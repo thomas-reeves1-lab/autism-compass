@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Compass, LayoutDashboard, Plane, HeartPulse, Workflow, History,
-  ClipboardList, BookOpen, FileText, ShoppingBag, Rocket,
+  ClipboardList, BookOpen, FileText, ShoppingBag, Rocket, HandHeart,
 } from 'lucide-react'
 import { TopWarningBanner, EmergencyWarning, SiteFooter } from './components/SafetyShell'
 import { Disclaimer } from './components/ui'
@@ -21,13 +21,15 @@ import { Tracker } from './features/tracker/Tracker'
 import { DoctorPack } from './features/doctorPack/DoctorPack'
 import { StorePreview } from './features/store/StorePreview'
 import { GrowthPreview } from './features/growth/GrowthPreview'
+import { Supports } from './features/supports/Supports'
 
 type TabId =
-  | 'dashboard' | 'stack' | 'safety' | 'loop' | 'changed'
+  | 'dashboard' | 'stack' | 'supports' | 'safety' | 'loop' | 'changed'
   | 'tracker' | 'evidence' | 'doctor' | 'store' | 'plans'
 
 const TABS: { id: TabId; label: string; icon: typeof Compass }[] = [
   { id: 'dashboard', label: 'Calculator', icon: LayoutDashboard },
+  { id: 'supports', label: 'Supports', icon: HandHeart },
   { id: 'stack', label: 'Safe Stack', icon: Plane },
   { id: 'safety', label: 'Med Safety', icon: HeartPulse },
   { id: 'loop', label: 'Loop Map', icon: Workflow },
@@ -48,18 +50,19 @@ export default function App() {
 
       <header className="border-b border-white/60 bg-white/70 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3">
-          <motion.div
+          <motion.img
+            src="/brand/autism-compass-mark.svg"
+            alt="Autism Compass"
             initial={{ rotate: -12, scale: 0.8, opacity: 0 }}
             animate={{ rotate: 0, scale: 1, opacity: 1 }}
             transition={{ type: 'spring', stiffness: 200, damping: 14 }}
-            className="shine flex h-11 w-11 items-center justify-center rounded-xl text-white glow-ring"
-            style={{ background: 'linear-gradient(135deg, #0e5196, #2c7be5)' }}
-          >
-            <Compass size={24} />
-          </motion.div>
+            className="h-12 w-12"
+          />
           <div>
-            <h1 className="text-lg font-extrabold text-gradient">AutismCompass</h1>
-            <p className="text-xs text-slate-500">ASD Behaviour Evidence Calculator · education only</p>
+            <h1 className="text-xl font-extrabold leading-none">
+              <span className="text-brand-deep">AUTISM</span> <span className="text-gradient">COMPASS</span>
+            </h1>
+            <p className="text-xs text-slate-500">Clinical Metrics &amp; Guidance Tool · education only</p>
           </div>
           <img src="/brand/iel-logo.png" alt="Integrity Empowered Living" className="ml-auto hidden h-9 sm:block" />
         </div>
@@ -141,6 +144,7 @@ export default function App() {
                 <Disclaimer />
               </div>
             )}
+            {tab === 'supports' && <Supports />}
             {tab === 'stack' && <StackChecker />}
             {tab === 'safety' && <MedicationSafety />}
             {tab === 'loop' && <LoopMap />}

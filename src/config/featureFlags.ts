@@ -18,6 +18,8 @@ export interface FeatureFlags {
   PREMIUM_LIVE: boolean
   /** The Hormozi growth engine (offers, funnels, upsells, primitives) is shown. */
   GROWTH_LIVE: boolean
+  /** Sponsor / advertiser slots (therapies, supplements, sensory) are shown to the public. */
+  SPONSORS_LIVE: boolean
 }
 
 export const featureFlags: FeatureFlags = {
@@ -25,6 +27,7 @@ export const featureFlags: FeatureFlags = {
   PHYSICAL_STORE_LIVE: false,
   PREMIUM_LIVE: false,
   GROWTH_LIVE: false,
+  SPONSORS_LIVE: false,
 }
 
 /**

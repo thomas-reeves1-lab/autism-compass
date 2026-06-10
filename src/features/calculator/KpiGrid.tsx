@@ -3,11 +3,12 @@ import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from
 import { Info } from 'lucide-react'
 import type { MetricKey } from '../../lib/types'
 import { metricLabels, numberLabelMeta } from '../../lib/labels'
-import { faceFor } from '../../lib/faceScale'
+import { faceFor, alertnessFace } from '../../lib/faceScale'
 import { useProjection } from '../../lib/useProjection'
 import { explainMetric } from '../../lib/calculator'
 import { useAppStore } from '../../store/useAppStore'
 import { AnimatedNumber } from '../../components/ui'
+import { FaceEmoji } from '../../components/FaceEmoji'
 
 export function KpiGrid() {
   const enabled = useAppStore((s) => s.enabledMetrics)
@@ -25,8 +26,9 @@ export function KpiGrid() {
 function KpiCard({ metric }: { metric: MetricKey }) {
   const pm = useProjection()[metric]
   const [open, setOpen] = useState(false)
-  const baseFace = faceFor(pm.baseline)
-  const projFace = faceFor(pm.projected)
+  const scale = metric === 'sedation' ? alertnessFace : faceFor
+  const baseFace = scale(pm.baseline)
+  const projFace = scale(pm.projected)
   const delta = +(pm.projected - pm.baseline).toFixed(1)
 
   // Pointer-driven 3D tilt
@@ -66,7 +68,7 @@ function KpiCard({ metric }: { metric: MetricKey }) {
 
       <div className="mt-3 flex items-center justify-between">
         <div className="text-center">
-          <div className="text-2xl opacity-70">{baseFace.emoji}</div>
+          <div className="opacity-70"><FaceEmoji id={baseFace.id} size={32} /></div>
           <div className="text-xs text-slate-400">now {pm.baseline}</div>
         </div>
         <motion.div
@@ -78,8 +80,8 @@ function KpiCard({ metric }: { metric: MetricKey }) {
           ➜
         </motion.div>
         <div className={`relative rounded-xl px-3 py-1 text-center ${projFace.bg} glow-ring`}>
-          <motion.div key={pm.projected} initial={{ scale: 0.6, rotate: -8 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: 'spring', stiffness: 300, damping: 14 }} className="text-3xl">
-            {projFace.emoji}
+          <motion.div key={pm.projected + projFace.id} initial={{ scale: 0.6, rotate: -8 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: 'spring', stiffness: 300, damping: 14 }} className="flex justify-center">
+            <FaceEmoji id={projFace.id} size={40} />
           </motion.div>
           <div className={`text-xs font-bold ${projFace.colour}`}>
             model <AnimatedNumber value={pm.projected} decimals={pm.projected % 1 === 0 ? 0 : 1} />

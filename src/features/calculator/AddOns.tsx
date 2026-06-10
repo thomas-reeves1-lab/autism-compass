@@ -6,6 +6,11 @@ import type { Treatment } from '../../lib/types'
 import { metricLabels } from '../../lib/labels'
 import { useAppStore } from '../../store/useAppStore'
 import { GlassCard, SectionTitle, EvidenceBadge } from '../../components/ui'
+import { SponsorSlot } from '../../components/SponsorSlot'
+
+const SUPPLEMENT_CATEGORIES = new Set([
+  'Supplement', 'Vitamin', 'Amino acid', 'Fatty acid', 'Mineral', 'Fibre', 'Plant extract', 'Sleep support', 'Gut support',
+])
 
 /** Adjuncts shown as cards (everything except risperidone + NAC which have sliders). */
 const ADJUNCTS = treatments.filter((t) => !['risperidone', 'nac'].includes(t.id))
@@ -80,6 +85,14 @@ function AddOnCard({ t }: { t: Treatment }) {
           Learn more <ChevronDown size={14} className={open ? 'rotate-180 transition' : 'transition'} />
         </button>
       </div>
+
+      {SUPPLEMENT_CATEGORIES.has(t.category) && (
+        <SponsorSlot
+          kind="supplement"
+          sponsor={undefined}
+          disclaimer="Not a medicine. Not approved to treat autism. Ask your doctor or pharmacist."
+        />
+      )}
 
       <AnimatePresence>
         {open && (
