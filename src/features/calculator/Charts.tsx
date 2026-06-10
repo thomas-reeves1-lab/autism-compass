@@ -1,0 +1,187 @@
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  Cell,
+  Legend,
+  RadialBarChart,
+  RadialBar,
+} from 'recharts'
+import type { MetricKey } from '../../lib/types'
+import { metricLabels, evidenceLevelMeta } from '../../lib/labels'
+import { useProjection } from '../../lib/useProjection'
+import { useAppStore } from '../../store/useAppStore'
+import { treatments } from '../../data/evidence'
+import { GlassCard, SectionTitle } from '../../components/ui'
+
+const FOCUS: MetricKey[] = [
+  'irritability',
+  'looping',
+  'aggressionRisk',
+  'skinPicking',
+  'hyperactivity',
+  'sleepOnsetDelay',
+]
+
+const C = {
+  navy: '#0E5196',
+  leaf: '#7BC043',
+  safe: '#2E9E5B',
+  caution: '#E0A800',
+  doctor: '#E8730C',
+  danger: '#D23B3B',
+  info: '#2C7BE5',
+  grey: '#7A8794',
+}
+
+/** 1. Behaviour change: baseline vs projected for focus metrics. */
+export function BehaviourChart() {
+  const p = useProjection()
+  const data = FOCUS.map((m) => ({
+    name: metricLabels[m].length > 16 ? metricLabels[m].slice(0, 15) + '…' : metricLabels[m],
+    now: p[m].baseline,
+    model: p[m].projected,
+  }))
+  return (
+    <GlassCard>
+      <SectionTitle title="Behaviour: now vs model" subtitle="Lower is calmer. The model is an estimate, not a promise." />
+      <ResponsiveContainer width="100%" height={260}>
+        <BarChart data={data} margin={{ top: 8, right: 8, left: -18, bottom: 36 }}>
+          <XAxis dataKey="name" angle={-30} textAnchor="end" interval={0} tick={{ fontSize: 11 }} height={60} />
+          <YAxis domain={[0, 10]} tick={{ fontSize: 11 }} />
+          <Tooltip />
+          <Legend wrapperStyle={{ fontSize: 12 }} />
+          <Bar dataKey="now" name="Now" fill={C.grey} radius={[4, 4, 0, 0]} animationDuration={500} />
+          <Bar dataKey="model" name="Model" fill={C.navy} radius={[4, 4, 0, 0]} animationDuration={500} />
+        </BarChart>
+      </ResponsiveContainer>
+    </GlassCard>
+  )
+}
+
+/** 2. Stack contribution: how much each active option moves the totals. */
+export function StackChart() {
+  const p = useProjection()
+  const totals = new Map<string, { name: string; improve: number; worsen: number }>()
+  for (const m of Object.values(p)) {
+    for (const c of m.contributions) {
+      const t = totals.get(c.treatmentId) ?? { name: c.treatmentName, improve: 0, worsen: 0 }
+      if (c.delta < 0) t.improve += -c.delta
+      else t.worsen += c.delta
+      totals.set(c.treatmentId, t)
+    }
+  }
+  const data = [...totals.values()].map((t) => ({
+    name: t.name.split(' ')[0],
+    improvement: +t.improve.toFixed(1),
+    sideEffect: +t.worsen.toFixed(1),
+  }))
+  return (
+    <GlassCard>
+      <SectionTitle title="What each option contributes" subtitle="Green = modelled improvement. Orange = modelled side-effect pressure." />
+      {data.length === 0 ? (
+        <p className="py-12 text-center text-sm text-slate-400">Add an option to see its contribution.</p>
+      ) : (
+        <ResponsiveContainer width="100%" height={260}>
+          <BarChart data={data} margin={{ top: 8, right: 8, left: -18, bottom: 8 }}>
+            <XAxis dataKey="name" tick={{ fontSize: 11 }} />
+            <YAxis tick={{ fontSize: 11 }} />
+            <Tooltip />
+            <Legend wrapperStyle={{ fontSize: 12 }} />
+            <Bar dataKey="improvement" name="Improvement" stackId="a" fill={C.safe} radius={[4, 4, 0, 0]} />
+            <Bar dataKey="sideEffect" name="Side-effect" stackId="a" fill={C.doctor} radius={[4, 4, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      )}
+    </GlassCard>
+  )
+}
+
+/** 3. Benefit vs harm balance. */
+export function BenefitHarmChart() {
+  const p = useProjection()
+  let benefit = 0
+  let harm = 0
+  for (const m of Object.values(p)) {
+    for (const c of m.contributions) {
+      if (c.delta < 0) benefit += -c.delta
+      else harm += c.delta
+    }
+  }
+  const data = [
+    { name: 'Likely benefit', value: +benefit.toFixed(1), fill: C.safe },
+    { name: 'Side-effect pressure', value: +harm.toFixed(1), fill: C.doctor },
+  ]
+  return (
+    <GlassCard>
+      <SectionTitle title="Benefit vs side-effect balance" subtitle="A rough balance of modelled improvements against modelled side effects." />
+      <ResponsiveContainer width="100%" height={260}>
+        <BarChart layout="vertical" data={data} margin={{ top: 8, right: 16, left: 30, bottom: 8 }}>
+          <XAxis type="number" tick={{ fontSize: 11 }} />
+          <YAxis type="category" dataKey="name" tick={{ fontSize: 11 }} width={120} />
+          <Tooltip />
+          <Bar dataKey="value" radius={[0, 4, 4, 0]} animationDuration={500}>
+            {data.map((d, i) => (
+              <Cell key={i} fill={d.fill} />
+            ))}
+          </Bar>
+        </BarChart>
+      </ResponsiveContainer>
+    </GlassCard>
+  )
+}
+
+/** 4. Evidence confidence: count of selected options by evidence level. */
+export function EvidenceConfidenceChart() {
+  const selected = useAppStore((s) => s.selectedAdjuncts)
+  const risperidoneDose = useAppStore((s) => s.risperidoneDose)
+  const nacDose = useAppStore((s) => s.nacDose)
+  const ids = new Set(selected)
+  if (risperidoneDose > 0) ids.add('risperidone')
+  if (nacDose > 0) ids.add('nac')
+
+  const counts = new Map<string, number>()
+  for (const t of treatments) {
+    if (!ids.has(t.id)) continue
+    counts.set(t.evidenceLevel, (counts.get(t.evidenceLevel) ?? 0) + 1)
+  }
+  const colourMap: Record<string, string> = {
+    strong: C.safe,
+    moderate: C.safe,
+    emerging: C.info,
+    mixed: C.caution,
+    weak: C.caution,
+    theoretical: C.grey,
+    negative: C.danger,
+    doctorOnly: C.doctor,
+  }
+  const data = [...counts.entries()].map(([level, count]) => ({
+    name: evidenceLevelMeta[level as keyof typeof evidenceLevelMeta].label,
+    count,
+    fill: colourMap[level] ?? C.grey,
+  }))
+
+  return (
+    <GlassCard>
+      <SectionTitle title="Evidence confidence of your selection" subtitle="How strong the evidence is behind the options you have switched on." />
+      {data.length === 0 ? (
+        <p className="py-12 text-center text-sm text-slate-400">Switch on options to see their evidence strength.</p>
+      ) : (
+        <ResponsiveContainer width="100%" height={260}>
+          <RadialBarChart innerRadius="25%" outerRadius="100%" data={data} startAngle={90} endAngle={-270}>
+            <RadialBar dataKey="count" background>
+              {data.map((d, i) => (
+                <Cell key={i} fill={d.fill} />
+              ))}
+            </RadialBar>
+            <Legend iconSize={10} layout="vertical" verticalAlign="middle" align="right" wrapperStyle={{ fontSize: 11 }} />
+            <Tooltip />
+          </RadialBarChart>
+        </ResponsiveContainer>
+      )}
+    </GlassCard>
+  )
+}

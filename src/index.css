@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-brand-sky text-slate-800 antialiased;
+    margin: 0;
+    background-image:
+      radial-gradient(1200px 600px at 10% -10%, rgba(123, 192, 67, 0.1), transparent),
+      radial-gradient(1000px 600px at 110% 0%, rgba(14, 81, 150, 0.1), transparent);
+    background-attachment: fixed;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-extrabold tracking-tight text-brand-deep;
+  }
+  :focus-visible {
+    @apply outline-none ring-2 ring-brand-navy ring-offset-2 ring-offset-white;
+  }
+}
+
+@layer components {
+  .glass {
+    @apply rounded-2xl border border-white/60 bg-glass-card shadow-glass backdrop-blur-sm;
+  }
+  .card {
+    @apply rounded-2xl border border-slate-100 bg-white/90 shadow-card;
+  }
+  .pill {
+    @apply inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-bold;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 font-bold transition
+      focus-visible:ring-2 focus-visible:ring-brand-navy disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply btn bg-brand-navy text-white hover:bg-brand-deep;
+  }
+  .btn-ghost {
+    @apply btn border border-brand-navy/30 bg-white text-brand-navy hover:bg-brand-sky;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
