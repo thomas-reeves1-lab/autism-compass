@@ -5,15 +5,28 @@ import { treatments } from '../../data/evidence'
 import type { Treatment } from '../../lib/types'
 import { metricLabels } from '../../lib/labels'
 import { useAppStore } from '../../store/useAppStore'
-import { GlassCard, SectionTitle, EvidenceBadge } from '../../components/ui'
+import { GlassCard, SectionTitle, EvidenceBadge, SafetyScoreChip } from '../../components/ui'
 import { SponsorSlot } from '../../components/SponsorSlot'
+import { safetyScore } from '../../lib/safety'
 
 const SUPPLEMENT_CATEGORIES = new Set([
   'Supplement', 'Vitamin', 'Amino acid', 'Fatty acid', 'Mineral', 'Fibre', 'Plant extract', 'Sleep support', 'Gut support',
 ])
 
-/** Adjuncts shown as cards (everything except risperidone + NAC which have sliders). */
-const ADJUNCTS = treatments.filter((t) => !['risperidone', 'nac'].includes(t.id))
+/** Sort weight: medicines first (grouped under risperidone), then adjuncts, then supplements. */
+function groupWeight(cat: string): number {
+  if (cat === 'Medication') return 0
+  if (cat === 'Prescription adjunct') return 1
+  if (cat === 'Not recommended') return 8
+  if (cat === 'No intervention model') return 9
+  return 4
+}
+
+/** Adjuncts shown as cards (everything except risperidone + NAC which have sliders, and watchful). */
+const ADJUNCTS = treatments
+  .filter((t) => !['risperidone', 'nac', 'watchful'].includes(t.id))
+  .slice()
+  .sort((a, b) => groupWeight(a.category) - groupWeight(b.category))
 
 export function AddOns() {
   return (
@@ -53,6 +66,10 @@ function AddOnCard({ t }: { t: Treatment }) {
           <p className="text-xs text-slate-500">{t.type}</p>
         </div>
         <EvidenceBadge level={t.evidenceLevel} />
+      </div>
+
+      <div className="mt-2">
+        <SafetyScoreChip score={safetyScore(t)} />
       </div>
 
       <div className="mt-2 flex flex-wrap gap-1">

@@ -35,6 +35,8 @@ interface AppState {
   risperidoneDose: number
   nacDose: number
   selectedAdjuncts: string[]
+  selectedTherapies: string[]
+  selectedSensory: string[]
   evidenceMode: EvidenceMode
 
   // tracker + change log (local only)
@@ -47,6 +49,8 @@ interface AppState {
   setRisperidone: (v: number) => void
   setNac: (v: number) => void
   toggleAdjunct: (id: string) => void
+  toggleTherapy: (id: string) => void
+  toggleSensory: (id: string) => void
   setEvidenceMode: (m: EvidenceMode) => void
   addTrackerEntry: (e: TrackerEntry) => void
   addChangeEvent: (e: ChangeEvent) => void
@@ -64,9 +68,11 @@ export const useAppStore = create<AppState>()(
     (set) => ({
       baselineMetrics: defaultMetrics(),
       enabledMetrics: allMetricsEnabled(),
-      risperidoneDose: 3,
+      risperidoneDose: 0,
       nacDose: 0,
       selectedAdjuncts: [],
+      selectedTherapies: [],
+      selectedSensory: [],
       evidenceMode: 'practical',
       trackerEntries: [],
       changeEvents: [],
@@ -83,11 +89,23 @@ export const useAppStore = create<AppState>()(
             ? s.selectedAdjuncts.filter((x) => x !== id)
             : [...s.selectedAdjuncts, id],
         })),
+      toggleTherapy: (id) =>
+        set((s) => ({
+          selectedTherapies: s.selectedTherapies.includes(id)
+            ? s.selectedTherapies.filter((x) => x !== id)
+            : [...s.selectedTherapies, id],
+        })),
+      toggleSensory: (id) =>
+        set((s) => ({
+          selectedSensory: s.selectedSensory.includes(id)
+            ? s.selectedSensory.filter((x) => x !== id)
+            : [...s.selectedSensory, id],
+        })),
       setEvidenceMode: (m) => set({ evidenceMode: m }),
       addTrackerEntry: (e) => set((s) => ({ trackerEntries: [e, ...s.trackerEntries] })),
       addChangeEvent: (e) => set((s) => ({ changeEvents: [e, ...s.changeEvents] })),
       resetBaseline: () => set({ baselineMetrics: defaultMetrics() }),
     }),
-    { name: 'autismcompass-v1' },
+    { name: 'autismcompass-v2' },
   ),
 )

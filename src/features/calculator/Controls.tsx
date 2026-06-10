@@ -2,7 +2,9 @@ import { Lock, Pill as PillIcon } from 'lucide-react'
 import { useAppStore } from '../../store/useAppStore'
 import { metricLabels } from '../../lib/labels'
 import type { MetricKey } from '../../lib/types'
-import { GlassCard, SectionTitle, Pill } from '../../components/ui'
+import { GlassCard, SectionTitle, Pill, SafetyScoreChip } from '../../components/ui'
+import { safetyScore } from '../../lib/safety'
+import { treatmentById } from '../../data/evidence'
 
 const NAC_TSP: Record<number, string> = {
   600: '¼ tsp',
@@ -35,9 +37,12 @@ export function DoseSliders() {
       <div className="rounded-xl border border-doctor/30 bg-doctor-soft/50 p-4">
         <div className="mb-2 flex items-center justify-between">
           <span className="font-extrabold text-brand-deep">Risperidone total daily dose</span>
-          <Pill tone="doctor">
-            <Lock size={12} /> Doctor only
-          </Pill>
+          <div className="flex items-center gap-2">
+            <SafetyScoreChip score={safetyScore(treatmentById('risperidone')!)} />
+            <Pill tone="doctor">
+              <Lock size={12} /> Doctor only
+            </Pill>
+          </div>
         </div>
         <input
           type="range"
@@ -64,7 +69,10 @@ export function DoseSliders() {
       <div className="mt-4 rounded-xl border border-safe/30 bg-safe-soft/40 p-4">
         <div className="mb-2 flex items-center justify-between">
           <span className="font-extrabold text-brand-deep">N-Acetylcysteine (NAC)</span>
-          <Pill tone="safe">Discuss first</Pill>
+          <div className="flex items-center gap-2">
+            <SafetyScoreChip score={safetyScore(treatmentById('nac')!)} />
+            <Pill tone="safe">Supplement, not a medicine</Pill>
+          </div>
         </div>
         <input
           type="range"

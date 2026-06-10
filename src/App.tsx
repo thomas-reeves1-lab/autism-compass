@@ -9,6 +9,7 @@ import { Disclaimer } from './components/ui'
 import { BaselineEditor, DoseSliders, EvidenceModeToggle } from './features/calculator/Controls'
 import { KpiGrid } from './features/calculator/KpiGrid'
 import { ScoreRings } from './features/calculator/ScoreRings'
+import { NacFeature } from './features/calculator/NacFeature'
 import { BehaviourChart, StackChart, BenefitHarmChart, EvidenceConfidenceChart } from './features/calculator/Charts'
 import { AddOns } from './features/calculator/AddOns'
 import { EvidenceTable } from './features/calculator/EvidenceTable'
@@ -96,7 +97,7 @@ export default function App() {
               animate={{ opacity: 1 }}
               className="pill mb-3 inline-flex bg-white/80 text-brand-navy glow-ring"
             >
-              <span className="h-2 w-2 animate-pulse rounded-full bg-brand-leaf" /> 36 studied options · evidence-labelled
+              <span className="h-2 w-2 animate-pulse rounded-full bg-brand-leaf" /> 40 studied options · evidence-labelled
             </motion.span>
             <h2 className="text-3xl font-extrabold leading-tight sm:text-5xl">
               <span className="text-gradient-bright">Understand the evidence.</span>
@@ -140,6 +141,7 @@ export default function App() {
                   <BenefitHarmChart />
                   <EvidenceConfidenceChart />
                 </div>
+                <NacFeature />
                 <AddOns />
                 <Disclaimer />
               </div>

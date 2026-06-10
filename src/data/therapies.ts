@@ -1,9 +1,11 @@
 import type { Sponsor } from '../components/SponsorSlot'
+import type { EffectModelEntry } from '../lib/types'
 
 /**
  * Allied health and therapy options. These are SUPPORTS, shown alongside (and
- * usually before) any medication discussion. Each can carry a dormant sponsor.
- * Evidence framing is honest and plain-English. Not medical advice.
+ * usually before) any medication. They are TOGGLEABLE into the model and gently
+ * change the behaviour scores — always labelled as estimated/individual, never
+ * presented as guaranteed. Each can carry a dormant sponsor.
  */
 export type TherapyEvidence = 'strong' | 'moderate' | 'emerging' | 'mixed' | 'individual'
 
@@ -16,8 +18,17 @@ export interface Therapy {
   evidence: TherapyEvidence
   evidenceNote: string
   ndisCategory: string
+  effects: EffectModelEntry[]
   sponsor?: Sponsor // dormant — none yet
 }
+
+const est = (metric: EffectModelEntry['metric'], maxEffect: number, reason: string): EffectModelEntry => ({
+  metric,
+  maxEffect,
+  label: 'estimated',
+  uncertainty: 0.5,
+  reason,
+})
 
 export const therapies: Therapy[] = [
   {
@@ -29,6 +40,11 @@ export const therapies: Therapy[] = [
     evidence: 'moderate',
     evidenceNote: 'Good support for daily function and sensory strategies; outcomes are individual.',
     ndisCategory: 'Improved Daily Living (Capacity Building)',
+    effects: [
+      est('hyperactivity', -0.12, 'Sensory strategies and routines can help a body settle.'),
+      est('irritability', -0.1, 'Predictable routines and sensory support can lower distress.'),
+      est('sleepOnsetDelay', -0.1, 'A good sleep routine often helps sleep onset.'),
+    ],
   },
   {
     id: 'speech',
@@ -39,6 +55,11 @@ export const therapies: Therapy[] = [
     evidence: 'moderate',
     evidenceNote: 'Communication support is well established; approach is tailored to the person.',
     ndisCategory: 'Improved Daily Living',
+    effects: [
+      est('irritability', -0.14, 'Less communication frustration can lower how fast someone gets upset.'),
+      est('looping', -0.1, 'Being understood can reduce stuck, repeated demands.'),
+      est('aggressionRisk', -0.08, 'Communication support can reduce frustration-driven behaviour.'),
+    ],
   },
   {
     id: 'psychology',
@@ -49,6 +70,10 @@ export const therapies: Therapy[] = [
     evidence: 'moderate',
     evidenceNote: 'Adapted CBT and regulation work help anxiety for many; needs an autism-aware clinician.',
     ndisCategory: 'Improved Daily Living',
+    effects: [
+      est('irritability', -0.12, 'Anxiety and regulation work can lower how fast someone gets upset.'),
+      est('looping', -0.1, 'Coping skills can ease anxious looping.'),
+    ],
   },
   {
     id: 'pbs',
@@ -59,6 +84,11 @@ export const therapies: Therapy[] = [
     evidence: 'moderate',
     evidenceNote: 'Function-based, proactive support is the recommended first line for behaviour.',
     ndisCategory: 'Improved Relationships',
+    effects: [
+      est('aggressionRisk', -0.16, 'Function-based plans target the reasons behind aggression.'),
+      est('selfInjuryRisk', -0.12, 'Proactive strategies can reduce self-injury over time.'),
+      est('irritability', -0.1, 'Fewer triggers can mean less frequent upset.'),
+    ],
   },
   {
     id: 'physio',
@@ -69,6 +99,7 @@ export const therapies: Therapy[] = [
     evidence: 'individual',
     evidenceNote: 'Useful where there are motor or mobility needs; outcomes are individual.',
     ndisCategory: 'Improved Daily Living',
+    effects: [est('hyperactivity', -0.06, 'Movement work can help some bodies settle.')],
   },
   {
     id: 'dietitian',
@@ -79,6 +110,10 @@ export const therapies: Therapy[] = [
     evidence: 'moderate',
     evidenceNote: 'Practical support for eating, growth and constipation.',
     ndisCategory: 'Improved Daily Living',
+    effects: [
+      est('foodSeeking', -0.15, 'A food plan can ease appetite pressure and food seeking.'),
+      est('gutUpset', -0.15, 'Fibre and fluid planning can improve bowel comfort.'),
+    ],
   },
   {
     id: 'exercise-physiology',
@@ -89,6 +124,11 @@ export const therapies: Therapy[] = [
     evidence: 'emerging',
     evidenceNote: 'Regular exercise can help sleep, mood and behaviour for many.',
     ndisCategory: 'Improved Health & Wellbeing',
+    effects: [
+      est('sleepOnsetDelay', -0.14, 'Regular movement can help sleep onset.'),
+      est('hyperactivity', -0.12, 'Planned activity can use up restless energy.'),
+      est('irritability', -0.08, 'Exercise can lift mood and lower irritability.'),
+    ],
   },
   {
     id: 'music-therapy',
@@ -99,6 +139,10 @@ export const therapies: Therapy[] = [
     evidence: 'mixed',
     evidenceNote: 'Some studies show social/communication benefits; evidence is mixed but low-risk.',
     ndisCategory: 'Improved Daily Living',
+    effects: [
+      est('irritability', -0.08, 'Music can be calming and regulating for some.'),
+      est('stereotypy', -0.05, 'Engagement may reduce repetitive behaviour for some.'),
+    ],
   },
   {
     id: 'early-intervention',
@@ -109,6 +153,10 @@ export const therapies: Therapy[] = [
     evidence: 'moderate',
     evidenceNote: 'Naturalistic developmental approaches have growing support. Choose respectful, neurodiversity-affirming providers.',
     ndisCategory: 'Early Childhood',
+    effects: [
+      est('looping', -0.08, 'Communication and play skills can ease stuck patterns.'),
+      est('irritability', -0.08, 'More skills can mean less frustration.'),
+    ],
   },
   {
     id: 'counselling',
@@ -119,5 +167,8 @@ export const therapies: Therapy[] = [
     evidence: 'individual',
     evidenceNote: 'Family support reduces strain and helps everyone cope.',
     ndisCategory: 'Improved Daily Living',
+    effects: [est('irritability', -0.06, 'A calmer, supported home can ease everyone, including the person.')],
   },
 ]
+
+export const therapyById = (id: string) => therapies.find((t) => t.id === id)

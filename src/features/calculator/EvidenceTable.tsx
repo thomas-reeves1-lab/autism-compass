@@ -2,7 +2,8 @@ import { useMemo, useState } from 'react'
 import { treatments } from '../../data/evidence'
 import type { EvidenceLevel } from '../../lib/types'
 import { evidenceLevelMeta } from '../../lib/labels'
-import { GlassCard, SectionTitle, EvidenceBadge } from '../../components/ui'
+import { GlassCard, SectionTitle, EvidenceBadge, SafetyScoreChip } from '../../components/ui'
+import { safetyScore } from '../../lib/safety'
 
 type SortKey = 'name' | 'category' | 'evidenceLevel' | 'harmLevel'
 
@@ -62,6 +63,7 @@ export function EvidenceTable() {
               <Th onClick={() => setSort('name')}>Option</Th>
               <Th onClick={() => setSort('category')}>Category</Th>
               <Th onClick={() => setSort('evidenceLevel')}>Evidence</Th>
+              <th className="px-2 py-2">Safety /100</th>
               <th className="px-2 py-2">Studied target</th>
               <Th onClick={() => setSort('harmLevel')}>Risk</Th>
               <th className="px-2 py-2">Doctor only</th>
@@ -74,6 +76,9 @@ export function EvidenceTable() {
                 <td className="px-2 py-2 text-slate-500">{t.category}</td>
                 <td className="px-2 py-2">
                   <EvidenceBadge level={t.evidenceLevel} />
+                </td>
+                <td className="px-2 py-2">
+                  <SafetyScoreChip score={safetyScore(t)} />
                 </td>
                 <td className="px-2 py-2 text-xs text-slate-500">{t.sourceSummary.slice(0, 60)}…</td>
                 <td className="px-2 py-2">

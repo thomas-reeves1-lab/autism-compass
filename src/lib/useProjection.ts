@@ -8,6 +8,8 @@ export function useProjection(): Projection {
   const risperidoneDose = useAppStore((s) => s.risperidoneDose)
   const nacDose = useAppStore((s) => s.nacDose)
   const selectedAdjuncts = useAppStore((s) => s.selectedAdjuncts)
+  const selectedTherapies = useAppStore((s) => s.selectedTherapies)
+  const selectedSensory = useAppStore((s) => s.selectedSensory)
   const evidenceMode = useAppStore((s) => s.evidenceMode)
 
   return useMemo(
@@ -17,8 +19,10 @@ export function useProjection(): Projection {
         risperidoneDose,
         nacDose,
         selectedAdjuncts,
+        selectedTherapies,
+        selectedSensory,
         evidenceMode,
       }),
-    [baselineMetrics, risperidoneDose, nacDose, selectedAdjuncts, evidenceMode],
+    [baselineMetrics, risperidoneDose, nacDose, selectedAdjuncts, selectedTherapies, selectedSensory, evidenceMode],
   )
 }

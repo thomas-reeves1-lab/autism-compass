@@ -1,8 +1,48 @@
 import { treatmentById } from '../data/evidence'
+import type { Treatment } from './types'
 
 /** Safe Stack Checker + Medication Safety Pressure Score. Conversation helpers, not medical scores. */
 
 export type TrafficLight = 'green' | 'yellow' | 'orange' | 'red'
+
+/**
+ * A per-option SAFETY score out of 100. HIGHER = SAFER.
+ * Prescription medicines score lower (higher risk); gentle supplements score
+ * higher. A conversation helper, never a clinical score.
+ */
+export function safetyScore(t: Treatment): number {
+  let s: number
+  switch (t.harmLevel) {
+    case 'low': s = 90; break
+    case 'moderate': s = 70; break
+    case 'high': s = 48; break
+    case 'doctorOnly': s = 55; break
+    default: s = 62
+  }
+  if (t.doctorOnly) s -= 6
+  if (t.category === 'Medication') s -= 12 // antipsychotics / prescription medicines sit clearly lower
+  if (t.evidenceLevel === 'negative') s -= 6
+  s -= Math.min(8, t.interactionWarnings.length * 3)
+  s -= Math.min(6, t.safetyFlags.length * 2)
+  if (t.id === 'watchful') s = 100
+  return Math.max(12, Math.min(100, Math.round(s)))
+}
+
+export interface SafetyMeta {
+  light: TrafficLight
+  label: string
+  text: string
+  bg: string
+  bar: string
+}
+
+/** Colour + label for a 0-100 safety score (higher = safer). */
+export function safetyMeta(score: number): SafetyMeta {
+  if (score >= 75) return { light: 'green', label: 'Gentle', text: 'text-safe', bg: 'bg-safe-soft', bar: '#2e9e5b' }
+  if (score >= 58) return { light: 'yellow', label: 'Caution', text: 'text-caution', bg: 'bg-caution-soft', bar: '#e0a800' }
+  if (score >= 45) return { light: 'orange', label: 'Higher care', text: 'text-doctor', bg: 'bg-doctor-soft', bar: '#e8730c' }
+  return { light: 'red', label: 'Highest care', text: 'text-danger', bg: 'bg-danger-soft', bar: '#d23b3b' }
+}
 
 export interface StackFlag {
   level: TrafficLight

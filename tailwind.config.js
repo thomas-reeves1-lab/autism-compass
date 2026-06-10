@@ -19,7 +19,8 @@ export default {
         theoretical: { DEFAULT: '#7A8794', soft: '#EEF1F4' }, // grey - not enough evidence
       },
       fontFamily: {
-        sans: ['Nunito', 'Segoe UI', 'system-ui', 'sans-serif'],
+        sans: ['Roboto', 'Segoe UI', 'system-ui', 'sans-serif'],
+        display: ['"Roboto Flex"', 'Roboto', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
         xl: '1rem',

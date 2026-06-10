@@ -13,6 +13,8 @@ function inputs(partial: Partial<CalculatorInputs> = {}): CalculatorInputs {
     risperidoneDose: 3,
     nacDose: 0,
     selectedAdjuncts: [],
+    selectedTherapies: [],
+    selectedSensory: [],
     evidenceMode: 'practical',
     ...partial,
   }
@@ -61,6 +63,18 @@ describe('calculateProjectedMetrics', () => {
     }
   })
 
+  it('an allied-health therapy lowers its target metric', () => {
+    const base = calculateProjectedMetrics(inputs({ risperidoneDose: 0 }))
+    const withPbs = calculateProjectedMetrics(inputs({ risperidoneDose: 0, selectedTherapies: ['pbs'] }))
+    expect(withPbs.aggressionRisk.projected).toBeLessThan(base.aggressionRisk.projected)
+  })
+
+  it('a sensory item lowers its target metric', () => {
+    const base = calculateProjectedMetrics(inputs({ risperidoneDose: 0 }))
+    const withBlanket = calculateProjectedMetrics(inputs({ risperidoneDose: 0, selectedSensory: ['weighted-blanket'] }))
+    expect(withBlanket.sleepOnsetDelay.projected).toBeLessThan(base.sleepOnsetDelay.projected)
+  })
+
   it('watchful waiting changes nothing', () => {
     const p = calculateProjectedMetrics(inputs({ risperidoneDose: 0, selectedAdjuncts: ['watchful'] }))
     for (const m of Object.values(p)) {
@@ -77,9 +91,9 @@ describe('calculateProjectedMetrics', () => {
 })
 
 describe('evidence data integrity', () => {
-  it('has 36 treatments with unique ids', () => {
-    expect(treatments).toHaveLength(36)
-    expect(new Set(treatments.map((t) => t.id)).size).toBe(36)
+  it('has 40 treatments with unique ids', () => {
+    expect(treatments).toHaveLength(40)
+    expect(new Set(treatments.map((t) => t.id)).size).toBe(40)
   })
 
   it('every effect entry carries an honesty label and uncertainty', () => {

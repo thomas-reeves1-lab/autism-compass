@@ -1,5 +1,17 @@
-import type { Metrics, MetricKey, NumberLabel } from './types'
-import { treatments, treatmentById, baselineDefaults } from '../data/evidence'
+import type { Metrics, MetricKey, NumberLabel, EffectModelEntry } from './types'
+import { treatments, baselineDefaults } from '../data/evidence'
+import { therapies } from '../data/therapies'
+import { sensoryItems } from '../data/sensory'
+
+/** Unified effect registry across medicines/supplements, therapies, and sensory items. */
+interface EffectSource {
+  name: string
+  effects: EffectModelEntry[]
+}
+const EFFECT_SOURCES: Record<string, EffectSource> = {}
+for (const t of treatments) EFFECT_SOURCES[t.id] = { name: t.name, effects: t.effectModel }
+for (const t of therapies) EFFECT_SOURCES[t.id] = { name: t.name, effects: t.effects }
+for (const s of sensoryItems) EFFECT_SOURCES[s.id] = { name: s.name, effects: s.effects }
 
 /**
  * The projection engine. Educational only — NOT a prescribing or dosing tool.
@@ -23,6 +35,10 @@ export interface CalculatorInputs {
   nacDose: number
   /** Ids of selected adjunct treatments (toggles). */
   selectedAdjuncts: string[]
+  /** Ids of selected allied-health therapies (toggles). */
+  selectedTherapies: string[]
+  /** Ids of selected sensory items (toggles). */
+  selectedSensory: string[]
   evidenceMode: EvidenceMode
 }
 
@@ -64,17 +80,21 @@ function labelAllowed(label: NumberLabel, mode: EvidenceMode): boolean {
   return true // explore: show everything, including theoretical
 }
 
-/** Dose fraction (0-1) for a treatment given the inputs. */
-function doseFraction(treatmentId: string, inputs: CalculatorInputs): number {
-  if (treatmentId === 'risperidone') return saturate(inputs.risperidoneDose, 3)
-  if (treatmentId === 'nac') return saturate(inputs.nacDose, 2700)
-  // Toggled adjuncts apply their full studied effect when selected.
-  return inputs.selectedAdjuncts.includes(treatmentId) ? 1 : 0
+/** Dose fraction (0-1) for an option given the inputs. */
+function doseFraction(id: string, inputs: CalculatorInputs): number {
+  if (id === 'risperidone') return saturate(inputs.risperidoneDose, 3)
+  if (id === 'nac') return saturate(inputs.nacDose, 2700)
+  // Toggled adjuncts / therapies / sensory apply their full effect when selected.
+  return 1
 }
 
-/** Which treatments are active in this calculation. */
+/** Which options are active in this calculation (medicines, therapies, sensory). */
 function activeTreatments(inputs: CalculatorInputs): string[] {
-  const active = new Set<string>(inputs.selectedAdjuncts)
+  const active = new Set<string>([
+    ...inputs.selectedAdjuncts,
+    ...inputs.selectedTherapies,
+    ...inputs.selectedSensory,
+  ])
   if (inputs.risperidoneDose > 0) active.add('risperidone')
   if (inputs.nacDose > 0) active.add('nac')
   return [...active]
@@ -96,12 +116,12 @@ export function calculateProjectedMetrics(inputs: CalculatorInputs): Projection 
     let value = baseline
 
     for (const id of active) {
-      const t = treatmentById(id)
-      if (!t) continue
+      const src = EFFECT_SOURCES[id]
+      if (!src) continue
       const frac = doseFraction(id, inputs)
       if (frac <= 0) continue
 
-      for (const e of t.effectModel) {
+      for (const e of src.effects) {
         if (e.metric !== metric) continue
         if (!labelAllowed(e.label, inputs.evidenceMode)) continue
 
@@ -121,7 +141,7 @@ export function calculateProjectedMetrics(inputs: CalculatorInputs): Projection 
         bandTotal += Math.abs(applied) * e.uncertainty
         contributions.push({
           treatmentId: id,
-          treatmentName: t.name,
+          treatmentName: src.name,
           delta: round1(applied),
           label: e.label,
           reason: e.reason,
