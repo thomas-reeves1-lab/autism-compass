@@ -8,6 +8,7 @@ import { TopWarningBanner, EmergencyWarning, SiteFooter } from './components/Saf
 import { Disclaimer } from './components/ui'
 import { BaselineEditor, DoseSliders, EvidenceModeToggle } from './features/calculator/Controls'
 import { KpiGrid } from './features/calculator/KpiGrid'
+import { ScoreRings } from './features/calculator/ScoreRings'
 import { BehaviourChart, StackChart, BenefitHarmChart, EvidenceConfidenceChart } from './features/calculator/Charts'
 import { AddOns } from './features/calculator/AddOns'
 import { EvidenceTable } from './features/calculator/EvidenceTable'
@@ -47,11 +48,17 @@ export default function App() {
 
       <header className="border-b border-white/60 bg-white/70 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3">
-          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-brand-navy text-white">
+          <motion.div
+            initial={{ rotate: -12, scale: 0.8, opacity: 0 }}
+            animate={{ rotate: 0, scale: 1, opacity: 1 }}
+            transition={{ type: 'spring', stiffness: 200, damping: 14 }}
+            className="shine flex h-11 w-11 items-center justify-center rounded-xl text-white glow-ring"
+            style={{ background: 'linear-gradient(135deg, #0e5196, #2c7be5)' }}
+          >
             <Compass size={24} />
-          </div>
+          </motion.div>
           <div>
-            <h1 className="text-lg font-extrabold text-brand-deep">AutismCompass</h1>
+            <h1 className="text-lg font-extrabold text-gradient">AutismCompass</h1>
             <p className="text-xs text-slate-500">ASD Behaviour Evidence Calculator · education only</p>
           </div>
           <img src="/brand/iel-logo.png" alt="Integrity Empowered Living" className="ml-auto hidden h-9 sm:block" />
@@ -81,12 +88,22 @@ export default function App() {
       <main className="mx-auto max-w-6xl px-4 py-6">
         {tab === 'dashboard' && (
           <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
-            <h2 className="text-2xl font-extrabold text-brand-deep sm:text-3xl">
-              A calm, family-friendly way to understand studied options
+            <motion.span
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="pill mb-3 inline-flex bg-white/80 text-brand-navy glow-ring"
+            >
+              <span className="h-2 w-2 animate-pulse rounded-full bg-brand-leaf" /> 36 studied options · evidence-labelled
+            </motion.span>
+            <h2 className="text-3xl font-extrabold leading-tight sm:text-5xl">
+              <span className="text-gradient-bright">Understand the evidence.</span>
+              <br />
+              <span className="text-white">Walk in prepared.</span>
             </h2>
-            <p className="mt-1 max-w-2xl text-sm text-slate-600">
-              See what published studies found about common ASD behaviour pathways. Track changes.
-              Prepare for the doctor. <span className="font-bold">This is not medical advice.</span>
+            <p className="mt-3 max-w-2xl text-sm text-slate-200 sm:text-base">
+              See what published studies found about common ASD behaviour and supplement pathways.
+              Track changes. Prepare for the doctor.{' '}
+              <span className="font-bold text-white">This is not medical advice.</span>
             </p>
           </motion.div>
         )}
@@ -108,6 +125,7 @@ export default function App() {
                 <div className="flex justify-end">
                   <EvidenceModeToggle />
                 </div>
+                <ScoreRings />
                 <div className="grid gap-6 lg:grid-cols-2">
                   <BaselineEditor />
                   <DoseSliders />

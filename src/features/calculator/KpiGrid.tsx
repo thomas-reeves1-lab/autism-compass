@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { useState, type PointerEvent } from 'react'
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
 import { Info } from 'lucide-react'
 import type { MetricKey } from '../../lib/types'
 import { metricLabels, numberLabelMeta } from '../../lib/labels'
@@ -7,6 +7,7 @@ import { faceFor } from '../../lib/faceScale'
 import { useProjection } from '../../lib/useProjection'
 import { explainMetric } from '../../lib/calculator'
 import { useAppStore } from '../../store/useAppStore'
+import { AnimatedNumber } from '../../components/ui'
 
 export function KpiGrid() {
   const enabled = useAppStore((s) => s.enabledMetrics)
@@ -28,13 +29,35 @@ function KpiCard({ metric }: { metric: MetricKey }) {
   const projFace = faceFor(pm.projected)
   const delta = +(pm.projected - pm.baseline).toFixed(1)
 
+  // Pointer-driven 3D tilt
+  const mx = useMotionValue(0)
+  const my = useMotionValue(0)
+  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [7, -7]), { stiffness: 200, damping: 18 })
+  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-7, 7]), { stiffness: 200, damping: 18 })
+
+  const onMove = (e: PointerEvent<HTMLDivElement>) => {
+    const r = e.currentTarget.getBoundingClientRect()
+    mx.set((e.clientX - r.left) / r.width - 0.5)
+    my.set((e.clientY - r.top) / r.height - 0.5)
+  }
+  const onLeave = () => {
+    mx.set(0)
+    my.set(0)
+  }
+
   return (
-    <motion.div layout className="card overflow-hidden p-4">
+    <motion.div
+      layout
+      onPointerMove={onMove}
+      onPointerLeave={onLeave}
+      style={{ rotateX, rotateY, transformPerspective: 900 }}
+      className="card lift overflow-hidden p-4"
+    >
       <div className="flex items-start justify-between gap-2">
         <h3 className="text-sm font-extrabold text-brand-deep">{metricLabels[metric]}</h3>
         <button
           onClick={() => setOpen((o) => !o)}
-          className="rounded-full p-1 text-slate-400 hover:bg-brand-sky hover:text-brand-navy"
+          className="rounded-full p-1 text-slate-400 transition hover:bg-brand-sky hover:text-brand-navy"
           aria-label="Why did this number move?"
         >
           <Info size={16} />
@@ -43,19 +66,28 @@ function KpiCard({ metric }: { metric: MetricKey }) {
 
       <div className="mt-3 flex items-center justify-between">
         <div className="text-center">
-          <div className="text-2xl">{baseFace.emoji}</div>
+          <div className="text-2xl opacity-70">{baseFace.emoji}</div>
           <div className="text-xs text-slate-400">now {pm.baseline}</div>
         </div>
-        <div className="text-slate-300">→</div>
-        <div className={`rounded-xl px-3 py-1 text-center ${projFace.bg}`}>
-          <motion.div key={pm.projected} initial={{ scale: 0.8 }} animate={{ scale: 1 }} className="text-3xl">
+        <motion.div
+          aria-hidden
+          animate={{ x: [0, 3, 0] }}
+          transition={{ duration: 1.6, repeat: Infinity }}
+          className="text-brand-leaf"
+        >
+          ➜
+        </motion.div>
+        <div className={`relative rounded-xl px-3 py-1 text-center ${projFace.bg} glow-ring`}>
+          <motion.div key={pm.projected} initial={{ scale: 0.6, rotate: -8 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: 'spring', stiffness: 300, damping: 14 }} className="text-3xl">
             {projFace.emoji}
           </motion.div>
-          <div className={`text-xs font-bold ${projFace.colour}`}>model {pm.projected}</div>
+          <div className={`text-xs font-bold ${projFace.colour}`}>
+            model <AnimatedNumber value={pm.projected} decimals={pm.projected % 1 === 0 ? 0 : 1} />
+          </div>
         </div>
       </div>
 
-      {/* Bar with uncertainty band */}
+      {/* Bar with uncertainty band + shimmer */}
       <div className="mt-3">
         <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-slate-100">
           <div
@@ -63,7 +95,8 @@ function KpiCard({ metric }: { metric: MetricKey }) {
             style={{ left: `${pm.low * 10}%`, width: `${(pm.high - pm.low) * 10}%` }}
           />
           <motion.div
-            className="absolute top-0 h-full rounded-full bg-brand-navy"
+            className="shine absolute top-0 h-full rounded-full"
+            style={{ background: 'linear-gradient(90deg, #0e5196, #2c7be5)' }}
             initial={false}
             animate={{ width: `${pm.projected * 10}%` }}
             transition={{ type: 'spring', stiffness: 120, damping: 18 }}
@@ -72,9 +105,14 @@ function KpiCard({ metric }: { metric: MetricKey }) {
         <div className="mt-1 flex justify-between text-[10px] text-slate-400">
           <span>calm</span>
           {delta !== 0 && (
-            <span className={delta < 0 ? 'font-bold text-safe' : 'font-bold text-doctor'}>
+            <motion.span
+              key={delta}
+              initial={{ opacity: 0, y: -3 }}
+              animate={{ opacity: 1, y: 0 }}
+              className={delta < 0 ? 'font-bold text-safe' : 'font-bold text-doctor'}
+            >
               {delta < 0 ? '▼' : '▲'} {Math.abs(delta)}
-            </span>
+            </motion.span>
           )}
           <span>severe</span>
         </div>

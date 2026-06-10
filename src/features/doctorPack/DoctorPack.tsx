@@ -38,7 +38,7 @@ export function DoctorPack() {
 
       <div id="doctor-pack" className="rounded-xl border border-slate-200 bg-white p-6 text-sm text-slate-700">
         <h3 className="text-lg font-extrabold text-brand-deep">AutismCompass — Doctor Visit Pack</h3>
-        <p className="text-xs text-slate-400">Case: moroC (name changed for privacy). Education only, not medical advice.</p>
+        <p className="text-xs text-slate-400">Example profile. Education only, not medical advice.</p>
 
         <section className="mt-4">
           <h4 className="font-extrabold text-brand-navy">Current medication reference</h4>

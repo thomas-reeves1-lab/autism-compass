@@ -27,7 +27,7 @@ export function MedicationSafety() {
         />
         <div className="grid gap-4 md:grid-cols-2">
           <div className="rounded-xl border border-doctor/30 bg-doctor-soft/40 p-4 text-sm">
-            <p className="font-extrabold text-brand-deep">Current reference for moroC</p>
+            <p className="font-extrabold text-brand-deep">Example current reference</p>
             <p>Risperidone 3 mg/day (1.5 morning, 1.5 night). Reference only.</p>
             <p className="mt-1 font-bold text-doctor">Prescription medication. Doctor only.</p>
           </div>

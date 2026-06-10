@@ -5,7 +5,7 @@ import { treatments } from '../../data/evidence'
 import type { Treatment } from '../../lib/types'
 import { metricLabels } from '../../lib/labels'
 import { useAppStore } from '../../store/useAppStore'
-import { GlassCard, SectionTitle, EvidenceBadge, Pill } from '../../components/ui'
+import { GlassCard, SectionTitle, EvidenceBadge } from '../../components/ui'
 
 /** Adjuncts shown as cards (everything except risperidone + NAC which have sliders). */
 const ADJUNCTS = treatments.filter((t) => !['risperidone', 'nac'].includes(t.id))
@@ -32,11 +32,12 @@ function AddOnCard({ t }: { t: Treatment }) {
   const toggle = useAppStore((s) => s.toggleAdjunct)
   const [open, setOpen] = useState(false)
   const [showSafety, setShowSafety] = useState(false)
+  const [showDoctor, setShowDoctor] = useState(false)
 
   const handleToggle = () => {
     if (selected) return toggle(t.id)
-    if (t.doctorOnly) return // locked
-    setShowSafety(true) // require the safety check before switching on
+    if (t.doctorOnly) return setShowDoctor(true) // doctor-only education gate
+    setShowSafety(true) // supplement safety check before switching on
   }
 
   return (
@@ -59,9 +60,16 @@ function AddOnCard({ t }: { t: Treatment }) {
 
       <div className="mt-3 flex items-center justify-between">
         {t.doctorOnly ? (
-          <Pill tone="doctor">
-            <Lock size={12} /> Doctor-only discussion item
-          </Pill>
+          selected ? (
+            <label className="flex cursor-pointer items-center gap-2 text-sm font-bold text-doctor">
+              <input type="checkbox" checked onChange={() => toggle(t.id)} className="h-4 w-4 accent-doctor" />
+              On (doctor-only)
+            </label>
+          ) : (
+            <button onClick={() => setShowDoctor(true)} className="flex items-center gap-1.5 text-sm font-bold text-doctor">
+              <Lock size={13} /> Add (doctor only)
+            </button>
+          )
         ) : (
           <label className="flex cursor-pointer items-center gap-2 text-sm font-bold text-slate-700">
             <input type="checkbox" checked={selected} onChange={handleToggle} className="h-4 w-4 accent-brand-navy" />
@@ -115,7 +123,84 @@ function AddOnCard({ t }: { t: Treatment }) {
           />
         )}
       </AnimatePresence>
+
+      <AnimatePresence>
+        {showDoctor && (
+          <DoctorGateModal
+            t={t}
+            onClose={() => setShowDoctor(false)}
+            onConfirm={() => {
+              toggle(t.id)
+              setShowDoctor(false)
+            }}
+          />
+        )}
+      </AnimatePresence>
     </div>
+  )
+}
+
+function DoctorGateModal({ t, onClose, onConfirm }: { t: Treatment; onClose: () => void; onConfirm: () => void }) {
+  const checks = [
+    'I understand this is a prescription / doctor-only medicine',
+    'I will NOT start, stop, or change this without the prescriber',
+    'I understand this website is education only, not medical advice',
+    'I am adding this only to learn what the evidence model shows',
+    'I understand it can interact with other medicines and needs monitoring',
+  ]
+  const [ticked, setTicked] = useState<boolean[]>(checks.map(() => false))
+  const all = ticked.every(Boolean)
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm"
+      onClick={onClose}
+    >
+      <motion.div
+        initial={{ scale: 0.95, y: 10 }}
+        animate={{ scale: 1, y: 0 }}
+        className="card max-w-md border-t-4 border-doctor p-6"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="mb-3 flex items-center gap-2 text-doctor">
+          <Lock />
+          <h3 className="text-lg font-extrabold">Doctor-only education gate</h3>
+        </div>
+        <p className="mb-4 text-sm text-slate-600">
+          <span className="font-bold">{t.name}</span> is a prescription / doctor-only medicine. You can
+          add it to the education model to learn what studies found — but only the prescriber can ever
+          decide to use it. Please confirm:
+        </p>
+        <div className="space-y-2">
+          {checks.map((c, i) => (
+            <label key={i} className="flex items-start gap-2 text-sm text-slate-700">
+              <input
+                type="checkbox"
+                checked={ticked[i]}
+                onChange={() => setTicked((arr) => arr.map((v, j) => (j === i ? !v : v)))}
+                className="mt-0.5 h-4 w-4 accent-doctor"
+              />
+              {c}
+            </label>
+          ))}
+        </div>
+        <div className="mt-5 flex justify-end gap-2">
+          <button onClick={onClose} className="btn-ghost text-sm">
+            Cancel
+          </button>
+          <button
+            onClick={onConfirm}
+            disabled={!all}
+            className="btn text-sm bg-doctor text-white hover:opacity-90 disabled:opacity-50"
+          >
+            Add to model (education only)
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
   )
 }
 

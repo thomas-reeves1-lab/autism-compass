@@ -44,7 +44,7 @@ export function EmergencyWarning() {
 /** Footer on every page. */
 export function SiteFooter() {
   return (
-    <footer className="mt-12 border-t border-slate-200 bg-white/70">
+    <footer className="mt-12 border-t border-white/40 bg-white/85 backdrop-blur">
       <div className="mx-auto max-w-6xl px-4 py-6 text-center text-xs text-slate-500">
         <p className="font-bold text-slate-600">
           Education only. Not medical advice. Not a diagnosis tool. Not a dosing tool.
@@ -53,7 +53,7 @@ export function SiteFooter() {
           Do not change medication without the prescriber. For urgent risk, seek urgent medical help.
         </p>
         <p className="mt-2 text-slate-400">
-          Names have been changed for privacy. A registered provider evidence project.
+          A registered provider evidence project. Example data only — edit it to your own situation.
         </p>
       </div>
     </footer>

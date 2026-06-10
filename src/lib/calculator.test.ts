@@ -77,9 +77,9 @@ describe('calculateProjectedMetrics', () => {
 })
 
 describe('evidence data integrity', () => {
-  it('has 25 treatments with unique ids', () => {
-    expect(treatments).toHaveLength(25)
-    expect(new Set(treatments.map((t) => t.id)).size).toBe(25)
+  it('has 36 treatments with unique ids', () => {
+    expect(treatments).toHaveLength(36)
+    expect(new Set(treatments.map((t) => t.id)).size).toBe(36)
   })
 
   it('every effect entry carries an honesty label and uncertainty', () => {

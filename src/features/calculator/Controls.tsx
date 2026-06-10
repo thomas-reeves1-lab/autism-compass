@@ -99,8 +99,8 @@ export function BaselineEditor() {
   return (
     <GlassCard>
       <SectionTitle
-        title="Baseline for moroC"
-        subtitle="Current risperidone schedule (3 mg/day; 1.5 morning, 1.5 night) is the reference point and does not imply any recommended change. Edit the scores to match your situation. 0 = calm, 10 = severe."
+        title="Your starting point"
+        subtitle="This is an example profile. The risperidone reference (3 mg/day) is a starting point only and does not imply any recommended change. Edit every score to match your own situation. 0 = calm, 10 = severe."
       />
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         {keys.map((k) => (
@@ -135,7 +135,7 @@ export function BaselineEditor() {
         ))}
       </div>
       <button onClick={resetBaseline} className="btn-ghost mt-4 text-sm">
-        Reset to moroC defaults
+        Reset to example defaults
       </button>
     </GlassCard>
   )

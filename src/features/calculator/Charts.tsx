@@ -50,12 +50,22 @@ export function BehaviourChart() {
       <SectionTitle title="Behaviour: now vs model" subtitle="Lower is calmer. The model is an estimate, not a promise." />
       <ResponsiveContainer width="100%" height={260}>
         <BarChart data={data} margin={{ top: 8, right: 8, left: -18, bottom: 36 }}>
+          <defs>
+            <linearGradient id="gNow" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#aab4c0" />
+              <stop offset="100%" stopColor="#7a8794" />
+            </linearGradient>
+            <linearGradient id="gModel" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor="#2c7be5" />
+              <stop offset="100%" stopColor="#0e5196" />
+            </linearGradient>
+          </defs>
           <XAxis dataKey="name" angle={-30} textAnchor="end" interval={0} tick={{ fontSize: 11 }} height={60} />
           <YAxis domain={[0, 10]} tick={{ fontSize: 11 }} />
-          <Tooltip />
+          <Tooltip cursor={{ fill: 'rgba(44,123,229,0.06)' }} />
           <Legend wrapperStyle={{ fontSize: 12 }} />
-          <Bar dataKey="now" name="Now" fill={C.grey} radius={[4, 4, 0, 0]} animationDuration={500} />
-          <Bar dataKey="model" name="Model" fill={C.navy} radius={[4, 4, 0, 0]} animationDuration={500} />
+          <Bar dataKey="now" name="Now" fill="url(#gNow)" radius={[6, 6, 0, 0]} animationDuration={700} />
+          <Bar dataKey="model" name="Model" fill="url(#gModel)" radius={[6, 6, 0, 0]} animationDuration={900} />
         </BarChart>
       </ResponsiveContainer>
     </GlassCard>
