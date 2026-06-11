@@ -59,13 +59,12 @@ export default function App() {
             transition={{ type: 'spring', stiffness: 200, damping: 14 }}
             className="h-12 w-12"
           />
-          <div className="leading-none">
-            <h1 className="font-display text-[1.4rem] leading-none">
-              <span className="font-medium tracking-[0.22em] text-brand-navy">AUTISM</span>
-              <span className="font-black tracking-tight text-brand-deep">&nbsp;COMPASS</span>
+          <div className="leading-tight">
+            <h1 className="font-display text-[1.05rem] font-black leading-none text-brand-deep sm:text-[1.25rem]">
+              ASD Clinical Metrics <span className="text-brand-navy">&amp;</span> Guidance Tool
             </h1>
-            <p className="mt-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">
-              Clinical metrics &amp; guidance tool
+            <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">
+              Autism Compass · education only
             </p>
           </div>
         </div>
