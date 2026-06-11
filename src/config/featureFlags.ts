@@ -20,6 +20,8 @@ export interface FeatureFlags {
   GROWTH_LIVE: boolean
   /** Sponsor / advertiser slots (therapies, supplements, sensory) are shown to the public. */
   SPONSORS_LIVE: boolean
+  /** Affiliate "where to buy a quality version" links are shown to the public. */
+  AFFILIATE_LIVE: boolean
 }
 
 export const featureFlags: FeatureFlags = {
@@ -28,6 +30,7 @@ export const featureFlags: FeatureFlags = {
   PREMIUM_LIVE: false,
   GROWTH_LIVE: false,
   SPONSORS_LIVE: false,
+  AFFILIATE_LIVE: false,
 }
 
 /**

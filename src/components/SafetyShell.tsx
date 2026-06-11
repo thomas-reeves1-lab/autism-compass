@@ -71,7 +71,18 @@ export function EmergencyWarning() {
 }
 
 /** Footer on every page. */
-export function SiteFooter() {
+export function SiteFooter({
+  onOpen,
+}: {
+  onOpen?: (doc: 'guide' | 'privacy' | 'terms' | 'refunds' | 'affiliate') => void
+}) {
+  const links: { key: 'guide' | 'privacy' | 'terms' | 'refunds' | 'affiliate'; label: string }[] = [
+    { key: 'guide', label: 'Free guide' },
+    { key: 'privacy', label: 'Privacy' },
+    { key: 'terms', label: 'Terms' },
+    { key: 'refunds', label: 'Refunds' },
+    { key: 'affiliate', label: 'Affiliate disclosure' },
+  ]
   return (
     <footer className="mt-12 border-t border-white/40 bg-white/85 backdrop-blur">
       <div className="mx-auto max-w-6xl px-4 py-6 text-center text-xs text-slate-500">
@@ -81,6 +92,15 @@ export function SiteFooter() {
         <p className="mt-1">
           Do not change medication without the prescriber. For urgent risk, seek urgent medical help.
         </p>
+        {onOpen && (
+          <div className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
+            {links.map((l) => (
+              <button key={l.key} onClick={() => onOpen(l.key)} className="font-semibold text-brand-navy hover:underline">
+                {l.label}
+              </button>
+            ))}
+          </div>
+        )}
         <p className="mt-2 text-slate-400">A registered provider evidence project.</p>
       </div>
     </footer>

@@ -5,7 +5,10 @@ import {
   ClipboardList, BookOpen, FileText, ShoppingBag, Rocket, HandHeart,
 } from './components/icons'
 import { TopWarningBanner, EmergencyWarning, SiteFooter } from './components/SafetyShell'
+import { ConsentBanner } from './components/ConsentBanner'
 import { Disclaimer } from './components/ui'
+import { LeadCapture } from './features/growth/LeadCapture'
+import type { LegalDoc } from './features/legal/Legal'
 // Dashboard core — eager (this is the landing view)
 import { BaselineEditor, DoseSliders, EvidenceModeToggle } from './features/calculator/Controls'
 import { KpiGrid } from './features/calculator/KpiGrid'
@@ -25,6 +28,8 @@ const DoctorPack = lazy(() => import('./features/doctorPack/DoctorPack').then((m
 const StorePreview = lazy(() => import('./features/store/StorePreview').then((m) => ({ default: m.StorePreview })))
 const GrowthPreview = lazy(() => import('./features/growth/GrowthPreview').then((m) => ({ default: m.GrowthPreview })))
 const Supports = lazy(() => import('./features/supports/Supports').then((m) => ({ default: m.Supports })))
+const FreeGuide = lazy(() => import('./features/growth/FreeGuide').then((m) => ({ default: m.FreeGuide })))
+const Legal = lazy(() => import('./features/legal/Legal').then((m) => ({ default: m.Legal })))
 
 function TabFallback() {
   return (
@@ -54,6 +59,7 @@ const TABS: { id: TabId; label: string; icon: typeof Compass }[] = [
 
 export default function App() {
   const [tab, setTab] = useState<TabId>('dashboard')
+  const [overlay, setOverlay] = useState<null | 'guide' | LegalDoc>(null)
 
   return (
     <div className="min-h-screen">
@@ -179,6 +185,7 @@ export default function App() {
                 </Suspense>
                 <NacFeature />
                 <AddOns />
+                <LeadCapture source="dashboard" onOpenGuide={() => setOverlay('guide')} />
                 <Disclaimer />
               </div>
             )}
@@ -203,7 +210,37 @@ export default function App() {
         </AnimatePresence>
       </main>
 
-      <SiteFooter />
+      <SiteFooter onOpen={(d) => setOverlay(d)} />
+
+      <ConsentBanner />
+
+      <AnimatePresence>
+        {overlay && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 overflow-y-auto bg-black/50 p-4 backdrop-blur-sm"
+            onClick={() => setOverlay(null)}
+          >
+            <motion.div
+              initial={{ y: 16, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              className="mx-auto my-6 max-w-3xl"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="mb-2 flex justify-end">
+                <button onClick={() => setOverlay(null)} className="btn-ghost px-3 py-1.5 text-xs">
+                  Close
+                </button>
+              </div>
+              <Suspense fallback={<TabFallback />}>
+                {overlay === 'guide' ? <FreeGuide /> : <Legal doc={overlay} />}
+              </Suspense>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
