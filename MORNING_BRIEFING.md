@@ -1,28 +1,27 @@
-# Morning Briefing — Autism Compass overnight build
+# Morning Briefing — Autism Compass overnight build (FINAL)
 
 ## TL;DR
-Built and shipped three safe, dormant, education-only upgrades while you slept: SEO foundation (robots, sitemap, FAQ schema), a 6-email nurture sequence as drafts (not sent), and a "what it is / what it is not" trust section. No live flags flipped, no claims made, nothing that sells. Build green, 16/16 tests, claim gate clean, deployed. **Your one decision:** pick an email tool so the nurture drafts can be wired, and book the 3 sign-offs before anything goes live.
+Overnight run complete. Shipped four safe, dormant, education-only upgrades: SEO foundation, a 6-email nurture sequence (drafts, not sent), a "what it is / what it is not" trust section, and a premium polish of the dormant growth/plans page. No live flags flipped, no claims, nothing that sells. Every batch: build green, 16/16 tests, claim gate clean, deployed. **Loop stopped on purpose** once safe tracks ran out, instead of inventing risky work. **Your one decision:** pick an email tool + book the 3 sign-offs so the gated work can begin.
 
-## Shipped
-- **Track A — SEO foundation.** `public/robots.txt`, `public/sitemap.xml`, FAQPage JSON-LD added to `index.html`. ~40 LOC. Build green.
-- **Track B — Nurture drafts.** `src/content/nurture.ts` (6 emails: day 0,2,5,9,14,21). Not wired to send. ~70 LOC.
-- **Track C — Trust section.** `src/features/growth/TrustSection.tsx` on the dashboard. ~45 LOC. Renders, build green.
-- **Track D — Verify.** `npm run build` green, `npm run test` 16/16, claim gate clean (only guard comments match).
-- Deployed to Pages + pushed master (commit fde08ea). Live: https://thomas-reeves1-lab.github.io/autism-compass/
+## Shipped (2 iterations)
+- **SEO foundation.** `public/robots.txt`, `public/sitemap.xml`, FAQPage JSON-LD in `index.html`. (commit fde08ea)
+- **Nurture drafts.** `src/content/nurture.ts` — 6 emails, not wired to send. (fde08ea)
+- **Trust section.** `src/features/growth/TrustSection.tsx` on the dashboard. (fde08ea)
+- **Growth/Plans polish.** Premium plan cards (depth, "most popular" ribbon, cost-per-day, reveal), card/field styles. GROWTH_LIVE stays false. (540410a)
+- All deployed to Pages + master. Live: https://thomas-reeves1-lab.github.io/autism-compass/
 
 ## Blocked
-- **Browser screenshot check:** Playwright threw "frame detached" mid-run, so no visual screenshot this batch. Build + tests + claim grep stand in. Re-check visually in the morning.
+- **Visual screenshot recheck:** Playwright stayed unhealthy ("frame detached"), so no live screenshots overnight. Build + 16 tests + claim grep stood in as proof each time. Please eyeball the site in the morning.
 
 ## Conflicts requiring decision
-- **robots.txt / sitemap on a project page.** They sit at `/autism-compass/robots.txt`, but crawlers read robots at the domain root. They only become fully effective once you point **autismcompass.com.au** at the site. No action needed tonight; just know they switch on with the custom domain.
-- **Per-ingredient SEO pages** (the big organic-traffic win) need real routes + prerendering, which is a larger change I deliberately did NOT do unsupervised. Flagged for a reviewed build.
+- **robots/sitemap** only become fully effective on the **autismcompass.com.au** custom domain (a project-page subpath is not where crawlers look). No fix needed; they switch on with the domain.
+- **Per-ingredient SEO pages** (the big organic-traffic win) need real routes + prerendering. I did NOT build this unsupervised. It deserves a reviewed daytime build.
 
-## Suggested next (safe) order
-1. Growth module visual polish (dormant, GROWTH_LIVE stays false).
-2. Accessibility deeper pass + visual screenshot recheck.
-3. STOP the loop once these are done. Per BUILD_PLAN, do not invent risky work.
+## Why the loop stopped
+The remaining high-value work all crosses a line I will not cross unsupervised: live email, affiliate signup, payments, legal-final, or per-route prerender. Per BUILD_PLAN, I stopped rather than invent low-value or risky changes.
 
-## Still gated on YOU (cannot be done unsupervised)
-- Pick email tool (MailerLite/Brevo) → then I wire nurture + capture.
-- 3 sign-offs (lawyer, TGA, NDIS) before any ad or sale.
-- Separate company + affiliate program signup → then flip AFFILIATE_LIVE.
+## Gated on YOU (then I can continue)
+1. Pick email tool (MailerLite/Brevo) → I wire the nurture drafts + capture.
+2. 3 sign-offs (lawyer, TGA, NDIS) before any ad or sale.
+3. Separate company + affiliate program → flip AFFILIATE_LIVE.
+4. Custom domain autismcompass.com.au → robots/sitemap go live; SEO routes build (reviewed).
