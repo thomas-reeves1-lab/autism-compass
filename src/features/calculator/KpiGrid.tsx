@@ -27,16 +27,14 @@ function KpiCard({ metric }: { metric: MetricKey }) {
   const pm = useProjection()[metric]
   const [open, setOpen] = useState(false)
   const scale = metric === 'sedation' ? alertnessFace : faceFor
-  const baseFace = scale(pm.baseline)
   const projFace = scale(pm.projected)
   const delta = +(pm.projected - pm.baseline).toFixed(1)
 
-  // Pointer-driven 3D tilt
+  // Subtle pointer tilt for depth
   const mx = useMotionValue(0)
   const my = useMotionValue(0)
-  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [7, -7]), { stiffness: 200, damping: 18 })
-  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-7, 7]), { stiffness: 200, damping: 18 })
-
+  const rotateX = useSpring(useTransform(my, [-0.5, 0.5], [5, -5]), { stiffness: 200, damping: 18 })
+  const rotateY = useSpring(useTransform(mx, [-0.5, 0.5], [-5, 5]), { stiffness: 200, damping: 18 })
   const onMove = (e: PointerEvent<HTMLDivElement>) => {
     const r = e.currentTarget.getBoundingClientRect()
     mx.set((e.clientX - r.left) / r.width - 0.5)
@@ -53,71 +51,71 @@ function KpiCard({ metric }: { metric: MetricKey }) {
       onPointerMove={onMove}
       onPointerLeave={onLeave}
       style={{ rotateX, rotateY, transformPerspective: 900 }}
-      className="card lift overflow-hidden p-3"
+      className="card lift overflow-hidden p-2.5"
     >
-      <div className="flex items-start justify-between gap-1">
-        <h3 className="text-xs font-extrabold leading-tight text-brand-deep">{metricLabels[metric]}</h3>
-        <button
-          onClick={() => setOpen((o) => !o)}
-          className="-mr-1 -mt-0.5 shrink-0 rounded-full p-1 text-slate-400 transition hover:bg-brand-sky hover:text-brand-navy"
-          aria-label="Why did this number move?"
-        >
-          <Info size={14} />
-        </button>
-      </div>
-
-      <div className="mt-2 flex items-center justify-between gap-1">
-        <div className="text-center">
-          <div className="opacity-60"><FaceEmoji id={baseFace.id} size={26} /></div>
-          <div className="text-[10px] text-slate-400">now {pm.baseline}</div>
-        </div>
+      <div className="flex items-center gap-2.5">
+        {/* Premium face token */}
         <motion.div
-          aria-hidden
-          animate={{ x: [0, 3, 0] }}
-          transition={{ duration: 1.6, repeat: Infinity }}
-          className="text-xs text-brand-leaf"
+          key={projFace.id}
+          initial={{ scale: 0.7 }}
+          animate={{ scale: 1 }}
+          transition={{ type: 'spring', stiffness: 320, damping: 16 }}
+          className={`grid h-11 w-11 shrink-0 place-items-center rounded-2xl ring-1 ring-black/5 ${projFace.bg}`}
+          style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.7), 0 6px 14px -9px rgba(6,32,63,0.5)' }}
         >
-          ➜
+          <FaceEmoji id={projFace.id} size={30} />
         </motion.div>
-        <div className={`relative rounded-lg px-2 py-1 text-center ${projFace.bg} glow-ring`}>
-          <motion.div key={pm.projected + projFace.id} initial={{ scale: 0.6, rotate: -8 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: 'spring', stiffness: 300, damping: 14 }} className="flex justify-center">
-            <FaceEmoji id={projFace.id} size={32} />
-          </motion.div>
-          <div className={`text-[10px] font-bold ${projFace.colour}`}>
-            <AnimatedNumber value={pm.projected} decimals={pm.projected % 1 === 0 ? 0 : 1} />
+
+        <div className="min-w-0 flex-1">
+          <div className="flex items-start justify-between gap-1">
+            <h3 className="text-[11px] font-extrabold leading-tight text-brand-deep line-clamp-2">
+              {metricLabels[metric]}
+            </h3>
+            <button
+              onClick={() => setOpen((o) => !o)}
+              className="-mr-0.5 -mt-0.5 shrink-0 rounded-full p-0.5 text-slate-300 transition hover:text-brand-navy"
+              aria-label="Why did this number move?"
+            >
+              <Info size={13} />
+            </button>
+          </div>
+          <div className="mt-0.5 flex items-baseline gap-1.5">
+            <span className={`text-lg font-black leading-none ${projFace.colour}`}>
+              <AnimatedNumber value={pm.projected} decimals={pm.projected % 1 === 0 ? 0 : 1} />
+            </span>
+            {delta !== 0 && (
+              <motion.span
+                key={delta}
+                initial={{ opacity: 0, y: -2 }}
+                animate={{ opacity: 1, y: 0 }}
+                className={`rounded px-1 py-0.5 text-[9px] font-extrabold ${delta < 0 ? 'bg-safe-soft text-safe' : 'bg-doctor-soft text-doctor'}`}
+              >
+                {delta < 0 ? '▼' : '▲'}{Math.abs(delta)}
+              </motion.span>
+            )}
+            <span className="ml-auto text-[9px] font-semibold text-slate-400">was {pm.baseline}</span>
           </div>
         </div>
       </div>
 
-      {/* Bar with uncertainty band + shimmer */}
-      <div className="mt-2">
-        <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-slate-100">
-          <div
-            className="absolute top-0 h-full rounded-full bg-slate-300/60"
-            style={{ left: `${pm.low * 10}%`, width: `${(pm.high - pm.low) * 10}%` }}
-          />
-          <motion.div
-            className="shine absolute top-0 h-full rounded-full"
-            style={{ background: 'linear-gradient(90deg, #0e5196, #2c7be5)' }}
-            initial={false}
-            animate={{ width: `${pm.projected * 10}%` }}
-            transition={{ type: 'spring', stiffness: 120, damping: 18 }}
-          />
-        </div>
-        <div className="mt-1 flex justify-between text-[10px] text-slate-400">
-          <span>calm</span>
-          {delta !== 0 && (
-            <motion.span
-              key={delta}
-              initial={{ opacity: 0, y: -3 }}
-              animate={{ opacity: 1, y: 0 }}
-              className={delta < 0 ? 'font-bold text-safe' : 'font-bold text-doctor'}
-            >
-              {delta < 0 ? '▼' : '▲'} {Math.abs(delta)}
-            </motion.span>
-          )}
-          <span>severe</span>
-        </div>
+      {/* Slim bar: uncertainty band, baseline tick, gradient fill */}
+      <div className="relative mt-2 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
+        <div
+          className="absolute top-0 h-full rounded-full bg-slate-300/60"
+          style={{ left: `${pm.low * 10}%`, width: `${(pm.high - pm.low) * 10}%` }}
+        />
+        <motion.div
+          className="absolute top-0 h-full rounded-full"
+          style={{ background: 'linear-gradient(90deg, #0e5196, #1D4ED8)' }}
+          initial={false}
+          animate={{ width: `${pm.projected * 10}%` }}
+          transition={{ type: 'spring', stiffness: 120, damping: 18 }}
+        />
+        <span
+          className="absolute top-[-2px] h-[10px] w-[2px] rounded bg-brand-deep/40"
+          style={{ left: `calc(${pm.baseline * 10}% - 1px)` }}
+          aria-hidden
+        />
       </div>
 
       <AnimatePresence>
@@ -126,12 +124,12 @@ function KpiCard({ metric }: { metric: MetricKey }) {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="mt-3 overflow-hidden border-t border-slate-100 pt-3"
+            className="overflow-hidden border-t border-slate-100"
           >
-            <p className="mb-1 text-xs font-bold text-slate-500">Why did this number move?</p>
-            <ul className="space-y-1.5">
+            <p className="mb-1 mt-2 text-[10px] font-bold text-slate-500">Why did this move?</p>
+            <ul className="space-y-1">
               {explainMetric(pm).map((line, i) => (
-                <li key={i} className="text-xs text-slate-600">
+                <li key={i} className="text-[10px] leading-snug text-slate-600">
                   {line}
                 </li>
               ))}
@@ -139,7 +137,7 @@ function KpiCard({ metric }: { metric: MetricKey }) {
             {pm.contributions.length > 0 && (
               <div className="mt-2 flex flex-wrap gap-1">
                 {pm.contributions.map((c, i) => (
-                  <span key={i} className={`pill bg-slate-50 ${numberLabelMeta[c.label].colour}`}>
+                  <span key={i} className={`pill bg-slate-50 text-[9px] ${numberLabelMeta[c.label].colour}`}>
                     {numberLabelMeta[c.label].label}
                   </span>
                 ))}

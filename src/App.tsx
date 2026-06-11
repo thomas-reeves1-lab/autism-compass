@@ -50,23 +50,21 @@ export default function App() {
       <TopWarningBanner />
 
       <header className="border-b border-white/60 bg-white/70 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3">
+        <div className="mx-auto flex max-w-6xl items-center gap-2.5 px-4 py-2.5">
           <motion.img
             src={`${import.meta.env.BASE_URL}brand/autism-compass-mark.svg`}
             alt="Autism Compass"
             initial={{ rotate: -12, scale: 0.8, opacity: 0 }}
             animate={{ rotate: 0, scale: 1, opacity: 1 }}
             transition={{ type: 'spring', stiffness: 200, damping: 14 }}
-            className="h-12 w-12"
+            className="h-9 w-9 sm:h-10 sm:w-10"
           />
-          <div className="leading-tight">
-            <h1 className="font-display text-[1.05rem] font-black leading-none text-brand-deep sm:text-[1.25rem]">
-              ASD Clinical Metrics <span className="text-brand-navy">&amp;</span> Guidance Tool
-            </h1>
-            <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400">
-              Autism Compass · education only
-            </p>
-          </div>
+          <span className="font-display text-base font-black tracking-tight text-brand-deep sm:text-lg">
+            Autism Compass
+          </span>
+          <span className="ml-2 hidden text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400 sm:inline">
+            Education only
+          </span>
         </div>
       </header>
 
@@ -106,24 +104,42 @@ export default function App() {
 
       <main className="mx-auto max-w-6xl px-4 py-6">
         {tab === 'dashboard' && (
-          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-6">
-            <motion.span
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="pill mb-3 inline-flex bg-white/80 text-brand-navy glow-ring"
-            >
-              <span className="h-2 w-2 animate-pulse rounded-full bg-brand-leaf" /> 40 studied options · evidence-labelled
-            </motion.span>
-            <h2 className="text-3xl font-extrabold leading-tight sm:text-5xl">
-              <span className="text-gradient-bright">Understand the evidence.</span>
-              <br />
-              <span className="text-white">Walk in prepared.</span>
-            </h2>
-            <p className="mt-3 max-w-2xl text-sm text-slate-200 sm:text-base">
-              See what published studies found about common ASD behaviour and supplement pathways.
-              Track changes. Prepare for the doctor.{' '}
-              <span className="font-bold text-white">This is not medical advice.</span>
-            </p>
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="relative mb-6 overflow-hidden rounded-3xl p-6 shine sm:p-8"
+            style={{
+              background: 'linear-gradient(135deg, #071a36 0%, #0b2347 45%, #08305c 100%)',
+              boxShadow: '0 24px 60px -28px rgba(6,32,63,0.85), inset 0 1px 0 rgba(255,255,255,0.08)',
+            }}
+          >
+            {/* aurora glow accents */}
+            <div
+              className="pointer-events-none absolute inset-0"
+              style={{
+                background:
+                  'radial-gradient(40% 60% at 88% 8%, rgba(44,123,229,0.45), transparent 60%), radial-gradient(34% 50% at 8% 95%, rgba(123,192,67,0.35), transparent 60%)',
+              }}
+            />
+            <div className="relative">
+              <motion.span
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-white ring-1 ring-white/20 backdrop-blur"
+              >
+                <span className="h-2 w-2 animate-pulse rounded-full bg-brand-leaf" /> 40 studied options · evidence-labelled
+              </motion.span>
+              <h1 className="font-display text-[1.7rem] font-black leading-[1.05] tracking-tight sm:text-5xl">
+                <span className="text-gradient-bright">ASD Clinical Metrics</span>
+                <br />
+                <span className="text-white">&amp; Guidance Tool</span>
+              </h1>
+              <p className="mt-3 max-w-2xl text-sm text-slate-200/90 sm:text-base">
+                See what published studies found about common ASD behaviour and supplement pathways.
+                Adjust an option to see the estimated effect, then walk into the appointment prepared.{' '}
+                <span className="font-bold text-white">This is not medical advice.</span>
+              </p>
+            </div>
           </motion.div>
         )}
 
