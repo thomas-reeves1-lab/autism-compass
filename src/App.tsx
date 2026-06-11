@@ -8,6 +8,7 @@ import { TopWarningBanner, EmergencyWarning, SiteFooter } from './components/Saf
 import { ConsentBanner } from './components/ConsentBanner'
 import { Disclaimer } from './components/ui'
 import { LeadCapture } from './features/growth/LeadCapture'
+import { TrustSection } from './features/growth/TrustSection'
 import type { LegalDoc } from './features/legal/Legal'
 // Dashboard core — eager (this is the landing view)
 import { BaselineEditor, DoseSliders, EvidenceModeToggle } from './features/calculator/Controls'
@@ -185,6 +186,7 @@ export default function App() {
                 </Suspense>
                 <NacFeature />
                 <AddOns />
+                <TrustSection />
                 <LeadCapture source="dashboard" onOpenGuide={() => setOverlay('guide')} />
                 <Disclaimer />
               </div>
