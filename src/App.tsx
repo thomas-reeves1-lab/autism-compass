@@ -145,10 +145,8 @@ export default function App() {
                   <EvidenceModeToggle />
                 </div>
                 <ScoreRings />
-                <div className="grid gap-6 lg:grid-cols-2">
-                  <BaselineEditor />
-                  <DoseSliders />
-                </div>
+                <DoseSliders />
+                <BaselineEditor />
                 <KpiGrid />
                 <div className="grid gap-6 lg:grid-cols-2">
                   <BehaviourChart />

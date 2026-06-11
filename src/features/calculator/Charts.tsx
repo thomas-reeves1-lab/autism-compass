@@ -29,13 +29,13 @@ const FOCUS: MetricKey[] = [
 
 const C = {
   navy: '#0E5196',
-  leaf: '#7BC043',
-  safe: '#2E9E5B',
-  caution: '#E0A800',
-  doctor: '#E8730C',
-  danger: '#D23B3B',
-  info: '#2C7BE5',
-  grey: '#7A8794',
+  leaf: '#5FA52E',
+  safe: '#15803D',
+  caution: '#B45309',
+  doctor: '#C2410C',
+  danger: '#B91C1C',
+  info: '#1D4ED8',
+  grey: '#64748B',
 }
 
 /** 1. Behaviour change: baseline vs projected for focus metrics. */

@@ -15,7 +15,7 @@ export function KpiGrid() {
   const keys = (Object.keys(metricLabels) as MetricKey[]).filter((k) => enabled[k])
 
   return (
-    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+    <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
       {keys.map((k) => (
         <KpiCard key={k} metric={k} />
       ))}
@@ -53,44 +53,44 @@ function KpiCard({ metric }: { metric: MetricKey }) {
       onPointerMove={onMove}
       onPointerLeave={onLeave}
       style={{ rotateX, rotateY, transformPerspective: 900 }}
-      className="card lift overflow-hidden p-4"
+      className="card lift overflow-hidden p-3"
     >
-      <div className="flex items-start justify-between gap-2">
-        <h3 className="text-sm font-extrabold text-brand-deep">{metricLabels[metric]}</h3>
+      <div className="flex items-start justify-between gap-1">
+        <h3 className="text-xs font-extrabold leading-tight text-brand-deep">{metricLabels[metric]}</h3>
         <button
           onClick={() => setOpen((o) => !o)}
-          className="rounded-full p-1 text-slate-400 transition hover:bg-brand-sky hover:text-brand-navy"
+          className="-mr-1 -mt-0.5 shrink-0 rounded-full p-1 text-slate-400 transition hover:bg-brand-sky hover:text-brand-navy"
           aria-label="Why did this number move?"
         >
-          <Info size={16} />
+          <Info size={14} />
         </button>
       </div>
 
-      <div className="mt-3 flex items-center justify-between">
+      <div className="mt-2 flex items-center justify-between gap-1">
         <div className="text-center">
-          <div className="opacity-70"><FaceEmoji id={baseFace.id} size={32} /></div>
-          <div className="text-xs text-slate-400">now {pm.baseline}</div>
+          <div className="opacity-60"><FaceEmoji id={baseFace.id} size={26} /></div>
+          <div className="text-[10px] text-slate-400">now {pm.baseline}</div>
         </div>
         <motion.div
           aria-hidden
           animate={{ x: [0, 3, 0] }}
           transition={{ duration: 1.6, repeat: Infinity }}
-          className="text-brand-leaf"
+          className="text-xs text-brand-leaf"
         >
           ➜
         </motion.div>
-        <div className={`relative rounded-xl px-3 py-1 text-center ${projFace.bg} glow-ring`}>
+        <div className={`relative rounded-lg px-2 py-1 text-center ${projFace.bg} glow-ring`}>
           <motion.div key={pm.projected + projFace.id} initial={{ scale: 0.6, rotate: -8 }} animate={{ scale: 1, rotate: 0 }} transition={{ type: 'spring', stiffness: 300, damping: 14 }} className="flex justify-center">
-            <FaceEmoji id={projFace.id} size={40} />
+            <FaceEmoji id={projFace.id} size={32} />
           </motion.div>
-          <div className={`text-xs font-bold ${projFace.colour}`}>
-            model <AnimatedNumber value={pm.projected} decimals={pm.projected % 1 === 0 ? 0 : 1} />
+          <div className={`text-[10px] font-bold ${projFace.colour}`}>
+            <AnimatedNumber value={pm.projected} decimals={pm.projected % 1 === 0 ? 0 : 1} />
           </div>
         </div>
       </div>
 
       {/* Bar with uncertainty band + shimmer */}
-      <div className="mt-3">
+      <div className="mt-2">
         <div className="relative h-2.5 w-full overflow-hidden rounded-full bg-slate-100">
           <div
             className="absolute top-0 h-full rounded-full bg-slate-300/60"

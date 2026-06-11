@@ -133,7 +133,7 @@ export function RingGauge({
   max = 10,
   size = 116,
   stroke = 11,
-  colour = '#2c7be5',
+  colour = '#1D4ED8',
   label,
   sublabel,
 }: {

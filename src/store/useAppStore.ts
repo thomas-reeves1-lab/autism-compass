@@ -37,6 +37,8 @@ interface AppState {
   selectedAdjuncts: string[]
   selectedTherapies: string[]
   selectedSensory: string[]
+  /** Id of the most recently added option (for the "last added" effect summary). */
+  lastAdded: string | null
   evidenceMode: EvidenceMode
 
   // tracker + change log (local only)
@@ -73,6 +75,7 @@ export const useAppStore = create<AppState>()(
       selectedAdjuncts: [],
       selectedTherapies: [],
       selectedSensory: [],
+      lastAdded: null,
       evidenceMode: 'practical',
       trackerEntries: [],
       changeEvents: [],
@@ -84,11 +87,13 @@ export const useAppStore = create<AppState>()(
       setRisperidone: (v) => set({ risperidoneDose: v }),
       setNac: (v) => set({ nacDose: v }),
       toggleAdjunct: (id) =>
-        set((s) => ({
-          selectedAdjuncts: s.selectedAdjuncts.includes(id)
-            ? s.selectedAdjuncts.filter((x) => x !== id)
-            : [...s.selectedAdjuncts, id],
-        })),
+        set((s) => {
+          const has = s.selectedAdjuncts.includes(id)
+          return {
+            selectedAdjuncts: has ? s.selectedAdjuncts.filter((x) => x !== id) : [...s.selectedAdjuncts, id],
+            lastAdded: has ? (s.lastAdded === id ? null : s.lastAdded) : id,
+          }
+        }),
       toggleTherapy: (id) =>
         set((s) => ({
           selectedTherapies: s.selectedTherapies.includes(id)

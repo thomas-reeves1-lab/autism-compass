@@ -2,9 +2,10 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Leaf, Lock, ChevronDown, ShieldCheck } from '../../components/icons'
 import { treatments } from '../../data/evidence'
-import type { Treatment } from '../../lib/types'
+import type { Treatment, MetricKey } from '../../lib/types'
 import { metricLabels } from '../../lib/labels'
 import { useAppStore } from '../../store/useAppStore'
+import { useProjection } from '../../lib/useProjection'
 import { GlassCard, SectionTitle, EvidenceBadge, SafetyScoreChip } from '../../components/ui'
 import { SponsorSlot } from '../../components/SponsorSlot'
 import { safetyScore } from '../../lib/safety'
@@ -30,6 +31,8 @@ const ADJUNCTS = treatments
 
 export function AddOns() {
   const selectedAdjuncts = useAppStore((s) => s.selectedAdjuncts)
+  const lastAdded = useAppStore((s) => s.lastAdded)
+  const projection = useProjection()
   // Selected options float to the top, then medicines-first by group weight.
   const ordered = [...ADJUNCTS].sort((a, b) => {
     const sa = selectedAdjuncts.includes(a.id) ? 0 : 1
@@ -37,6 +40,19 @@ export function AddOns() {
     if (sa !== sb) return sa - sb
     return groupWeight(a.category) - groupWeight(b.category)
   })
+
+  // What did the most recently added option actually move?
+  const lastEffects = (
+    lastAdded
+      ? (Object.keys(projection) as MetricKey[]).flatMap((m) => {
+          const c = projection[m].contributions.find((x) => x.treatmentId === lastAdded)
+          return c ? [{ metric: m, delta: c.delta, name: c.treatmentName }] : []
+        })
+      : []
+  )
+    .sort((a, b) => Math.abs(b.delta) - Math.abs(a.delta))
+    .slice(0, 5)
+
   return (
     <GlassCard>
       <SectionTitle
@@ -44,6 +60,35 @@ export function AddOns() {
         title="Add-on options to learn about"
         subtitle="Switch options on — they jump to the top. Supplements need a safety check first. Doctor-only items open an education gate."
       />
+
+      <AnimatePresence mode="wait">
+        {lastAdded && lastEffects.length > 0 && (
+          <motion.div
+            key={lastAdded}
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -8 }}
+            className="mb-4 flex flex-wrap items-center gap-2 rounded-xl p-3 text-white shadow-card"
+            style={{ background: 'linear-gradient(110deg, #0E5196, #1740A8)' }}
+          >
+            <span className="rounded-md bg-brand-leaf/90 px-2 py-0.5 text-[10px] font-black uppercase tracking-wide text-brand-deep">
+              Just added
+            </span>
+            <span className="font-extrabold">{lastEffects[0].name}</span>
+            <span className="text-xs text-white/60">moved</span>
+            {lastEffects.map((e) => (
+              <span
+                key={e.metric}
+                className="pill-solid"
+                style={{ background: e.delta < 0 ? '#15803D' : '#C2410C' }}
+              >
+                {e.delta < 0 ? '▼' : '▲'} {metricLabels[e.metric]} {Math.abs(e.delta)}
+              </span>
+            ))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <motion.div layout className="grid grid-cols-1 gap-3 md:grid-cols-2">
         {ordered.map((t) => (
           <AddOnCard key={t.id} t={t} />
