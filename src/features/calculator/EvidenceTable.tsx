@@ -4,6 +4,7 @@ import type { EvidenceLevel } from '../../lib/types'
 import { evidenceLevelMeta } from '../../lib/labels'
 import { GlassCard, SectionTitle, EvidenceBadge, SafetyScoreChip } from '../../components/ui'
 import { safetyScore } from '../../lib/safety'
+import { Lock } from '../../components/icons'
 
 type SortKey = 'name' | 'category' | 'evidenceLevel' | 'harmLevel'
 
@@ -56,35 +57,46 @@ export function EvidenceTable() {
           </button>
         ))}
       </div>
-      <div className="overflow-x-auto">
+      <div className="max-h-[540px] overflow-auto rounded-xl ring-1 ring-brand-deep/10">
         <table className="w-full text-left text-sm">
           <thead>
-            <tr className="border-b border-slate-200 text-xs uppercase tracking-wide text-slate-400">
+            <tr className="sticky top-0 z-10 bg-white/95 text-[11px] uppercase tracking-wide text-slate-500 shadow-[0_1px_0_rgba(14,81,150,0.12)] backdrop-blur">
               <Th onClick={() => setSort('name')}>Option</Th>
               <Th onClick={() => setSort('category')}>Category</Th>
               <Th onClick={() => setSort('evidenceLevel')}>Evidence</Th>
-              <th className="px-2 py-2">Safety /100</th>
-              <th className="px-2 py-2">Studied target</th>
+              <th className="px-3 py-2.5">Safety /100</th>
+              <th className="px-3 py-2.5">Studied target</th>
               <Th onClick={() => setSort('harmLevel')}>Risk</Th>
-              <th className="px-2 py-2">Doctor only</th>
+              <th className="px-3 py-2.5">Doctor only</th>
             </tr>
           </thead>
           <tbody>
             {rows.map((t) => (
-              <tr key={t.id} className="border-b border-slate-100 hover:bg-brand-sky/40">
-                <td className="px-2 py-2 font-bold text-brand-deep">{t.name}</td>
-                <td className="px-2 py-2 text-slate-500">{t.category}</td>
-                <td className="px-2 py-2">
+              <tr
+                key={t.id}
+                className="border-b border-slate-100 transition even:bg-brand-sky/30 hover:bg-brand-sky/70"
+              >
+                <td className="px-3 py-2.5 font-bold text-brand-deep">{t.name}</td>
+                <td className="px-3 py-2.5 text-slate-500">{t.category}</td>
+                <td className="px-3 py-2.5">
                   <EvidenceBadge level={t.evidenceLevel} />
                 </td>
-                <td className="px-2 py-2">
+                <td className="px-3 py-2.5">
                   <SafetyScoreChip score={safetyScore(t)} />
                 </td>
-                <td className="px-2 py-2 text-xs text-slate-500">{t.sourceSummary.slice(0, 60)}…</td>
-                <td className="px-2 py-2">
+                <td className="px-3 py-2.5 text-xs text-slate-500">{t.sourceSummary.slice(0, 60)}…</td>
+                <td className="px-3 py-2.5">
                   <span className={harmColour(t.harmLevel)}>{t.harmLevel}</span>
                 </td>
-                <td className="px-2 py-2">{t.doctorOnly ? '🔒 Yes' : 'No'}</td>
+                <td className="px-3 py-2.5">
+                  {t.doctorOnly ? (
+                    <span className="inline-flex items-center gap-1 font-bold text-doctor">
+                      <Lock size={13} /> Yes
+                    </span>
+                  ) : (
+                    <span className="text-slate-400">No</span>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>

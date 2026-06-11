@@ -37,11 +37,11 @@ export function WhatChanged() {
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <label className="text-xs font-bold text-slate-500">
             Date
-            <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="mt-1 w-full rounded-lg border border-slate-200 p-2 text-sm" />
+            <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="mt-1 field" />
           </label>
           <label className="text-xs font-bold text-slate-500 sm:col-span-2">
             What changed
-            <select value={type} onChange={(e) => setType(e.target.value)} className="mt-1 w-full rounded-lg border border-slate-200 p-2 text-sm">
+            <select value={type} onChange={(e) => setType(e.target.value)} className="mt-1 field">
               {CHANGE_TYPES.map((t) => (
                 <option key={t}>{t}</option>
               ))}
@@ -52,7 +52,7 @@ export function WhatChanged() {
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
           placeholder="Notes (optional)"
-          className="mt-3 w-full rounded-lg border border-slate-200 p-2 text-sm"
+          className="mt-3 field"
           rows={2}
         />
         <button onClick={submit} className="btn-primary mt-3 text-sm">

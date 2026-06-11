@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import { ShieldPlus, Stethoscope, ClipboardCheck, HeartPulse } from '../../components/icons'
 import {
   sideEffectMatrix,
@@ -8,11 +9,11 @@ import {
 import type { TrafficLight } from '../../lib/safety'
 import { GlassCard, SectionTitle } from '../../components/ui'
 
-const URGENCY: Record<TrafficLight, { label: string; cls: string }> = {
-  green: { label: 'Track only', cls: 'bg-safe-soft text-safe' },
-  yellow: { label: 'Book review', cls: 'bg-caution-soft text-caution' },
-  orange: { label: 'Prompt doctor review', cls: 'bg-doctor-soft text-doctor' },
-  red: { label: 'Urgent medical help', cls: 'bg-danger-soft text-danger' },
+const URGENCY: Record<TrafficLight, { label: string; cls: string; colour: string }> = {
+  green: { label: 'Track only', cls: 'bg-safe-soft text-safe', colour: '#2e9e5b' },
+  yellow: { label: 'Book review', cls: 'bg-caution-soft text-caution', colour: '#e0a800' },
+  orange: { label: 'Prompt doctor review', cls: 'bg-doctor-soft text-doctor', colour: '#e8730c' },
+  red: { label: 'Urgent medical help', cls: 'bg-danger-soft text-danger', colour: '#d23b3b' },
 }
 
 export function MedicationSafety() {
@@ -47,11 +48,25 @@ export function MedicationSafety() {
       <GlassCard>
         <SectionTitle title="Side-effect risk matrix" subtitle="What families might see, what to track, and when to act. Calm and practical." />
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-          {sideEffectMatrix.map((r) => (
-            <div key={r.key} className="rounded-xl border border-slate-100 bg-white p-3">
+          {sideEffectMatrix.map((r, i) => (
+            <motion.div
+              key={r.key}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ delay: (i % 2) * 0.05 + Math.floor(i / 2) * 0.04, duration: 0.4 }}
+              className="accent-card p-3 pl-4"
+              style={{ ['--accent' as string]: URGENCY[r.urgency].colour }}
+            >
               <div className="flex items-start justify-between gap-2">
-                <p className="text-sm font-extrabold text-brand-deep">
-                  {r.key}. {r.name}
+                <p className="flex items-center gap-2 text-sm font-extrabold text-brand-deep">
+                  <span
+                    className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md text-[11px] text-white"
+                    style={{ background: URGENCY[r.urgency].colour }}
+                  >
+                    {r.key}
+                  </span>
+                  {r.name}
                 </p>
                 <span className={`pill ${URGENCY[r.urgency].cls}`}>{URGENCY[r.urgency].label}</span>
               </div>
@@ -67,7 +82,7 @@ export function MedicationSafety() {
                 <span className="font-bold">Ask: </span>
                 {r.doctorQuestion}
               </p>
-            </div>
+            </motion.div>
           ))}
         </div>
       </GlassCard>
@@ -141,11 +156,22 @@ export function MedicationSafety() {
       <GlassCard>
         <SectionTitle icon={<Stethoscope size={20} />} title="Who to ask" subtitle="The right person for the right question." />
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-          {specialists.map((s) => (
-            <div key={s.role} className="rounded-xl border border-slate-100 bg-white p-3">
-              <p className="text-sm font-extrabold text-brand-deep">{s.role}</p>
-              <p className="text-xs text-slate-600">{s.best}</p>
-            </div>
+          {specialists.map((s, i) => (
+            <motion.div
+              key={s.role}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-30px' }}
+              transition={{ delay: (i % 2) * 0.04, duration: 0.35 }}
+              className="accent-card p-3 pl-4"
+              style={{ ['--accent' as string]: '#0e5196' }}
+            >
+              <p className="flex items-center gap-2 text-sm font-extrabold text-brand-deep">
+                <Stethoscope size={15} className="text-brand-navy" />
+                {s.role}
+              </p>
+              <p className="mt-0.5 text-xs text-slate-600">{s.best}</p>
+            </motion.div>
           ))}
         </div>
       </GlassCard>

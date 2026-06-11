@@ -60,7 +60,7 @@ export function Tracker() {
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
           <label className="text-xs font-bold text-slate-500">
             Date
-            <input type="date" value={form.date} onChange={(e) => set('date', e.target.value)} className="mt-1 w-full rounded-lg border border-slate-200 p-2 text-sm" />
+            <input type="date" value={form.date} onChange={(e) => set('date', e.target.value)} className="mt-1 field" />
           </label>
           {numFields.map((f) => (
             <label key={f.k} className="text-xs font-bold text-slate-500">
@@ -69,7 +69,7 @@ export function Tracker() {
                 type="number"
                 value={form[f.k] as number}
                 onChange={(e) => set(f.k, Number(e.target.value) as never)}
-                className="mt-1 w-full rounded-lg border border-slate-200 p-2 text-sm"
+                className="mt-1 field"
               />
             </label>
           ))}
@@ -83,7 +83,7 @@ export function Tracker() {
           onChange={(e) => set('notes', e.target.value)}
           placeholder="Notes"
           rows={2}
-          className="mt-3 w-full rounded-lg border border-slate-200 p-2 text-sm"
+          className="mt-3 field"
         />
         <button onClick={submit} className="btn-primary mt-3 text-sm">
           Save day
