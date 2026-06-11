@@ -52,7 +52,7 @@ export default function App() {
       <header className="border-b border-white/60 bg-white/70 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3">
           <motion.img
-            src="/brand/autism-compass-mark.svg"
+            src={`${import.meta.env.BASE_URL}brand/autism-compass-mark.svg`}
             alt="Autism Compass"
             initial={{ rotate: -12, scale: 0.8, opacity: 0 }}
             animate={{ rotate: 0, scale: 1, opacity: 1 }}
@@ -65,7 +65,7 @@ export default function App() {
             </h1>
             <p className="text-xs text-slate-500">Clinical Metrics &amp; Guidance Tool · education only</p>
           </div>
-          <img src="/brand/iel-logo.png" alt="Integrity Empowered Living" className="ml-auto hidden h-9 sm:block" />
+          <img src={`${import.meta.env.BASE_URL}brand/iel-logo.png`} alt="Integrity Empowered Living" className="ml-auto hidden h-9 sm:block" />
         </div>
       </header>
 

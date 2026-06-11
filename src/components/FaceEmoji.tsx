@@ -26,7 +26,7 @@ const PALETTE: Record<FaceId, { skin: string; cheek?: string }> = {
 
 export function FaceEmoji({ id, size = 40, className = '' }: { id: FaceId; size?: number; className?: string }) {
   if (USE_PNG) {
-    return <img src={`/brand/emojis/${id}.png`} width={size} height={size} alt={id} className={className} />
+    return <img src={`${import.meta.env.BASE_URL}brand/emojis/${id}.png`} width={size} height={size} alt={id} className={className} />
   }
   const p = PALETTE[id]
   const cx = 50
