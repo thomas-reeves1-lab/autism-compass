@@ -38,6 +38,18 @@ const C = {
   grey: '#64748B',
 }
 
+/** All four charts in the dashboard grid (lazy-loaded so recharts stays out of the initial bundle). */
+export function ChartsGrid() {
+  return (
+    <div className="grid gap-6 lg:grid-cols-2">
+      <BehaviourChart />
+      <StackChart />
+      <BenefitHarmChart />
+      <EvidenceConfidenceChart />
+    </div>
+  )
+}
+
 /** 1. Behaviour change: baseline vs projected for focus metrics. */
 // Coloured delta label drawn above each "model" bar.
 function DeltaLabel(props: { x?: number; y?: number; width?: number; value?: number; index?: number; data: { delta: number }[] }) {

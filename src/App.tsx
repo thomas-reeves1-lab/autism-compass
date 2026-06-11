@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, lazy, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Compass, LayoutDashboard, Plane, HeartPulse, Workflow, History,
@@ -6,23 +6,33 @@ import {
 } from './components/icons'
 import { TopWarningBanner, EmergencyWarning, SiteFooter } from './components/SafetyShell'
 import { Disclaimer } from './components/ui'
+// Dashboard core — eager (this is the landing view)
 import { BaselineEditor, DoseSliders, EvidenceModeToggle } from './features/calculator/Controls'
 import { KpiGrid } from './features/calculator/KpiGrid'
 import { ScoreRings } from './features/calculator/ScoreRings'
 import { NacFeature } from './features/calculator/NacFeature'
-import { BehaviourChart, StackChart, BenefitHarmChart, EvidenceConfidenceChart } from './features/calculator/Charts'
 import { AddOns } from './features/calculator/AddOns'
-import { EvidenceTable } from './features/calculator/EvidenceTable'
-import { StudyLibrary } from './features/calculator/StudyLibrary'
-import { StackChecker } from './features/stackChecker/StackChecker'
-import { MedicationSafety } from './features/safety/MedicationSafety'
-import { LoopMap } from './features/loopMap/LoopMap'
-import { WhatChanged } from './features/whatChanged/WhatChanged'
-import { Tracker } from './features/tracker/Tracker'
-import { DoctorPack } from './features/doctorPack/DoctorPack'
-import { StorePreview } from './features/store/StorePreview'
-import { GrowthPreview } from './features/growth/GrowthPreview'
-import { Supports } from './features/supports/Supports'
+// Heavy / other tabs — lazy-loaded as separate chunks
+const ChartsGrid = lazy(() => import('./features/calculator/Charts').then((m) => ({ default: m.ChartsGrid })))
+const EvidenceTable = lazy(() => import('./features/calculator/EvidenceTable').then((m) => ({ default: m.EvidenceTable })))
+const StudyLibrary = lazy(() => import('./features/calculator/StudyLibrary').then((m) => ({ default: m.StudyLibrary })))
+const StackChecker = lazy(() => import('./features/stackChecker/StackChecker').then((m) => ({ default: m.StackChecker })))
+const MedicationSafety = lazy(() => import('./features/safety/MedicationSafety').then((m) => ({ default: m.MedicationSafety })))
+const LoopMap = lazy(() => import('./features/loopMap/LoopMap').then((m) => ({ default: m.LoopMap })))
+const WhatChanged = lazy(() => import('./features/whatChanged/WhatChanged').then((m) => ({ default: m.WhatChanged })))
+const Tracker = lazy(() => import('./features/tracker/Tracker').then((m) => ({ default: m.Tracker })))
+const DoctorPack = lazy(() => import('./features/doctorPack/DoctorPack').then((m) => ({ default: m.DoctorPack })))
+const StorePreview = lazy(() => import('./features/store/StorePreview').then((m) => ({ default: m.StorePreview })))
+const GrowthPreview = lazy(() => import('./features/growth/GrowthPreview').then((m) => ({ default: m.GrowthPreview })))
+const Supports = lazy(() => import('./features/supports/Supports').then((m) => ({ default: m.Supports })))
+
+function TabFallback() {
+  return (
+    <div className="glass flex items-center justify-center gap-2 p-10 text-sm text-slate-400">
+      <span className="h-3 w-3 animate-ping rounded-full bg-brand-leaf" /> Loading…
+    </div>
+  )
+}
 
 type TabId =
   | 'dashboard' | 'stack' | 'supports' | 'safety' | 'loop' | 'changed'
@@ -164,32 +174,31 @@ export default function App() {
                 <DoseSliders />
                 <BaselineEditor />
                 <KpiGrid />
-                <div className="grid gap-6 lg:grid-cols-2">
-                  <BehaviourChart />
-                  <StackChart />
-                  <BenefitHarmChart />
-                  <EvidenceConfidenceChart />
-                </div>
+                <Suspense fallback={<TabFallback />}>
+                  <ChartsGrid />
+                </Suspense>
                 <NacFeature />
                 <AddOns />
                 <Disclaimer />
               </div>
             )}
-            {tab === 'supports' && <Supports />}
-            {tab === 'stack' && <StackChecker />}
-            {tab === 'safety' && <MedicationSafety />}
-            {tab === 'loop' && <LoopMap />}
-            {tab === 'changed' && <WhatChanged />}
-            {tab === 'tracker' && <Tracker />}
-            {tab === 'evidence' && (
-              <div className="space-y-6">
-                <EvidenceTable />
-                <StudyLibrary />
-              </div>
-            )}
-            {tab === 'doctor' && <DoctorPack />}
-            {tab === 'store' && <StorePreview />}
-            {tab === 'plans' && <GrowthPreview />}
+            <Suspense fallback={<TabFallback />}>
+              {tab === 'supports' && <Supports />}
+              {tab === 'stack' && <StackChecker />}
+              {tab === 'safety' && <MedicationSafety />}
+              {tab === 'loop' && <LoopMap />}
+              {tab === 'changed' && <WhatChanged />}
+              {tab === 'tracker' && <Tracker />}
+              {tab === 'evidence' && (
+                <div className="space-y-6">
+                  <EvidenceTable />
+                  <StudyLibrary />
+                </div>
+              )}
+              {tab === 'doctor' && <DoctorPack />}
+              {tab === 'store' && <StorePreview />}
+              {tab === 'plans' && <GrowthPreview />}
+            </Suspense>
           </motion.div>
         </AnimatePresence>
       </main>
