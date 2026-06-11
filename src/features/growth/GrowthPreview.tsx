@@ -1,10 +1,11 @@
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 import { Rocket, Gift, Mail, Check, Sparkles } from '../../components/icons'
 import { ethics } from './ethics'
 import { sampleOffer, totalStackValue, quizQuestions } from './offers/offer'
 import { formatAud } from '../store/catalogue'
 import { isLive } from '../../config/featureFlags'
-import { GlassCard, SectionTitle, Pill, Disclaimer } from '../../components/ui'
+import { GlassCard, SectionTitle, Disclaimer } from '../../components/ui'
 
 const TIERS = [
   { name: 'Free', price: 0, features: ['Full evidence calculator', 'Safe Stack Checker', 'Basic family tracker', 'All safety tools'], cta: 'Always free' },
@@ -31,36 +32,51 @@ export function GrowthPreview() {
       {/* Subscription tiers */}
       <GlassCard>
         <SectionTitle icon={<Rocket size={20} />} title="Plans" subtitle="The core tool is free forever. Paid tiers only add convenience and white-label features." />
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
-          {TIERS.map((t) => (
-            <div key={t.name} className={`rounded-2xl border p-4 ${t.name === 'Premium' ? 'border-brand-navy bg-brand-sky/40' : 'border-slate-100 bg-white'}`}>
-              <div className="flex items-center justify-between">
+        <div className="grid grid-cols-1 gap-3 pt-2 md:grid-cols-3">
+          {TIERS.map((t, i) => {
+            const popular = t.name === 'Premium'
+            return (
+              <motion.div
+                key={t.name}
+                initial={{ opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.08, type: 'spring', stiffness: 220, damping: 22 }}
+                className={`card lift relative p-4 ${popular ? 'ring-2 ring-brand-navy md:-mt-2 md:scale-[1.03]' : ''}`}
+              >
+                {popular && (
+                  <span className="absolute -top-2 left-1/2 -translate-x-1/2 rounded-full bg-brand-navy px-3 py-0.5 text-[10px] font-black uppercase tracking-wide text-white shadow-card">
+                    Most popular
+                  </span>
+                )}
                 <h3 className="font-extrabold text-brand-deep">{t.name}</h3>
-                {t.name === 'Premium' && <Pill tone="info">popular</Pill>}
-              </div>
-              <p className="mt-1 text-2xl font-extrabold text-brand-navy">
-                {t.price === 0 ? 'Free' : `$${t.price}`}
-                {t.price > 0 && <span className="text-sm font-normal text-slate-400">/mo</span>}
-              </p>
-              <ul className="mt-3 space-y-1.5">
-                {t.features.map((f) => (
-                  <li key={f} className="flex items-start gap-1.5 text-xs text-slate-600">
-                    <Check size={14} className="mt-0.5 shrink-0 text-safe" /> {f}
-                  </li>
-                ))}
-              </ul>
-              <button disabled={!live} className={`mt-4 w-full text-sm ${t.price === 0 ? 'btn-ghost' : 'btn-primary'}`}>
-                {t.cta}
-              </button>
-            </div>
-          ))}
+                <p className="mt-1 flex items-baseline gap-1">
+                  <span className="text-3xl font-black text-brand-navy">{t.price === 0 ? 'Free' : `$${t.price}`}</span>
+                  {t.price > 0 && <span className="text-xs font-bold text-slate-400">/mo</span>}
+                </p>
+                {t.price > 0 && (
+                  <p className="text-[11px] font-semibold text-slate-400">about ${(t.price / 30).toFixed(2)} a day</p>
+                )}
+                <ul className="mt-3 space-y-1.5">
+                  {t.features.map((f) => (
+                    <li key={f} className="flex items-start gap-1.5 text-xs text-slate-600">
+                      <Check size={14} className="mt-0.5 shrink-0 text-safe" /> {f}
+                    </li>
+                  ))}
+                </ul>
+                <button disabled={!live} className={`mt-4 w-full text-sm ${t.price === 0 ? 'btn-ghost' : 'btn-primary'}`}>
+                  {t.cta}
+                </button>
+              </motion.div>
+            )
+          })}
         </div>
       </GlassCard>
 
       {/* Grand-slam offer (value stack) */}
       <GlassCard>
         <SectionTitle icon={<Sparkles size={20} />} title="Offer builder" subtitle="Honest value stacking. Every line is a real deliverable — no inflated promises." />
-        <div className="rounded-2xl border border-brand-navy/20 bg-white p-5">
+        <div className="card p-5">
           <h3 className="text-lg font-extrabold text-brand-deep">{sampleOffer.headline}</h3>
           <p className="text-sm text-slate-600">{sampleOffer.promise}</p>
           <ul className="mt-3 space-y-1.5">
@@ -130,7 +146,7 @@ function LeadMagnet() {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@example.com"
-          className="flex-1 rounded-lg border border-slate-200 p-2 text-sm"
+          className="field flex-1"
         />
         <button
           disabled={!email.includes('@') || !consent || !live}
