@@ -1,4 +1,4 @@
-import { Lock, Pill as PillIcon } from 'lucide-react'
+import { Lock, Pill as PillIcon } from '../../components/icons'
 import { useAppStore } from '../../store/useAppStore'
 import { metricLabels } from '../../lib/labels'
 import type { MetricKey } from '../../lib/types'

@@ -1,4 +1,4 @@
-import { FileText, Printer } from 'lucide-react'
+import { FileText, Printer } from '../../components/icons'
 import { useAppStore } from '../../store/useAppStore'
 import { useProjection } from '../../lib/useProjection'
 import { treatmentById } from '../../data/evidence'

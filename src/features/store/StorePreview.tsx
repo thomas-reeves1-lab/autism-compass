@@ -1,4 +1,4 @@
-import { ShoppingBag, Lock } from 'lucide-react'
+import { ShoppingBag, Lock } from '../../components/icons'
 import { products, formatAud } from './catalogue'
 import { isLive, showDormant } from '../../config/featureFlags'
 import { GlassCard, SectionTitle, Disclaimer, Pill } from '../../components/ui'

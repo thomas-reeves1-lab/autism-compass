@@ -1,4 +1,4 @@
-import { BookOpen } from 'lucide-react'
+import { BookOpen } from '../../components/icons'
 import { studies } from '../../data/studies'
 import { GlassCard, SectionTitle } from '../../components/ui'
 

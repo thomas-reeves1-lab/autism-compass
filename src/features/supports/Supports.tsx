@@ -1,4 +1,4 @@
-import { HandHeart, Puzzle, Info, Plus, Check } from 'lucide-react'
+import { HandHeart, Puzzle, Info, Plus, Check } from '../../components/icons'
 import { therapies, type TherapyEvidence } from '../../data/therapies'
 import { sensoryItems } from '../../data/sensory'
 import { SponsorSlot } from '../../components/SponsorSlot'

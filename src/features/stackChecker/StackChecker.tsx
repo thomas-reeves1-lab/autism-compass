@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Plane, AlertTriangle, CheckCircle2, Lock } from 'lucide-react'
+import { Plane, AlertTriangle, CheckCircle2, Lock } from '../../components/icons'
 import { treatments } from '../../data/evidence'
 import { checkStack, type TrafficLight } from '../../lib/safety'
 import { GlassCard, SectionTitle } from '../../components/ui'

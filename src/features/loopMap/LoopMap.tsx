@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Workflow, ArrowRight } from 'lucide-react'
+import { Workflow, ArrowRight } from '../../components/icons'
 import { GlassCard, SectionTitle } from '../../components/ui'
 
 const STAGES = ['Trigger', 'Loop', 'Escalation', 'Behaviour', 'Recovery'] as const

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ClipboardList, Download, Lock } from 'lucide-react'
+import { ClipboardList, Download, Lock } from '../../components/icons'
 import { useAppStore, type TrackerEntry } from '../../store/useAppStore'
 import { downloadTrackerCsv } from '../../lib/exports'
 import { showDormant } from '../../config/featureFlags'

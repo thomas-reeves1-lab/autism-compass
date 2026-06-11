@@ -7,6 +7,7 @@ import {
   ResponsiveContainer,
   Cell,
   Legend,
+  LabelList,
   RadialBarChart,
   RadialBar,
 } from 'recharts'
@@ -38,18 +39,36 @@ const C = {
 }
 
 /** 1. Behaviour change: baseline vs projected for focus metrics. */
+// Coloured delta label drawn above each "model" bar.
+function DeltaLabel(props: { x?: number; y?: number; width?: number; value?: number; index?: number; data: { delta: number }[] }) {
+  const { x = 0, y = 0, width = 0, index = 0, data } = props
+  const d = data[index]?.delta ?? 0
+  if (Math.abs(d) < 0.05) return null
+  const colour = d < 0 ? '#2e9e5b' : '#e8730c'
+  return (
+    <text x={x + width / 2} y={y - 6} fill={colour} fontSize={11} fontWeight={800} textAnchor="middle">
+      {d < 0 ? '▼' : '▲'}
+      {Math.abs(d).toFixed(1)}
+    </text>
+  )
+}
+
 export function BehaviourChart() {
   const p = useProjection()
   const data = FOCUS.map((m) => ({
     name: metricLabels[m].length > 16 ? metricLabels[m].slice(0, 15) + '…' : metricLabels[m],
     now: p[m].baseline,
     model: p[m].projected,
+    delta: +(p[m].projected - p[m].baseline).toFixed(1),
   }))
+  const improved = data.filter((d) => d.delta < 0).length
+  const worse = data.filter((d) => d.delta > 0).length
+  const net = +data.reduce((a, d) => a + d.delta, 0).toFixed(1)
   return (
     <GlassCard>
-      <SectionTitle title="Behaviour: now vs model" subtitle="Lower is calmer. The model is an estimate, not a promise." />
-      <ResponsiveContainer width="100%" height={260}>
-        <BarChart data={data} margin={{ top: 8, right: 8, left: -18, bottom: 36 }}>
+      <SectionTitle title="Behaviour: now vs model" subtitle="Lower is calmer. Coloured numbers show how much each metric changes. The model is an estimate, not a promise." />
+      <ResponsiveContainer width="100%" height={268}>
+        <BarChart data={data} margin={{ top: 22, right: 8, left: -18, bottom: 36 }}>
           <defs>
             <linearGradient id="gNow" x1="0" y1="0" x2="0" y2="1">
               <stop offset="0%" stopColor="#aab4c0" />
@@ -65,9 +84,18 @@ export function BehaviourChart() {
           <Tooltip cursor={{ fill: 'rgba(44,123,229,0.06)' }} />
           <Legend wrapperStyle={{ fontSize: 12 }} />
           <Bar dataKey="now" name="Now" fill="url(#gNow)" radius={[6, 6, 0, 0]} animationDuration={700} />
-          <Bar dataKey="model" name="Model" fill="url(#gModel)" radius={[6, 6, 0, 0]} animationDuration={900} />
+          <Bar dataKey="model" name="Model" fill="url(#gModel)" radius={[6, 6, 0, 0]} animationDuration={900}>
+            <LabelList dataKey="model" content={(props) => <DeltaLabel {...(props as Record<string, number>)} data={data} />} />
+          </Bar>
         </BarChart>
       </ResponsiveContainer>
+      <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
+        <span className="pill bg-safe-soft text-safe">▼ {improved} improved</span>
+        <span className="pill bg-doctor-soft text-doctor">▲ {worse} worse</span>
+        <span className={`pill ${net <= 0 ? 'bg-safe-soft text-safe' : 'bg-doctor-soft text-doctor'}`}>
+          Net change {net > 0 ? '+' : ''}{net}
+        </span>
+      </div>
     </GlassCard>
   )
 }

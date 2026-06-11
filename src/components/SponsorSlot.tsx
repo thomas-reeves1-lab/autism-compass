@@ -1,4 +1,4 @@
-import { Megaphone } from 'lucide-react'
+import { Megaphone } from './icons'
 import { isLive, showDormant } from '../config/featureFlags'
 
 export interface Sponsor {

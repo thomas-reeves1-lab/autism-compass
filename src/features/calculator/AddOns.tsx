@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Leaf, Lock, ChevronDown, ShieldCheck } from 'lucide-react'
+import { Leaf, Lock, ChevronDown, ShieldCheck } from '../../components/icons'
 import { treatments } from '../../data/evidence'
 import type { Treatment } from '../../lib/types'
 import { metricLabels } from '../../lib/labels'
@@ -29,18 +29,26 @@ const ADJUNCTS = treatments
   .sort((a, b) => groupWeight(a.category) - groupWeight(b.category))
 
 export function AddOns() {
+  const selectedAdjuncts = useAppStore((s) => s.selectedAdjuncts)
+  // Selected options float to the top, then medicines-first by group weight.
+  const ordered = [...ADJUNCTS].sort((a, b) => {
+    const sa = selectedAdjuncts.includes(a.id) ? 0 : 1
+    const sb = selectedAdjuncts.includes(b.id) ? 0 : 1
+    if (sa !== sb) return sa - sb
+    return groupWeight(a.category) - groupWeight(b.category)
+  })
   return (
     <GlassCard>
       <SectionTitle
         icon={<Leaf size={20} />}
         title="Add-on options to learn about"
-        subtitle="Switch options on to see what the evidence model estimates. Supplements need a safety check first. Doctor-only items are locked."
+        subtitle="Switch options on — they jump to the top. Supplements need a safety check first. Doctor-only items open an education gate."
       />
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-        {ADJUNCTS.map((t) => (
+      <motion.div layout className="grid grid-cols-1 gap-3 md:grid-cols-2">
+        {ordered.map((t) => (
           <AddOnCard key={t.id} t={t} />
         ))}
-      </div>
+      </motion.div>
     </GlassCard>
   )
 }
@@ -59,7 +67,11 @@ function AddOnCard({ t }: { t: Treatment }) {
   }
 
   return (
-    <div className={`rounded-xl border p-4 transition ${selected ? 'border-brand-leaf bg-safe-soft/40' : 'border-slate-100 bg-white'}`}>
+    <motion.div
+      layout
+      transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+      className={`rounded-xl border p-4 ${selected ? 'border-brand-leaf bg-safe-soft/40 ring-1 ring-brand-leaf/40' : 'border-slate-100 bg-white'}`}
+    >
       <div className="flex items-start justify-between gap-2">
         <div>
           <h3 className="font-extrabold text-brand-deep">{t.name}</h3>
@@ -166,7 +178,7 @@ function AddOnCard({ t }: { t: Treatment }) {
           />
         )}
       </AnimatePresence>
-    </div>
+    </motion.div>
   )
 }
 

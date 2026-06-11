@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { ShieldCheck } from 'lucide-react'
+import { ShieldCheck } from './icons'
 import type { EvidenceLevel } from '../lib/types'
 import { evidenceLevelMeta } from '../lib/labels'
 import { safetyMeta } from '../lib/safety'
@@ -12,7 +12,17 @@ export function GlassCard({
   children: ReactNode
   className?: string
 }) {
-  return <div className={`glass p-5 ${className}`}>{children}</div>
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-60px' }}
+      transition={{ duration: 0.5, ease: [0.2, 0.8, 0.2, 1] }}
+      className={`glass p-5 ${className}`}
+    >
+      {children}
+    </motion.div>
+  )
 }
 
 export function SectionTitle({

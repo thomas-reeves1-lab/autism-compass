@@ -1,6 +1,6 @@
 import { useState, type PointerEvent } from 'react'
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion'
-import { Info } from 'lucide-react'
+import { Info } from '../../components/icons'
 import type { MetricKey } from '../../lib/types'
 import { metricLabels, numberLabelMeta } from '../../lib/labels'
 import { faceFor, alertnessFace } from '../../lib/faceScale'

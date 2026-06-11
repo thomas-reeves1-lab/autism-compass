@@ -107,27 +107,72 @@
     box-shadow: 0 26px 60px -22px rgba(6, 32, 63, 0.55);
   }
 
+  /* Clinical chip: squared-soft tag with a hairline ring in its own tone */
   .pill {
-    @apply inline-flex items-center gap-1 rounded-full px-3 py-1 text-xs font-bold;
+    @apply inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-xs font-bold;
+    letter-spacing: 0.012em;
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, currentColor 16%, transparent);
   }
+
+  /* Clinical button family: squared-soft, hairline ring, leaf accent, tactile press */
   .btn {
-    @apply inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 font-bold transition
-      focus-visible:ring-2 focus-visible:ring-brand-leaf disabled:opacity-50;
+    @apply relative inline-flex select-none items-center justify-center gap-2 rounded-lg px-4 py-2.5
+      font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-leaf
+      focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50;
+    letter-spacing: 0.012em;
+  }
+  .btn:active {
+    transform: translateY(1px);
   }
   .btn-primary {
     @apply btn text-white;
-    background: linear-gradient(120deg, #0e5196, #2c7be5);
-    box-shadow: 0 10px 26px -10px rgba(44, 123, 229, 0.7);
+    background: #0e5196;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.22),
+      0 0 0 1px #0c4684,
+      0 8px 20px -10px rgba(14, 81, 150, 0.75);
+  }
+  .btn-primary::after {
+    content: '';
+    position: absolute;
+    left: 12px;
+    right: 12px;
+    bottom: 4px;
+    height: 2px;
+    border-radius: 2px;
+    background: #7bc043;
+    opacity: 0;
+    transition: opacity 0.2s ease;
   }
   .btn-primary:hover {
-    background: linear-gradient(120deg, #0a3f78, #1f6fd8);
+    background: #0c4684;
+  }
+  .btn-primary:hover::after {
+    opacity: 0.95;
   }
   .btn-ghost {
-    @apply btn border bg-white/85 text-brand-navy;
-    border-color: rgba(14, 81, 150, 0.25);
+    @apply btn bg-white text-brand-navy;
+    box-shadow: inset 0 0 0 1.5px rgba(14, 81, 150, 0.26);
   }
   .btn-ghost:hover {
     @apply bg-brand-sky;
+    box-shadow: inset 0 0 0 1.5px rgba(14, 81, 150, 0.5);
+  }
+  .btn-danger {
+    @apply btn text-white;
+    background: #d23b3b;
+    box-shadow: 0 0 0 1px #b62f2f, 0 8px 20px -10px rgba(210, 59, 59, 0.7);
+  }
+  .btn-danger:hover {
+    background: #b62f2f;
+  }
+  .btn-soft {
+    @apply btn text-brand-navy;
+    background: #e9f1fb;
+    box-shadow: inset 0 0 0 1px rgba(14, 81, 150, 0.14);
+  }
+  .btn-soft:hover {
+    background: #dcebfa;
   }
 
   /* Gradient headline text (for light surfaces) */

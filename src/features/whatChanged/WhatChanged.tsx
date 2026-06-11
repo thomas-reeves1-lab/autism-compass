@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { History, Plus } from 'lucide-react'
+import { History, Plus } from '../../components/icons'
 import { useAppStore, type ChangeEvent } from '../../store/useAppStore'
 import { GlassCard, SectionTitle } from '../../components/ui'
 

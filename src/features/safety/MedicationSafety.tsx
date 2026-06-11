@@ -1,4 +1,4 @@
-import { ShieldPlus, Stethoscope, ClipboardCheck, HeartPulse } from 'lucide-react'
+import { ShieldPlus, Stethoscope, ClipboardCheck, HeartPulse } from '../../components/icons'
 import {
   sideEffectMatrix,
   monitoringChecklist,

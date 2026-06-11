@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Sparkles, Leaf, TrendingUp, ShieldCheck } from 'lucide-react'
+import { Sparkles, Leaf, TrendingUp, ShieldCheck } from '../../components/icons'
 import { useAppStore } from '../../store/useAppStore'
 import { treatmentById } from '../../data/evidence'
 import { safetyScore } from '../../lib/safety'

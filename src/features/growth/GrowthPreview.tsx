@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Rocket, Gift, Mail, Check, Sparkles } from 'lucide-react'
+import { Rocket, Gift, Mail, Check, Sparkles } from '../../components/icons'
 import { ethics } from './ethics'
 import { sampleOffer, totalStackValue, quizQuestions } from './offers/offer'
 import { formatAud } from '../store/catalogue'

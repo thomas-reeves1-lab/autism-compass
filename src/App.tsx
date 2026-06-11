@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   Compass, LayoutDashboard, Plane, HeartPulse, Workflow, History,
   ClipboardList, BookOpen, FileText, ShoppingBag, Rocket, HandHeart,
-} from 'lucide-react'
+} from './components/icons'
 import { TopWarningBanner, EmergencyWarning, SiteFooter } from './components/SafetyShell'
 import { Disclaimer } from './components/ui'
 import { BaselineEditor, DoseSliders, EvidenceModeToggle } from './features/calculator/Controls'
@@ -59,13 +59,15 @@ export default function App() {
             transition={{ type: 'spring', stiffness: 200, damping: 14 }}
             className="h-12 w-12"
           />
-          <div>
-            <h1 className="text-xl font-extrabold leading-none">
-              <span className="text-brand-deep">AUTISM</span> <span className="text-gradient">COMPASS</span>
+          <div className="leading-none">
+            <h1 className="font-display text-[1.4rem] leading-none">
+              <span className="font-medium tracking-[0.22em] text-brand-navy">AUTISM</span>
+              <span className="font-black tracking-tight text-brand-deep">&nbsp;COMPASS</span>
             </h1>
-            <p className="text-xs text-slate-500">Clinical Metrics &amp; Guidance Tool · education only</p>
+            <p className="mt-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-400">
+              Clinical metrics &amp; guidance tool
+            </p>
           </div>
-          <img src={`${import.meta.env.BASE_URL}brand/iel-logo.png`} alt="Integrity Empowered Living" className="ml-auto hidden h-9 sm:block" />
         </div>
       </header>
 
@@ -78,11 +80,25 @@ export default function App() {
               <button
                 key={t.id}
                 onClick={() => setTab(t.id)}
-                className={`flex shrink-0 items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-bold transition ${
-                  active ? 'bg-brand-navy text-white shadow-card' : 'text-slate-600 hover:bg-white/70'
+                aria-current={active ? 'page' : undefined}
+                className={`group relative flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold transition ${
+                  active
+                    ? 'bg-brand-navy text-white'
+                    : 'text-slate-500 hover:bg-white hover:text-brand-navy'
                 }`}
+                style={
+                  active
+                    ? { boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.22), 0 6px 16px -8px rgba(14,81,150,0.7)' }
+                    : undefined
+                }
               >
-                <Icon size={16} /> {t.label}
+                <Icon size={16} className={active ? 'text-brand-leaf' : ''} /> {t.label}
+                {active && (
+                  <motion.span
+                    layoutId="nav-underline"
+                    className="absolute inset-x-2 -bottom-[6px] h-[3px] rounded-full bg-brand-leaf"
+                  />
+                )}
               </button>
             )
           })}
