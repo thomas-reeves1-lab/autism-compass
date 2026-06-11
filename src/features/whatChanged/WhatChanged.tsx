@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { motion } from 'framer-motion'
 import { History, Plus } from '../../components/icons'
 import { useAppStore, type ChangeEvent } from '../../store/useAppStore'
 import { GlassCard, SectionTitle } from '../../components/ui'
@@ -63,14 +64,21 @@ export function WhatChanged() {
       {events.length > 0 && (
         <div className="mt-4">
           <p className="mb-2 text-xs font-bold text-slate-500">Timeline</p>
-          <div className="space-y-2 border-l-2 border-brand-navy/20 pl-4">
-            {events.map((e) => (
-              <div key={e.id} className="relative">
-                <span className="absolute -left-[21px] top-1.5 h-2.5 w-2.5 rounded-full bg-brand-navy" />
+          <div className="relative space-y-2.5 pl-5">
+            <span className="absolute left-[5px] top-1 bottom-1 w-[2px] rounded bg-gradient-to-b from-brand-navy/40 via-brand-navy/20 to-transparent" />
+            {events.map((e, i) => (
+              <motion.div
+                key={e.id}
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: Math.min(i, 6) * 0.04 }}
+                className="relative rounded-lg bg-white/70 p-2.5 ring-1 ring-brand-deep/8"
+              >
+                <span className="absolute -left-[20px] top-3 h-3 w-3 rounded-full bg-brand-navy ring-4 ring-brand-navy/15" />
                 <p className="text-sm font-bold text-brand-deep">{e.type}</p>
-                <p className="text-xs text-slate-400">{e.date}</p>
-                {e.notes && <p className="text-xs text-slate-600">{e.notes}</p>}
-              </div>
+                <p className="text-[11px] font-semibold text-slate-400">{e.date}</p>
+                {e.notes && <p className="mt-0.5 text-xs text-slate-600">{e.notes}</p>}
+              </motion.div>
             ))}
           </div>
         </div>

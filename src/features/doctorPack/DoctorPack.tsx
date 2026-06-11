@@ -36,9 +36,17 @@ export function DoctorPack() {
         <Printer size={16} /> Print / save as PDF
       </button>
 
-      <div id="doctor-pack" className="rounded-xl border border-slate-200 bg-white p-6 text-sm text-slate-700">
-        <h3 className="text-lg font-extrabold text-brand-deep">AutismCompass — Doctor Visit Pack</h3>
-        <p className="text-xs text-slate-400">Example profile. Education only, not medical advice.</p>
+      <div id="doctor-pack" className="overflow-hidden rounded-xl bg-white p-6 text-sm text-slate-700 ring-1 ring-brand-deep/12">
+        <div
+          className="-m-6 mb-6 flex items-center gap-3 p-5 text-white"
+          style={{ background: 'linear-gradient(110deg, #0E5196, #1740A8)' }}
+        >
+          <img src={`${import.meta.env.BASE_URL}brand/autism-compass-mark.svg`} alt="" className="h-9 w-9 rounded-lg bg-white/95 p-0.5" />
+          <div>
+            <h3 className="text-base font-black leading-none">Autism Compass — Doctor Visit Pack</h3>
+            <p className="mt-1 text-[11px] text-white/75">Example profile · Education only, not medical advice</p>
+          </div>
+        </div>
 
         <section className="mt-4">
           <h4 className="font-extrabold text-brand-navy">Current medication reference</h4>

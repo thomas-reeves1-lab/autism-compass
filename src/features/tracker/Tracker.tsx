@@ -106,27 +106,29 @@ export function Tracker() {
       </div>
 
       {entries.length > 0 && (
-        <div className="mt-4 overflow-x-auto">
+        <div className="mt-4 overflow-hidden rounded-xl ring-1 ring-brand-deep/10">
           <table className="w-full text-left text-xs">
             <thead>
-              <tr className="border-b border-slate-200 text-slate-400">
-                <th className="px-2 py-1">Date</th>
-                <th className="px-2 py-1">Sleep</th>
-                <th className="px-2 py-1">Looping</th>
-                <th className="px-2 py-1">Aggression</th>
-                <th className="px-2 py-1">PRN</th>
-                <th className="px-2 py-1">Notes</th>
+              <tr className="bg-white/95 text-[10px] uppercase tracking-wide text-slate-500 shadow-[0_1px_0_rgba(14,81,150,0.1)]">
+                <th className="px-3 py-2">Date</th>
+                <th className="px-3 py-2">Sleep</th>
+                <th className="px-3 py-2">Looping</th>
+                <th className="px-3 py-2">Aggression</th>
+                <th className="px-3 py-2">PRN</th>
+                <th className="px-3 py-2">Notes</th>
               </tr>
             </thead>
             <tbody>
               {entries.slice(0, 14).map((e, i) => (
-                <tr key={i} className="border-b border-slate-100">
-                  <td className="px-2 py-1 font-bold text-brand-deep">{e.date}</td>
-                  <td className="px-2 py-1">{e.sleepHours}h</td>
-                  <td className="px-2 py-1">{e.loopingEpisodes}</td>
-                  <td className="px-2 py-1">{e.aggressionEpisodes}</td>
-                  <td className="px-2 py-1">{e.prnUsed ? 'yes' : 'no'}</td>
-                  <td className="px-2 py-1 text-slate-500">{e.notes.slice(0, 30)}</td>
+                <tr key={i} className="border-b border-slate-100 transition even:bg-brand-sky/30 hover:bg-brand-sky/70">
+                  <td className="px-3 py-2 font-bold text-brand-deep">{e.date}</td>
+                  <td className="px-3 py-2">{e.sleepHours}h</td>
+                  <td className="px-3 py-2">{e.loopingEpisodes}</td>
+                  <td className="px-3 py-2">{e.aggressionEpisodes}</td>
+                  <td className="px-3 py-2">
+                    {e.prnUsed ? <span className="pill bg-doctor-soft text-doctor">yes</span> : <span className="text-slate-400">no</span>}
+                  </td>
+                  <td className="px-3 py-2 text-slate-500">{e.notes.slice(0, 30)}</td>
                 </tr>
               ))}
             </tbody>

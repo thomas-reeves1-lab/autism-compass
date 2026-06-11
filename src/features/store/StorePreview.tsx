@@ -27,13 +27,13 @@ export function StorePreview() {
 
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
         {products.map((p) => (
-          <div key={p.id} className="rounded-xl border border-slate-100 bg-white p-4">
+          <div key={p.id} className="card lift p-4">
             <div className="flex items-start justify-between gap-2">
               <div>
                 <h3 className="font-extrabold text-brand-deep">{p.name}</h3>
                 <Pill tone={p.type === 'digital' ? 'info' : 'safe'}>{p.type}</Pill>
               </div>
-              <span className="text-sm font-extrabold text-brand-navy">{formatAud(p.priceCents)}</span>
+              <span className="rounded-lg bg-brand-sky px-2 py-1 text-sm font-black text-brand-navy">{formatAud(p.priceCents)}</span>
             </div>
             <p className="mt-2 text-xs text-slate-600">{p.description}</p>
             <div className="mt-3">
