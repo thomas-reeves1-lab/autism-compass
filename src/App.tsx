@@ -34,8 +34,20 @@ const Legal = lazy(() => import('./features/legal/Legal').then((m) => ({ default
 
 function TabFallback() {
   return (
-    <div className="glass flex items-center justify-center gap-2 p-10 text-sm text-slate-400">
-      <span className="h-3 w-3 animate-ping rounded-full bg-brand-leaf" /> Loading…
+    <div className="space-y-4 p-2">
+      {/* Skeleton rows — gives a sense of content shape while loading */}
+      <div className="glass overflow-hidden rounded-2xl p-5">
+        <div className="mb-3 h-4 w-1/3 animate-pulse rounded-md bg-slate-200" />
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="card h-24 animate-pulse rounded-xl bg-slate-100" style={{ animationDelay: `${i * 80}ms` }} />
+          ))}
+        </div>
+      </div>
+      <div className="glass h-40 animate-pulse rounded-2xl bg-slate-50/80" />
+      <div className="flex items-center justify-center gap-2 py-4 text-xs text-slate-300">
+        <span className="h-2 w-2 animate-ping rounded-full bg-brand-leaf opacity-60" /> Loading content
+      </div>
     </div>
   )
 }
@@ -85,8 +97,11 @@ export default function App() {
         </div>
       </header>
 
-      <nav className="sticky top-0 z-40 border-b border-white/60 bg-brand-sky/80 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl gap-1 overflow-x-auto px-2 py-2">
+      <nav
+        className="sticky top-0 z-40 border-b border-white/20"
+        style={{ background: 'rgba(7,26,54,0.82)', backdropFilter: 'blur(16px) saturate(1.5)' }}
+      >
+        <div className="mx-auto flex max-w-6xl gap-0.5 overflow-x-auto px-2 py-1.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {TABS.map((t) => {
             const Icon = t.icon
             const active = tab === t.id
@@ -95,22 +110,28 @@ export default function App() {
                 key={t.id}
                 onClick={() => setTab(t.id)}
                 aria-current={active ? 'page' : undefined}
-                className={`group relative flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold transition ${
+                className={`group relative flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold transition-all duration-200 ${
                   active
-                    ? 'bg-brand-navy text-white'
-                    : 'text-slate-500 hover:bg-white hover:text-brand-navy'
+                    ? 'text-white'
+                    : 'text-white/45 hover:bg-white/8 hover:text-white/80'
                 }`}
                 style={
                   active
-                    ? { boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.22), 0 6px 16px -8px rgba(14,81,150,0.7)' }
+                    ? {
+                        background: 'rgba(14,81,150,0.55)',
+                        boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.14), 0 0 0 1px rgba(44,123,229,0.35), 0 4px 20px -6px rgba(44,123,229,0.6)',
+                      }
                     : undefined
                 }
               >
-                <Icon size={16} className={active ? 'text-brand-leaf' : ''} /> {t.label}
+                <Icon size={15} className={active ? 'text-brand-leaf' : 'opacity-60'} />
+                <span className="hidden sm:inline">{t.label}</span>
+                <span className="sm:hidden">{t.label.split(' ')[0]}</span>
                 {active && (
                   <motion.span
                     layoutId="nav-underline"
-                    className="absolute inset-x-2 -bottom-[6px] h-[3px] rounded-full bg-brand-leaf"
+                    className="absolute inset-x-2 -bottom-[6px] h-[2.5px] rounded-full"
+                    style={{ background: 'linear-gradient(90deg, #7bc043, #2c7be5)' }}
                   />
                 )}
               </button>
@@ -156,6 +177,32 @@ export default function App() {
                 Adjust an option to see the estimated effect, then walk into the appointment prepared.{' '}
                 <span className="font-bold text-white">This is not medical advice.</span>
               </p>
+
+              {/* Credibility trust strip */}
+              <div className="mt-5 flex flex-wrap gap-2">
+                {[
+                  { text: 'Registered NDIS provider' },
+                  { text: 'Reviewed by a Registered Nurse' },
+                  { text: '200+ peer-reviewed studies' },
+                  { text: 'Data stays on your device' },
+                ].map((b, i) => (
+                  <motion.span
+                    key={b.text}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 + i * 0.07 }}
+                    className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[11px] font-semibold text-white/80 sm:text-xs"
+                    style={{
+                      background: 'rgba(255,255,255,0.09)',
+                      border: '1px solid rgba(255,255,255,0.14)',
+                      backdropFilter: 'blur(6px)',
+                    }}
+                  >
+                    <span className="h-1.5 w-1.5 rounded-full bg-brand-leaf opacity-90" />
+                    {b.text}
+                  </motion.span>
+                ))}
+              </div>
             </div>
           </motion.div>
         )}

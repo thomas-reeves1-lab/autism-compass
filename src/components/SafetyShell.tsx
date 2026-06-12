@@ -70,7 +70,14 @@ export function EmergencyWarning() {
   )
 }
 
-/** Footer on every page. */
+const TRUST_PILLS = [
+  { label: 'Registered NDIS provider' },
+  { label: 'Reviewed by a Registered Nurse' },
+  { label: 'Education only' },
+  { label: 'No cure claims' },
+]
+
+/** Footer on every page — dark glass to match the aurora. */
 export function SiteFooter({
   onOpen,
 }: {
@@ -84,24 +91,62 @@ export function SiteFooter({
     { key: 'affiliate', label: 'Affiliate disclosure' },
   ]
   return (
-    <footer className="mt-12 border-t border-white/40 bg-white/85 backdrop-blur">
-      <div className="mx-auto max-w-6xl px-4 py-6 text-center text-xs text-slate-500">
-        <p className="font-bold text-slate-600">
-          Education only. Not medical advice. Not a diagnosis tool. Not a dosing tool.
-        </p>
-        <p className="mt-1">
-          Do not change medication without the prescriber. For urgent risk, seek urgent medical help.
-        </p>
+    <footer
+      className="mt-12 border-t border-white/10"
+      style={{
+        background: 'linear-gradient(180deg, rgba(5,12,26,0.0) 0%, rgba(5,12,26,0.88) 18%, #050c1a 100%)',
+        backdropFilter: 'blur(8px)',
+      }}
+    >
+      {/* Gradient accent hairline at top */}
+      <div
+        className="h-[2px] w-full"
+        style={{ background: 'linear-gradient(90deg, transparent, #0e5196 20%, #2c7be5 50%, #7bc043 80%, transparent)' }}
+      />
+
+      <div className="mx-auto max-w-6xl px-4 py-10">
+        {/* Trust pills row */}
+        <div className="mb-6 flex flex-wrap items-center justify-center gap-2">
+          {TRUST_PILLS.map((p) => (
+            <span
+              key={p.label}
+              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold text-white/70"
+              style={{
+                background: 'rgba(255,255,255,0.07)',
+                border: '1px solid rgba(255,255,255,0.12)',
+              }}
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-brand-leaf" />
+              {p.label}
+            </span>
+          ))}
+        </div>
+
+        {/* Links row */}
         {onOpen && (
-          <div className="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
+          <div className="mb-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
             {links.map((l) => (
-              <button key={l.key} onClick={() => onOpen(l.key)} className="font-semibold text-brand-navy hover:underline">
+              <button
+                key={l.key}
+                onClick={() => onOpen(l.key)}
+                className="text-xs font-semibold text-white/50 transition hover:text-white/90"
+              >
                 {l.label}
               </button>
             ))}
           </div>
         )}
-        <p className="mt-2 text-slate-400">A registered provider evidence project.</p>
+
+        {/* Disclaimer */}
+        <p className="text-center text-[11px] font-bold text-white/40">
+          Education only. Not medical advice. Not a diagnosis tool. Not a dosing tool.
+        </p>
+        <p className="mt-1 text-center text-[11px] text-white/30">
+          Do not change medication without the prescriber. For urgent risk, seek urgent medical help.
+        </p>
+        <p className="mt-3 text-center text-[10px] text-white/20">
+          A registered NDIS provider evidence project. Tasmania, Australia.
+        </p>
       </div>
     </footer>
   )

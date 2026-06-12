@@ -23,29 +23,50 @@ export function ScoreRings() {
   ]
 
   return (
-    <div className="sticky top-[54px] z-30">
-      <div className="glass flex items-center gap-1 overflow-x-auto !rounded-xl !p-2.5 shadow-glass">
-        <span className="shrink-0 px-1.5 text-[10px] font-black uppercase leading-tight tracking-wider text-brand-navy/70">
-          Live
-          <br />
-          scores
-        </span>
-        <div className="h-9 w-px shrink-0 bg-brand-deep/10" />
+    <div className="sticky top-[50px] z-30 -mx-1">
+      {/* Outer glass strip — slightly inset from the page edges on mobile */}
+      <div
+        className="flex items-center gap-1 overflow-x-auto rounded-2xl px-3 py-2.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        style={{
+          background: 'linear-gradient(120deg, rgba(255,255,255,0.93) 0%, rgba(232,244,251,0.88) 100%)',
+          border: '1px solid rgba(255,255,255,0.72)',
+          boxShadow: '0 8px 32px -12px rgba(6,32,63,0.35), inset 0 1px 0 rgba(255,255,255,0.95)',
+          backdropFilter: 'blur(18px) saturate(1.5)',
+        }}
+      >
+        {/* Label column */}
+        <div className="shrink-0 pr-2">
+          <span className="block text-[9px] font-black uppercase tracking-widest text-brand-navy/60">Live</span>
+          <span className="block text-[9px] font-black uppercase tracking-widest text-brand-leaf">scores</span>
+        </div>
+        <div className="h-10 w-px shrink-0" style={{ background: 'linear-gradient(180deg, transparent, rgba(14,81,150,0.15), transparent)' }} />
+
         {rings.map((r, i) => (
           <motion.div
             key={r.label}
-            initial={{ opacity: 0, scale: 0.85 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: i * 0.06 }}
-            className="flex shrink-0 flex-col items-center px-1.5"
+            initial={{ opacity: 0, scale: 0.8, y: 4 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            transition={{ delay: i * 0.07, type: 'spring', stiffness: 260, damping: 18 }}
+            className="group flex shrink-0 flex-col items-center px-2 transition"
           >
-            <RingGauge value={r.value} max={10} size={58} stroke={7} colour={r.colour} />
-            <span className="mt-0.5 text-[10px] font-bold text-slate-500">{r.label}</span>
+            <div className="transition-transform duration-300 group-hover:scale-110">
+              <RingGauge value={r.value} max={10} size={56} stroke={6} colour={r.colour} />
+            </div>
+            <span
+              className="mt-0.5 text-[10px] font-bold"
+              style={{ color: r.colour }}
+            >
+              {r.label}
+            </span>
           </motion.div>
         ))}
-        <span className="ml-auto hidden shrink-0 px-2 text-[10px] text-slate-400 sm:block">
-          higher = calmer · side-effect lower = better
-        </span>
+
+        {/* Legend hint — desktop only */}
+        <div className="ml-auto hidden shrink-0 rounded-lg bg-slate-50 px-3 py-1.5 text-[10px] leading-relaxed text-slate-400 sm:block">
+          <span className="font-semibold text-brand-navy">Higher</span> = calmer
+          <br />
+          <span className="font-semibold text-orange-600">Side-effect</span> lower = better
+        </div>
       </div>
     </div>
   )
