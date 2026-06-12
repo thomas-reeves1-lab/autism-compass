@@ -78,13 +78,16 @@ function KpiCard({ metric }: { metric: MetricKey }) {
             <h3 className="text-[11px] font-extrabold leading-tight text-brand-deep line-clamp-2">
               {metricLabels[metric]}
             </h3>
-            <button
+            <motion.button
               onClick={() => setOpen((o) => !o)}
-              className="-mr-0.5 -mt-0.5 shrink-0 rounded-full p-0.5 text-slate-300 transition hover:text-brand-navy"
+              whileHover={{ scale: 1.2, color: '#0E5196' }}
+              whileTap={{ scale: 0.85 }}
+              transition={{ type: 'spring', stiffness: 380, damping: 20 }}
+              className="-mr-0.5 -mt-0.5 shrink-0 rounded-full p-0.5 text-slate-300"
               aria-label="Why did this number move?"
             >
               <Info size={13} />
-            </button>
+            </motion.button>
           </div>
           <div className="mt-0.5 flex items-baseline gap-1.5">
             <span className={`text-lg font-black leading-none ${projFace.colour}`}>

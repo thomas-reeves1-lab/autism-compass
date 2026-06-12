@@ -162,9 +162,15 @@ function AddOnCard({ t }: { t: Treatment }) {
               On (doctor-only)
             </label>
           ) : (
-            <button onClick={() => setShowDoctor(true)} className="flex items-center gap-1.5 text-sm font-bold text-doctor">
+            <motion.button
+              onClick={() => setShowDoctor(true)}
+              whileHover={{ scale: 1.04 }}
+              whileTap={{ scale: 0.94 }}
+              transition={{ type: 'spring', stiffness: 320, damping: 22 }}
+              className="flex items-center gap-1.5 text-sm font-bold text-doctor"
+            >
               <Lock size={13} /> Add (doctor only)
-            </button>
+            </motion.button>
           )
         ) : (
           <label className="flex cursor-pointer items-center gap-2 text-sm font-bold text-slate-700">
@@ -291,16 +297,25 @@ function DoctorGateModal({ t, onClose, onConfirm }: { t: Treatment; onClose: () 
           ))}
         </div>
         <div className="mt-5 flex justify-end gap-2">
-          <button onClick={onClose} className="btn-ghost text-sm">
+          <motion.button
+            onClick={onClose}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.96 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+            className="btn-ghost text-sm"
+          >
             Cancel
-          </button>
-          <button
+          </motion.button>
+          <motion.button
             onClick={onConfirm}
             disabled={!all}
+            whileHover={all ? { scale: 1.03 } : {}}
+            whileTap={all ? { scale: 0.96 } : {}}
+            transition={{ type: 'spring', stiffness: 300, damping: 22 }}
             className="btn text-sm bg-doctor text-white hover:opacity-90 disabled:opacity-50"
           >
             Add to model (education only)
-          </button>
+          </motion.button>
         </div>
       </motion.div>
     </motion.div>
@@ -353,12 +368,25 @@ function SupplementSafetyModal({ t, onClose, onConfirm }: { t: Treatment; onClos
           ))}
         </div>
         <div className="mt-5 flex justify-end gap-2">
-          <button onClick={onClose} className="btn-ghost text-sm">
+          <motion.button
+            onClick={onClose}
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.96 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+            className="btn-ghost text-sm"
+          >
             Cancel
-          </button>
-          <button onClick={onConfirm} disabled={!all} className="btn-primary text-sm">
+          </motion.button>
+          <motion.button
+            onClick={onConfirm}
+            disabled={!all}
+            whileHover={all ? { scale: 1.03 } : {}}
+            whileTap={all ? { scale: 0.96 } : {}}
+            transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+            className="btn-primary text-sm"
+          >
             Add to model
-          </button>
+          </motion.button>
         </div>
       </motion.div>
     </motion.div>
