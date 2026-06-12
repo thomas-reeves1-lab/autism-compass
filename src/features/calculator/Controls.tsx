@@ -162,8 +162,14 @@ export function BaselineEditor() {
             className="overflow-hidden"
           >
             <div className="mt-3 grid grid-cols-1 gap-x-5 gap-y-2 sm:grid-cols-2 lg:grid-cols-3">
-              {keys.map((k) => (
-                <div key={k} className={`flex items-center gap-2 ${enabledMetrics[k] ? '' : 'opacity-50'}`}>
+              {keys.map((k, idx) => (
+                <motion.div
+                  key={k}
+                  initial={{ opacity: 0, x: -6 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: Math.min(idx, 12) * 0.025, type: 'spring', stiffness: 280, damping: 22 }}
+                  className={`flex items-center gap-2 ${enabledMetrics[k] ? '' : 'opacity-50'}`}
+                >
                   <input
                     type="checkbox" checked={enabledMetrics[k]} onChange={() => toggleMetric(k)}
                     className="h-3.5 w-3.5 shrink-0 accent-brand-navy" aria-label={`Toggle ${metricLabels[k]}`}
@@ -175,7 +181,7 @@ export function BaselineEditor() {
                     className="w-full accent-brand-navy" aria-label={metricLabels[k]}
                   />
                   <span className="w-5 text-right text-sm font-black text-brand-navy">{baselineMetrics[k]}</span>
-                </div>
+                </motion.div>
               ))}
             </div>
             <motion.button
