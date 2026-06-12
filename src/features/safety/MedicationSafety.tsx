@@ -29,7 +29,11 @@ export function MedicationSafety() {
           subtitle="Reference only, not a recommendation. Prescription medication is doctor territory."
         />
         <div className="grid gap-4 md:grid-cols-2">
-          <div
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ type: 'spring', stiffness: 260, damping: 26 }}
             className="relative overflow-hidden rounded-xl p-4 text-sm"
             style={{
               background: 'linear-gradient(135deg, rgba(194,65,12,0.06), rgba(194,65,12,0.02))',
@@ -43,8 +47,12 @@ export function MedicationSafety() {
             <p className="mb-1 pl-1 font-extrabold text-brand-deep">Example current reference</p>
             <p className="pl-1 text-slate-700">Risperidone 3 mg/day (1.5 morning, 1.5 night). Reference only.</p>
             <p className="mt-1 pl-1 text-xs font-bold text-doctor">Prescription medication. Doctor only.</p>
-          </div>
-          <div
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.08, type: 'spring', stiffness: 260, damping: 26 }}
             className="relative overflow-hidden rounded-xl p-4 text-sm"
             style={{
               background: 'linear-gradient(135deg, rgba(14,81,150,0.05), rgba(14,81,150,0.02))',
@@ -62,7 +70,7 @@ export function MedicationSafety() {
               teach skills, and does not fix pain, constipation, sleep, trauma, boredom, sensory
               overload or communication frustration.
             </p>
-          </div>
+          </motion.div>
         </div>
       </GlassCard>
 

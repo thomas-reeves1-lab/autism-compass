@@ -42,15 +42,17 @@ export function LoopMap() {
       <div className="mb-4">
         <p className="mb-2 text-xs font-bold text-slate-500">Pick a trigger you recognise:</p>
         <div className="flex flex-wrap gap-1.5">
-          {TRIGGERS.map((t) => {
+          {TRIGGERS.map((t, i) => {
             const on = trigger === t
             return (
               <motion.button
                 key={t}
+                initial={{ opacity: 0, scale: 0.85 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ delay: Math.min(i, 12) * 0.025, type: 'spring', stiffness: 280, damping: 22 }}
                 onClick={() => setTrigger(on ? '' : t)}
                 whileTap={{ scale: 0.93 }}
-                whileHover={{ scale: 1.04 }}
-                transition={{ type: 'spring', stiffness: 320, damping: 22 }}
+                whileHover={{ scale: 1.06 }}
                 className="rounded-lg px-2.5 py-1.5 text-xs font-bold"
                 style={on ? {
                   background: 'linear-gradient(135deg, #0E5196, #1d4ed8)',
