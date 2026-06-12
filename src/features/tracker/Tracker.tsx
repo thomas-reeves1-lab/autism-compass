@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { ClipboardList, Download, Lock } from '../../components/icons'
+import { motion, AnimatePresence } from 'framer-motion'
+import { ClipboardList, Download, Lock, Plus } from '../../components/icons'
 import { useAppStore, type TrackerEntry } from '../../store/useAppStore'
 import { downloadTrackerCsv } from '../../lib/exports'
 import { showDormant } from '../../config/featureFlags'
@@ -21,6 +22,50 @@ const blank = (): TrackerEntry => ({
   notes: '',
 })
 
+type NumField = { k: keyof TrackerEntry; label: string; min?: number; max?: number }
+
+const SLEEP_FIELDS: NumField[] = [
+  { k: 'sleepHours', label: 'Sleep hours', min: 0, max: 24 },
+  { k: 'sleepOnsetMinutes', label: 'Mins to fall asleep', min: 0, max: 180 },
+  { k: 'sedation', label: 'Sedation (0-10)', min: 0, max: 10 },
+]
+const BEHAVIOUR_FIELDS: NumField[] = [
+  { k: 'loopingEpisodes', label: 'Looping episodes', min: 0 },
+  { k: 'aggressionEpisodes', label: 'Aggression episodes', min: 0 },
+  { k: 'selfInjuryEpisodes', label: 'Self-injury episodes', min: 0 },
+  { k: 'skinPickingEpisodes', label: 'Skin picking', min: 0 },
+]
+const PHYSICAL_FIELDS: NumField[] = [
+  { k: 'foodSeeking', label: 'Food seeking (0-10)', min: 0, max: 10 },
+  { k: 'bowelIssues', label: 'Bowel issues (0-10)', min: 0, max: 10 },
+  { k: 'painSigns', label: 'Pain signs (0-10)', min: 0, max: 10 },
+]
+
+function FormSection({ accent, title, children }: { accent: string; title: string; children: React.ReactNode }) {
+  return (
+    <div className="mb-3 last:mb-0">
+      <p className="mb-2 text-[10px] font-extrabold uppercase tracking-widest" style={{ color: accent }}>{title}</p>
+      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">{children}</div>
+    </div>
+  )
+}
+
+function NumInput({ label, value, onChange, min, max }: { label: string; value: number; onChange: (v: number) => void; min?: number; max?: number }) {
+  return (
+    <label className="text-xs font-bold text-slate-500">
+      {label}
+      <input
+        type="number"
+        value={value}
+        min={min}
+        max={max}
+        onChange={(e) => onChange(Number(e.target.value))}
+        className="mt-1 field"
+      />
+    </label>
+  )
+}
+
 export function Tracker() {
   const entries = useAppStore((s) => s.trackerEntries)
   const add = useAppStore((s) => s.addTrackerEntry)
@@ -35,18 +80,15 @@ export function Tracker() {
     setForm(blank())
   }
 
-  const numFields: { k: keyof TrackerEntry; label: string }[] = [
-    { k: 'sleepHours', label: 'Sleep hours' },
-    { k: 'sleepOnsetMinutes', label: 'Mins to fall asleep' },
-    { k: 'loopingEpisodes', label: 'Looping episodes' },
-    { k: 'aggressionEpisodes', label: 'Aggression episodes' },
-    { k: 'selfInjuryEpisodes', label: 'Self-injury episodes' },
-    { k: 'skinPickingEpisodes', label: 'Skin-picking episodes' },
-    { k: 'foodSeeking', label: 'Food seeking (0-10)' },
-    { k: 'bowelIssues', label: 'Bowel issues (0-10)' },
-    { k: 'sedation', label: 'Sedation (0-10)' },
-    { k: 'painSigns', label: 'Pain signs (0-10)' },
-  ]
+  const avgSleep = entries.length
+    ? (entries.reduce((s, e) => s + e.sleepHours, 0) / entries.length).toFixed(1)
+    : null
+
+  const totalEpisodes = entries.reduce(
+    (s, e) => s + e.aggressionEpisodes + e.selfInjuryEpisodes + e.loopingEpisodes, 0
+  )
+
+  const prnDays = entries.filter((e) => e.prnUsed).length
 
   return (
     <GlassCard>
@@ -56,55 +98,108 @@ export function Tracker() {
         subtitle="Log a day in under a minute. Data stays on this device only unless you export it."
       />
 
-      <div className="rounded-xl border border-slate-100 bg-white p-4">
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-          <label className="text-xs font-bold text-slate-500">
-            Date
-            <input type="date" value={form.date} onChange={(e) => set('date', e.target.value)} className="mt-1 field" />
-          </label>
-          {numFields.map((f) => (
-            <label key={f.k} className="text-xs font-bold text-slate-500">
-              {f.label}
-              <input
-                type="number"
-                value={form[f.k] as number}
-                onChange={(e) => set(f.k, Number(e.target.value) as never)}
-                className="mt-1 field"
-              />
-            </label>
+      {/* Form */}
+      <div
+        className="rounded-2xl p-4"
+        style={{ background: 'linear-gradient(135deg, #f8fafc, #f1f5fb)', border: '1px solid rgba(14,81,150,0.09)' }}
+      >
+        <label className="mb-3 block text-xs font-bold text-slate-500">
+          Date
+          <input type="date" value={form.date} onChange={(e) => set('date', e.target.value)} className="mt-1 field max-w-[180px]" />
+        </label>
+
+        <FormSection accent="#0E5196" title="Sleep">
+          {SLEEP_FIELDS.map((f) => (
+            <NumInput key={String(f.k)} label={f.label} value={form[f.k] as number} onChange={(v) => set(f.k, v as never)} min={f.min} max={f.max} />
           ))}
-          <label className="flex items-center gap-2 text-xs font-bold text-slate-500">
-            <input type="checkbox" checked={form.prnUsed} onChange={(e) => set('prnUsed', e.target.checked)} className="h-4 w-4 accent-brand-navy" />
-            PRN medication used
-          </label>
-        </div>
+        </FormSection>
+
+        <FormSection accent="#B45309" title="Behaviours">
+          {BEHAVIOUR_FIELDS.map((f) => (
+            <NumInput key={String(f.k)} label={f.label} value={form[f.k] as number} onChange={(v) => set(f.k, v as never)} min={f.min} max={f.max} />
+          ))}
+        </FormSection>
+
+        <FormSection accent="#15803D" title="Physical">
+          {PHYSICAL_FIELDS.map((f) => (
+            <NumInput key={String(f.k)} label={f.label} value={form[f.k] as number} onChange={(v) => set(f.k, v as never)} min={f.min} max={f.max} />
+          ))}
+        </FormSection>
+
+        <label className="mb-3 flex items-center gap-2 text-xs font-bold text-slate-500">
+          <input
+            type="checkbox"
+            checked={form.prnUsed}
+            onChange={(e) => set('prnUsed', e.target.checked)}
+            className="h-4 w-4 accent-brand-navy"
+          />
+          PRN medication used today
+        </label>
+
         <textarea
           value={form.notes}
           onChange={(e) => set('notes', e.target.value)}
-          placeholder="Notes"
+          placeholder="Notes — anything that stood out today"
           rows={2}
-          className="mt-3 field"
+          className="mt-1 field"
         />
-        <button onClick={submit} className="btn-primary mt-3 text-sm">
-          Save day
+        <button onClick={submit} disabled={!form.date} className="btn-primary mt-3 text-sm">
+          <Plus size={16} /> Save this day
         </button>
       </div>
 
+      {/* Actions row */}
       <div className="mt-4 flex flex-wrap items-center gap-2">
         <button onClick={() => downloadTrackerCsv(entries)} className="btn-ghost text-sm" disabled={entries.length === 0}>
           <Download size={16} /> Export CSV
         </button>
-        {/* Premium export — gated; shown as dormant in dev preview */}
         {showDormant('PREMIUM_LIVE') && (
           <span title="Premium export — not live yet">
             <Pill tone="doctor">
-              <Lock size={12} /> PDF export (premium — coming soon)
+              <Lock size={12} /> PDF export (coming soon)
             </Pill>
           </span>
         )}
-        <span className="text-xs text-slate-400">{entries.length} day(s) logged</span>
+        <span className="text-xs text-slate-400">{entries.length} day{entries.length !== 1 ? 's' : ''} logged</span>
       </div>
 
+      {/* Summary strip */}
+      {entries.length > 0 && avgSleep && (
+        <div className="mt-4 grid grid-cols-3 gap-2">
+          {[
+            { label: 'Avg sleep', value: `${avgSleep}h`, accent: '#0E5196' },
+            { label: 'Total episodes', value: String(totalEpisodes), accent: '#B45309' },
+            { label: 'PRN days', value: String(prnDays), accent: '#C2410C' },
+          ].map(({ label, value, accent }) => (
+            <div
+              key={label}
+              className="rounded-xl p-3 text-center"
+              style={{ background: `color-mix(in srgb, ${accent} 7%, white)`, border: `1px solid ${accent}22` }}
+            >
+              <p className="text-base font-black" style={{ color: accent }}>{value}</p>
+              <p className="text-[10px] font-bold text-slate-400">{label}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Empty state */}
+      <AnimatePresence>
+        {entries.length === 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-4 rounded-2xl border border-dashed border-slate-200 py-8 text-center"
+          >
+            <p className="text-3xl">📋</p>
+            <p className="mt-2 text-sm font-bold text-slate-400">No days logged yet</p>
+            <p className="mt-1 text-xs text-slate-300">Fill in today above to start building your picture.</p>
+            <p className="mt-0.5 text-xs text-slate-300">Even 7 days shows patterns a doctor can act on.</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Log table */}
       {entries.length > 0 && (
         <div className="mt-4 overflow-hidden rounded-xl ring-1 ring-brand-deep/10">
           <table className="w-full text-left text-xs">
@@ -115,20 +210,30 @@ export function Tracker() {
                 <th className="px-3 py-2">Looping</th>
                 <th className="px-3 py-2">Aggression</th>
                 <th className="px-3 py-2">PRN</th>
-                <th className="px-3 py-2">Notes</th>
+                <th className="px-3 py-2 hidden sm:table-cell">Notes</th>
               </tr>
             </thead>
             <tbody>
               {entries.slice(0, 14).map((e, i) => (
-                <tr key={i} className="border-b border-slate-100 transition even:bg-brand-sky/30 hover:bg-brand-sky/70">
+                <tr
+                  key={i}
+                  className="border-b border-slate-100 transition"
+                  style={e.prnUsed
+                    ? { background: 'linear-gradient(90deg, rgba(194,65,12,0.06), rgba(194,65,12,0.03))' }
+                    : i % 2 === 1 ? { background: 'rgba(219,234,254,0.3)' } : undefined
+                  }
+                >
                   <td className="px-3 py-2 font-bold text-brand-deep">{e.date}</td>
                   <td className="px-3 py-2">{e.sleepHours}h</td>
                   <td className="px-3 py-2">{e.loopingEpisodes}</td>
                   <td className="px-3 py-2">{e.aggressionEpisodes}</td>
                   <td className="px-3 py-2">
-                    {e.prnUsed ? <span className="pill bg-doctor-soft text-doctor">yes</span> : <span className="text-slate-400">no</span>}
+                    {e.prnUsed
+                      ? <span className="pill bg-doctor-soft text-doctor font-bold">PRN</span>
+                      : <span className="text-slate-300">—</span>
+                    }
                   </td>
-                  <td className="px-3 py-2 text-slate-500">{e.notes.slice(0, 30)}</td>
+                  <td className="px-3 py-2 text-slate-500 hidden sm:table-cell">{e.notes.slice(0, 30)}</td>
                 </tr>
               ))}
             </tbody>
@@ -136,7 +241,7 @@ export function Tracker() {
         </div>
       )}
 
-      <p className="mt-4 rounded-lg bg-info-soft px-3 py-2 text-xs text-info">
+      <p className="mt-4 rounded-xl bg-info-soft px-3 py-2 text-xs text-info">
         This tracker stores data on this device only unless you export it. No data is sent anywhere.
       </p>
     </GlassCard>

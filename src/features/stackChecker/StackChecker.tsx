@@ -6,11 +6,23 @@ import { checkStack, type TrafficLight } from '../../lib/safety'
 import { GlassCard, SectionTitle, AnimatedNumber } from '../../components/ui'
 
 const LIGHT_META: Record<TrafficLight, { label: string; text: string; bg: string; hex: string; grad: string }> = {
-  green: { label: 'Clear to discuss', text: 'text-safe', bg: 'bg-safe-soft', hex: '#15803D', grad: 'linear-gradient(110deg,#15803D,#1FA055)' },
-  yellow: { label: 'Caution — bring to pharmacist', text: 'text-caution', bg: 'bg-caution-soft', hex: '#B45309', grad: 'linear-gradient(110deg,#B45309,#D08214)' },
-  orange: { label: 'Doctor / pharmacist review recommended', text: 'text-doctor', bg: 'bg-doctor-soft', hex: '#C2410C', grad: 'linear-gradient(110deg,#C2410C,#E0631F)' },
-  red: { label: 'Do not self-start — medical advice needed', text: 'text-danger', bg: 'bg-danger-soft', hex: '#B91C1C', grad: 'linear-gradient(110deg,#B91C1C,#DC2F2F)' },
+  green:  { label: 'Clear to discuss',                       text: 'text-safe',    bg: 'bg-safe-soft',    hex: '#15803D', grad: 'linear-gradient(110deg,#15803D,#1FA055)' },
+  yellow: { label: 'Caution — bring to pharmacist',          text: 'text-caution', bg: 'bg-caution-soft', hex: '#B45309', grad: 'linear-gradient(110deg,#B45309,#D08214)' },
+  orange: { label: 'Doctor / pharmacist review recommended', text: 'text-doctor',  bg: 'bg-doctor-soft',  hex: '#C2410C', grad: 'linear-gradient(110deg,#C2410C,#E0631F)' },
+  red:    { label: 'Do not self-start — medical advice needed', text: 'text-danger', bg: 'bg-danger-soft', hex: '#B91C1C', grad: 'linear-gradient(110deg,#B91C1C,#DC2F2F)' },
 }
+
+const PHARMACIST_QUESTIONS = [
+  'Can these be taken together safely?',
+  'Could any of these change risperidone levels?',
+  'Could this combination make sleepiness worse?',
+  'Could this affect bleeding risk or seizures?',
+  'Should any doses be separated by time or food?',
+  'What signs should we call you about straight away?',
+]
+
+const doctorItems = treatments.filter((t) => t.id !== 'watchful' && t.doctorOnly)
+const supplementItems = treatments.filter((t) => t.id !== 'watchful' && !t.doctorOnly)
 
 export function StackChecker() {
   const [selected, setSelected] = useState<string[]>(['risperidone'])
@@ -18,6 +30,39 @@ export function StackChecker() {
   const meta = LIGHT_META[result.light]
   const toggle = (id: string) =>
     setSelected((s) => (s.includes(id) ? s.filter((x) => x !== id) : [...s, id]))
+
+  const ChipGroup = ({ label, accent, items }: { label: string; accent: string; items: typeof treatments }) => (
+    <div className="mb-3">
+      <p className="mb-1.5 text-[10px] font-extrabold uppercase tracking-widest" style={{ color: accent }}>{label}</p>
+      <div className="flex flex-wrap gap-1.5">
+        {items.map((t) => {
+          const on = selected.includes(t.id)
+          return (
+            <motion.button
+              key={t.id}
+              onClick={() => toggle(t.id)}
+              whileTap={{ scale: 0.94 }}
+              className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-bold transition"
+              style={on ? {
+                background: accent,
+                color: '#fff',
+                boxShadow: `0 2px 8px -3px ${accent}88`,
+              } : {
+                background: 'rgba(255,255,255,0.85)',
+                color: '#475569',
+                boxShadow: 'inset 0 0 0 1px rgba(14,81,150,0.15)',
+              }}
+            >
+              {t.doctorOnly && (
+                <Lock size={11} style={{ color: on ? 'rgba(255,255,255,0.75)' : '#C2410C' }} />
+              )}
+              {t.name}
+            </motion.button>
+          )
+        })}
+      </div>
+    </div>
+  )
 
   return (
     <GlassCard>
@@ -27,24 +72,24 @@ export function StackChecker() {
         subtitle="A calm pre-flight check of everything together. Tick what is being taken or considered. This is a conversation helper, not medical advice."
       />
 
-      <p className="mb-2 text-[11px] font-bold uppercase tracking-wide text-slate-400">Pre-flight check — select items</p>
-      <div className="mb-4 flex flex-wrap gap-1.5">
-        {treatments
-          .filter((t) => t.id !== 'watchful')
-          .map((t) => {
-            const on = selected.includes(t.id)
-            return (
-              <button
-                key={t.id}
-                onClick={() => toggle(t.id)}
-                className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-bold transition ${
-                  on ? 'bg-brand-navy text-white shadow-card' : 'bg-white text-slate-600 ring-1 ring-inset ring-brand-deep/15 hover:ring-brand-navy/40'
-                }`}
-              >
-                {t.doctorOnly && <Lock size={11} className={on ? 'text-brand-leaf' : 'text-doctor'} />} {t.name}
-              </button>
-            )
-          })}
+      <div
+        className="mb-4 rounded-2xl p-4"
+        style={{ background: 'linear-gradient(135deg, #f8fafc, #f1f5fb)', border: '1px solid rgba(14,81,150,0.09)' }}
+      >
+        <div className="mb-2 flex items-center gap-2">
+          <p className="text-[11px] font-bold uppercase tracking-wide text-slate-400">Pre-flight — select what is being taken</p>
+          {selected.length > 0 && (
+            <span
+              className="ml-auto rounded-full px-2 py-0.5 text-[10px] font-extrabold text-white"
+              style={{ background: 'linear-gradient(110deg,#0e5196,#2c7be5)' }}
+            >
+              {selected.length} selected
+            </span>
+          )}
+        </div>
+
+        <ChipGroup label="Doctor-prescribed items" accent="#C2410C" items={doctorItems} />
+        <ChipGroup label="Supplements and other" accent="#0E5196" items={supplementItems} />
       </div>
 
       {/* Animated traffic-light result */}
@@ -53,8 +98,8 @@ export function StackChecker() {
         initial={{ scale: 0.97, opacity: 0.6 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ type: 'spring', stiffness: 260, damping: 22 }}
-        className="relative overflow-hidden rounded-2xl p-4 text-white shadow-glass"
-        style={{ background: meta.grad }}
+        className="relative overflow-hidden rounded-2xl p-4 text-white"
+        style={{ background: meta.grad, boxShadow: `0 8px 24px -10px ${meta.hex}88` }}
       >
         <div className="pointer-events-none absolute inset-0 opacity-30" style={{ background: 'radial-gradient(60% 120% at 100% 0%, rgba(255,255,255,0.5), transparent)' }} />
         <div className="relative flex items-center justify-between gap-3">
@@ -71,8 +116,8 @@ export function StackChecker() {
         </div>
       </motion.div>
 
-      {/* Flags as accent cards */}
-      <div className="mt-4 space-y-2">
+      {/* Flags */}
+      <div className="mt-3 space-y-2">
         <AnimatePresence initial={false}>
           {result.flags.map((f, i) => {
             const m = LIGHT_META[f.level]
@@ -84,34 +129,57 @@ export function StackChecker() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0 }}
                 transition={{ delay: i * 0.04 }}
-                className="accent-card p-3 pl-4"
-                style={{ ['--accent' as string]: m.hex }}
+                className="relative overflow-hidden rounded-xl p-3 pl-5"
+                style={{
+                  background: `linear-gradient(135deg, white, color-mix(in srgb, ${m.hex} 5%, white))`,
+                  border: `1px solid ${m.hex}22`,
+                  boxShadow: `0 2px 8px -4px ${m.hex}44`,
+                }}
               >
+                <span
+                  className="absolute bottom-0 left-0 top-0 w-[3.5px] rounded-l-xl"
+                  style={{ background: m.hex }}
+                />
                 <p className={`text-sm font-bold ${m.text}`}>{f.title}</p>
                 <p className="text-xs text-slate-600">{f.detail}</p>
               </motion.div>
             )
           })}
         </AnimatePresence>
+
+        {result.flags.length === 0 && selected.length > 0 && (
+          <p className="rounded-xl bg-safe-soft px-4 py-2.5 text-sm font-semibold text-safe">
+            No interaction flags detected for this combination. Always confirm with a pharmacist.
+          </p>
+        )}
       </div>
 
       {result.doctorOnlyItems.length > 0 && (
-        <p className="mt-3 rounded-lg bg-doctor-soft px-3 py-2 text-xs text-doctor">
-          Doctor-only items selected: {result.doctorOnlyItems.join(', ')}. Do not use this website to
-          self-start them.
+        <p className="mt-3 rounded-xl bg-doctor-soft px-3 py-2 text-xs text-doctor">
+          <span className="font-extrabold">Doctor-only items selected:</span>{' '}
+          {result.doctorOnlyItems.join(', ')}. Do not use this website to self-start them.
         </p>
       )}
 
-      <div className="mt-4 rounded-xl bg-slate-50 p-3 text-xs text-slate-600 ring-1 ring-brand-deep/8">
-        <p className="font-bold text-slate-700">Questions to ask the pharmacist:</p>
-        <ul className="ml-4 list-disc">
-          <li>Can these be taken together?</li>
-          <li>Could this change risperidone levels?</li>
-          <li>Could this make sleepiness worse?</li>
-          <li>Could this affect bleeding risk or seizures?</li>
-          <li>Should any doses be separated from fibre?</li>
-          <li>What should we stop and call you about?</li>
-        </ul>
+      {/* Pharmacist questions — numbered cards */}
+      <div
+        className="mt-4 rounded-2xl p-4"
+        style={{ background: 'linear-gradient(135deg, #f0f7ff, #e8f4fd)', border: '1px solid rgba(44,123,229,0.12)' }}
+      >
+        <p className="mb-3 text-xs font-extrabold uppercase tracking-wider text-brand-navy">Questions to ask the pharmacist</p>
+        <ol className="space-y-2">
+          {PHARMACIST_QUESTIONS.map((q, i) => (
+            <li key={q} className="flex items-start gap-2.5">
+              <span
+                className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full text-[10px] font-black text-white"
+                style={{ background: 'linear-gradient(135deg, #0e5196, #2c7be5)' }}
+              >
+                {i + 1}
+              </span>
+              <span className="text-xs text-slate-600">{q}</span>
+            </li>
+          ))}
+        </ol>
       </div>
     </GlassCard>
   )
