@@ -37,11 +37,16 @@ export function StorePreview() {
       )}
 
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-        {products.map((p) => {
+        {products.map((p, i) => {
           const acc = PRODUCT_ACCENT[p.type] ?? '#0E5196'
           return (
-            <div
+            <motion.div
               key={p.id}
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ delay: i * 0.08, type: 'spring', stiffness: 260, damping: 24 }}
+              whileHover={{ y: -2, boxShadow: `0 8px 28px -8px ${acc}50`, transition: { type: 'spring', stiffness: 300, damping: 22 } }}
               className="relative overflow-hidden rounded-2xl p-4"
               style={{
                 background: `linear-gradient(135deg, white, color-mix(in srgb, ${acc} 4%, white))`,
@@ -77,12 +82,17 @@ export function StorePreview() {
                     Add to cart
                   </motion.button>
                 ) : (
-                  <button disabled className="btn-ghost w-full cursor-not-allowed text-sm opacity-60">
+                  <motion.button
+                    disabled
+                    whileHover={{ scale: 1.01 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+                    className="btn-ghost w-full cursor-not-allowed text-sm opacity-60"
+                  >
                     <Lock size={14} /> Coming soon
-                  </button>
+                  </motion.button>
                 )}
               </div>
-            </div>
+            </motion.div>
           )
         })}
       </div>
