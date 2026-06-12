@@ -44,15 +44,24 @@ export function EmergencyWarning() {
           onClick={() => setOpen((o) => !o)}
           className="hidden items-center gap-1 text-xs font-bold text-danger/80 hover:text-danger sm:inline-flex"
         >
-          Signs <ChevronDown size={13} className={open ? 'rotate-180 transition' : 'transition'} />
+          Signs{' '}
+          <motion.span
+            animate={{ rotate: open ? 180 : 0 }}
+            transition={{ type: 'spring', stiffness: 280, damping: 24 }}
+            className="inline-block"
+          >
+            <ChevronDown size={13} />
+          </motion.span>
         </button>
-        <a
+        <motion.a
           href="tel:000"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.96 }}
           className="btn-danger shrink-0 px-3 py-1.5 text-xs"
           aria-label="Call 000 emergency services"
         >
           <Phone size={14} /> Call 000
-        </a>
+        </motion.a>
       </div>
       <AnimatePresence>
         {open && (

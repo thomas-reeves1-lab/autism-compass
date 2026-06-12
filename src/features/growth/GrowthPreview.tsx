@@ -8,9 +8,9 @@ import { isLive } from '../../config/featureFlags'
 import { GlassCard, SectionTitle, Disclaimer } from '../../components/ui'
 
 const TIERS = [
-  { name: 'Free', price: 0, features: ['Full evidence calculator', 'Safe Stack Checker', 'Basic family tracker', 'All safety tools'], cta: 'Always free' },
-  { name: 'Premium', price: 9, features: ['Everything in Free', 'PDF exports', 'History beyond 30 days', 'Monthly evidence digest'], cta: 'Coming soon' },
-  { name: 'Practitioner', price: 49, features: ['Everything in Premium', 'White-label reports', 'Bulk export', 'Clinical-note format', 'Referral cards'], cta: 'Coming soon' },
+  { name: 'Free', price: 0, accent: '#15803D', features: ['Full evidence calculator', 'Safe Stack Checker', 'Basic family tracker', 'All safety tools'], cta: 'Always free' },
+  { name: 'Premium', price: 9, accent: '#0E5196', features: ['Everything in Free', 'PDF exports', 'History beyond 30 days', 'Monthly evidence digest'], cta: 'Coming soon' },
+  { name: 'Practitioner', price: 49, accent: '#7C3AED', features: ['Everything in Premium', 'White-label reports', 'Bulk export', 'Clinical-note format', 'Referral cards'], cta: 'Coming soon' },
 ]
 
 /**
@@ -23,35 +23,56 @@ export function GrowthPreview() {
   return (
     <div className="space-y-6">
       {!live && (
-        <div className="rounded-xl border border-theoretical/30 bg-theoretical-soft p-3 text-xs text-theoretical">
-          <span className="font-bold">Preview mode.</span> The growth engine is built but not live.
-          Ethics rail: dark patterns OFF, honest persuasion ON. Safety content can never be gated.
+        <div
+          className="flex items-start gap-2.5 rounded-xl p-3 text-xs"
+          style={{
+            background: 'rgba(100,116,139,0.07)',
+            border: '1px solid rgba(100,116,139,0.18)',
+          }}
+        >
+          <Sparkles size={14} className="mt-0.5 shrink-0 text-theoretical" />
+          <p className="text-theoretical">
+            <span className="font-bold">Preview mode.</span> The growth engine is built but not live.
+            Ethics rail: dark patterns OFF, honest persuasion ON. Safety content can never be gated.
+          </p>
         </div>
       )}
 
       {/* Subscription tiers */}
       <GlassCard>
-        <SectionTitle icon={<Rocket size={20} />} title="Plans" subtitle="The core tool is free forever. Paid tiers only add convenience and white-label features." />
+        <SectionTitle icon={<Rocket size={18} />} title="Plans" subtitle="The core tool is free forever. Paid tiers only add convenience and white-label features." />
         <div className="grid grid-cols-1 gap-3 pt-2 md:grid-cols-3">
           {TIERS.map((t, i) => {
             const popular = t.name === 'Premium'
+            const acc = t.accent
             return (
               <motion.div
                 key={t.name}
                 initial={{ opacity: 0, y: 14 }}
                 whileInView={{ opacity: 1, y: 0 }}
+                whileHover={{ y: -3 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.08, type: 'spring', stiffness: 220, damping: 22 }}
-                className={`card lift relative p-4 ${popular ? 'ring-2 ring-brand-navy md:-mt-2 md:scale-[1.03]' : ''}`}
+                className={`relative overflow-hidden rounded-2xl p-4 ${popular ? 'md:-mt-2 md:scale-[1.03]' : ''}`}
+                style={{
+                  background: `linear-gradient(135deg, white, color-mix(in srgb, ${acc} 5%, white))`,
+                  border: popular ? `1.5px solid ${acc}55` : `1px solid ${acc}22`,
+                  boxShadow: popular ? `0 8px 28px -10px ${acc}40` : '0 2px 10px -6px rgba(6,32,63,0.12)',
+                }}
               >
+                {/* Left accent bar */}
+                <span className="absolute bottom-0 left-0 top-0 w-[3.5px] rounded-l-2xl" style={{ background: acc }} />
                 {popular && (
-                  <span className="absolute -top-2 left-1/2 -translate-x-1/2 rounded-full bg-brand-navy px-3 py-0.5 text-[10px] font-black uppercase tracking-wide text-white shadow-card">
+                  <span
+                    className="absolute -top-px left-1/2 -translate-x-1/2 rounded-b-lg px-3 py-0.5 text-[10px] font-black uppercase tracking-wide text-white"
+                    style={{ background: `linear-gradient(110deg, ${acc}, color-mix(in srgb, ${acc} 70%, #1d4ed8))` }}
+                  >
                     Most popular
                   </span>
                 )}
-                <h3 className="font-extrabold text-brand-deep">{t.name}</h3>
+                <h3 className="mt-1 font-extrabold" style={{ color: acc }}>{t.name}</h3>
                 <p className="mt-1 flex items-baseline gap-1">
-                  <span className="text-3xl font-black text-brand-navy">{t.price === 0 ? 'Free' : `$${t.price}`}</span>
+                  <span className="text-3xl font-black text-brand-deep">{t.price === 0 ? 'Free' : `$${t.price}`}</span>
                   {t.price > 0 && <span className="text-xs font-bold text-slate-400">/mo</span>}
                 </p>
                 {t.price > 0 && (
@@ -60,11 +81,15 @@ export function GrowthPreview() {
                 <ul className="mt-3 space-y-1.5">
                   {t.features.map((f) => (
                     <li key={f} className="flex items-start gap-1.5 text-xs text-slate-600">
-                      <Check size={14} className="mt-0.5 shrink-0 text-safe" /> {f}
+                      <Check size={14} className="mt-0.5 shrink-0" style={{ color: acc }} /> {f}
                     </li>
                   ))}
                 </ul>
-                <button disabled={!live} className={`mt-4 w-full text-sm ${t.price === 0 ? 'btn-ghost' : 'btn-primary'}`}>
+                <button
+                  disabled={!live}
+                  className="mt-4 w-full rounded-xl py-2 text-sm font-bold text-white transition"
+                  style={{ background: `linear-gradient(110deg, ${acc}, color-mix(in srgb, ${acc} 70%, #1d4ed8))` }}
+                >
                   {t.cta}
                 </button>
               </motion.div>
