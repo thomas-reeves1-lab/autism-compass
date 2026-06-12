@@ -290,8 +290,10 @@ export default function App() {
             onClick={() => setOverlay(null)}
           >
             <motion.div
-              initial={{ y: 16, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
+              initial={{ y: 24, opacity: 0, scale: 0.98 }}
+              animate={{ y: 0, opacity: 1, scale: 1 }}
+              exit={{ y: 16, opacity: 0, scale: 0.98 }}
+              transition={{ type: 'spring', stiffness: 320, damping: 28 }}
               className="mx-auto my-6 max-w-3xl"
               onClick={(e) => e.stopPropagation()}
             >

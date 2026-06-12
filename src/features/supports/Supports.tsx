@@ -117,7 +117,9 @@ export function Supports() {
 
                 <motion.button
                   onClick={() => toggleTherapy(t.id)}
+                  whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.94 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 22 }}
                   className="mt-3 inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-bold transition-all"
                   style={on ? {
                     background: accent,
@@ -195,7 +197,9 @@ export function Supports() {
                 </div>
                 <motion.button
                   onClick={() => toggleSensory(s.id)}
+                  whileHover={{ scale: 1.04 }}
                   whileTap={{ scale: 0.94 }}
+                  transition={{ type: 'spring', stiffness: 300, damping: 22 }}
                   className="mt-3 inline-flex items-center gap-1.5 rounded-xl px-3 py-2 text-sm font-bold transition-all"
                   style={on ? {
                     background: '#15803D',
