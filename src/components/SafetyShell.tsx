@@ -119,9 +119,14 @@ export function SiteFooter({
       <div className="mx-auto max-w-6xl px-4 py-10">
         {/* Trust pills row */}
         <div className="mb-6 flex flex-wrap items-center justify-center gap-2">
-          {TRUST_PILLS.map((p) => (
-            <span
+          {TRUST_PILLS.map((p, i) => (
+            <motion.span
               key={p.label}
+              initial={{ opacity: 0, y: 6 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              whileHover={{ scale: 1.05, background: 'rgba(255,255,255,0.11)' }}
+              transition={{ delay: i * 0.05, type: 'spring', stiffness: 260, damping: 22 }}
               className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold text-white/70"
               style={{
                 background: 'rgba(255,255,255,0.07)',
@@ -130,7 +135,7 @@ export function SiteFooter({
             >
               <span className="h-1.5 w-1.5 rounded-full bg-brand-leaf" />
               {p.label}
-            </span>
+            </motion.span>
           ))}
         </div>
 

@@ -116,7 +116,8 @@ function AddOnCard({ t }: { t: Treatment }) {
   return (
     <motion.div
       layout
-      transition={{ type: 'spring', stiffness: 380, damping: 32 }}
+      whileHover={{ y: -2 }}
+      transition={{ type: 'spring', stiffness: 300, damping: 22 }}
       className="relative overflow-hidden rounded-xl p-4 pl-5"
       style={{
         background: selected

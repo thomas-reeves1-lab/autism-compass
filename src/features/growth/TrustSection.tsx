@@ -63,7 +63,7 @@ export function TrustSection() {
                 initial={{ opacity: 0, x: -6 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.06 + 0.1 }}
+                transition={{ delay: i * 0.06 + 0.1, type: 'spring', stiffness: 260, damping: 24 }}
                 className="flex items-start gap-2 text-xs text-slate-600"
               >
                 <Check size={13} className="mt-0.5 shrink-0 text-safe" />
@@ -106,7 +106,7 @@ export function TrustSection() {
                 initial={{ opacity: 0, x: 6 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.06 + 0.15 }}
+                transition={{ delay: i * 0.06 + 0.15, type: 'spring', stiffness: 260, damping: 24 }}
                 className="flex items-start gap-2 text-xs text-slate-600"
               >
                 <X size={13} className="mt-0.5 shrink-0 text-doctor" />
