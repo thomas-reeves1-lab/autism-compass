@@ -2,7 +2,7 @@ import { useState, lazy, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Compass, LayoutDashboard, Plane, HeartPulse, Workflow, History,
-  ClipboardList, BookOpen, FileText, ShoppingBag, Rocket, HandHeart,
+  ClipboardList, BookOpen, FileText, ShoppingBag, Rocket, HandHeart, X,
 } from './components/icons'
 import { TopWarningBanner, EmergencyWarning, SiteFooter } from './components/SafetyShell'
 import { ConsentBanner } from './components/ConsentBanner'
@@ -296,9 +296,16 @@ export default function App() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="mb-2 flex justify-end">
-                <button onClick={() => setOverlay(null)} className="btn-ghost px-3 py-1.5 text-xs">
-                  Close
-                </button>
+                <motion.button
+                  onClick={() => setOverlay(null)}
+                  whileHover={{ scale: 1.08 }}
+                  whileTap={{ scale: 0.92 }}
+                  transition={{ type: 'spring', stiffness: 340, damping: 24 }}
+                  className="inline-flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-xs font-bold text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700"
+                  aria-label="Close"
+                >
+                  <X size={14} /> Close
+                </motion.button>
               </div>
               <Suspense fallback={<TabFallback />}>
                 {overlay === 'guide' ? <FreeGuide /> : <Legal doc={overlay} />}

@@ -55,9 +55,15 @@ export function LeadCapture({ source = 'site', onOpenGuide }: { source?: string;
             <h3 className="text-lg font-black text-brand-deep">You are in. Check your inbox.</h3>
             <p className="mt-1 text-sm text-slate-600">Your guide is on its way. You can read it right now too.</p>
             {onOpenGuide && (
-              <button onClick={onOpenGuide} className="btn-primary mt-3 text-sm">
+              <motion.button
+                onClick={onOpenGuide}
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.96 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+                className="btn-primary mt-3 text-sm"
+              >
                 <BookOpen size={16} /> Read the guide now
-              </button>
+              </motion.button>
             )}
           </motion.div>
         ) : (
@@ -105,13 +111,16 @@ export function LeadCapture({ source = 'site', onOpenGuide }: { source?: string;
                 className="field flex-1 text-sm"
                 aria-label="Your email"
               />
-              <button
+              <motion.button
                 onClick={submit}
                 disabled={!valid || busy}
+                whileHover={valid && !busy ? { scale: 1.03 } : {}}
+                whileTap={valid && !busy ? { scale: 0.96 } : {}}
+                transition={{ type: 'spring', stiffness: 300, damping: 22 }}
                 className="btn-primary shrink-0 text-sm"
               >
                 <Mail size={16} /> {busy ? 'Sending…' : 'Send my guide'}
-              </button>
+              </motion.button>
             </div>
 
             {/* Consent */}
