@@ -85,13 +85,16 @@ export function GrowthPreview() {
                     </li>
                   ))}
                 </ul>
-                <button
+                <motion.button
                   disabled={!live}
+                  whileHover={live ? { scale: 1.04 } : { scale: 1.01 }}
+                  whileTap={live ? { scale: 0.96 } : {}}
+                  transition={{ type: 'spring', stiffness: 300, damping: 22 }}
                   className="mt-4 w-full rounded-xl py-2 text-sm font-bold text-white transition"
                   style={{ background: `linear-gradient(110deg, ${acc}, color-mix(in srgb, ${acc} 70%, #1d4ed8))` }}
                 >
                   {t.cta}
-                </button>
+                </motion.button>
               </motion.div>
             )
           })}

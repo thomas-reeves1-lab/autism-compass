@@ -95,7 +95,15 @@ export default function App() {
             transition={{ type: 'spring', stiffness: 200, damping: 14 }}
             className="h-9 w-9 sm:h-10 sm:w-10"
           />
-          <span className="font-display text-base font-black tracking-tight text-brand-deep sm:text-lg">
+          <span
+            className="font-display text-base font-black tracking-tight sm:text-lg"
+            style={{
+              background: 'linear-gradient(110deg, #0E5196 10%, #2c7be5 55%, #7bc043 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundClip: 'text',
+            }}
+          >
             Autism Compass
           </span>
           <span className="ml-2 hidden text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400 sm:inline">
