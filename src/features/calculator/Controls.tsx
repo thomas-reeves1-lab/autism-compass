@@ -33,8 +33,11 @@ export function DoseSliders() {
         {/* Risperidone */}
         <motion.div
           className="relative overflow-hidden rounded-xl p-3.5 pl-5"
-          whileHover={{ y: -2, boxShadow: '0 8px 24px -8px rgba(194,65,12,0.3)' }}
-          transition={{ type: 'spring', stiffness: 280, damping: 22 }}
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-20px' }}
+          whileHover={{ y: -2, boxShadow: '0 8px 24px -8px rgba(194,65,12,0.3)', transition: { type: 'spring', stiffness: 280, damping: 22 } }}
+          transition={{ type: 'spring', stiffness: 260, damping: 24 }}
           style={{
             background: 'linear-gradient(135deg, rgba(194,65,12,0.07), rgba(194,65,12,0.03))',
             border: '1px solid rgba(194,65,12,0.2)',
@@ -66,8 +69,11 @@ export function DoseSliders() {
         {/* NAC */}
         <motion.div
           className="relative overflow-hidden rounded-xl p-3.5 pl-5"
-          whileHover={{ y: -2, boxShadow: '0 8px 24px -8px rgba(21,128,61,0.26)' }}
-          transition={{ type: 'spring', stiffness: 280, damping: 22 }}
+          initial={{ opacity: 0, y: 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-20px' }}
+          whileHover={{ y: -2, boxShadow: '0 8px 24px -8px rgba(21,128,61,0.26)', transition: { type: 'spring', stiffness: 280, damping: 22 } }}
+          transition={{ delay: 0.1, type: 'spring', stiffness: 260, damping: 24 }}
           style={{
             background: 'linear-gradient(135deg, rgba(21,128,61,0.07), rgba(21,128,61,0.03))',
             border: '1px solid rgba(21,128,61,0.18)',

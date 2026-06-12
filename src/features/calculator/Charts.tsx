@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import {
   BarChart,
   Bar,
@@ -150,11 +151,22 @@ export function BehaviourChart() {
         </BarChart>
       </ResponsiveContainer>
       <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
-        <span className="pill bg-safe-soft text-safe">▼ {improved} improved</span>
-        <span className="pill bg-doctor-soft text-doctor">▲ {worse} worse</span>
-        <span className={`pill ${net <= 0 ? 'bg-safe-soft text-safe' : 'bg-doctor-soft text-doctor'}`}>
-          Net change {net > 0 ? '+' : ''}{net}
-        </span>
+        {[
+          { text: `▼ ${improved} improved`, cls: 'pill bg-safe-soft text-safe' },
+          { text: `▲ ${worse} worse`, cls: 'pill bg-doctor-soft text-doctor' },
+          { text: `Net change ${net > 0 ? '+' : ''}${net}`, cls: `pill ${net <= 0 ? 'bg-safe-soft text-safe' : 'bg-doctor-soft text-doctor'}` },
+        ].map((b, i) => (
+          <motion.span
+            key={b.text}
+            initial={{ opacity: 0, y: 4 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.07, type: 'spring', stiffness: 260, damping: 24 }}
+            className={b.cls}
+          >
+            {b.text}
+          </motion.span>
+        ))}
       </div>
     </GlassCard>
   )
