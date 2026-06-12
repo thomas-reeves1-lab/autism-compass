@@ -5,7 +5,7 @@ import { useAppStore } from '../../store/useAppStore'
 import { metricLabels } from '../../lib/labels'
 import { faceFor } from '../../lib/faceScale'
 import type { MetricKey } from '../../lib/types'
-import { GlassCard, Pill, SafetyScoreChip } from '../../components/ui'
+import { GlassCard, Pill, SafetyScoreChip, AnimatedNumber } from '../../components/ui'
 import { safetyScore } from '../../lib/safety'
 import { treatmentById } from '../../data/evidence'
 
@@ -60,7 +60,7 @@ export function DoseSliders() {
           />
           <div className="mt-1 flex items-baseline justify-between">
             <span className="text-[10px] text-slate-400">0.5</span>
-            <span className="text-lg font-black text-doctor">{risperidoneDose}<span className="text-xs font-bold"> mg/day</span></span>
+            <span className="text-lg font-black text-doctor"><AnimatedNumber value={risperidoneDose} decimals={risperidoneDose % 1 === 0 ? 0 : 2} duration={350} /><span className="text-xs font-bold"> mg/day</span></span>
             <span className="text-[10px] text-slate-400">3</span>
           </div>
           <p className="mt-1 text-[10px] leading-tight text-doctor/80">Prescription antipsychotic. Only the prescriber can change it.</p>
@@ -97,7 +97,7 @@ export function DoseSliders() {
           <div className="mt-1 flex items-baseline justify-between">
             <span className="text-[10px] text-slate-400">0</span>
             <span className="text-lg font-black text-safe">
-              {nacDose}<span className="text-xs font-bold"> mg/day</span>
+              <AnimatedNumber value={nacDose} decimals={0} duration={350} /><span className="text-xs font-bold"> mg/day</span>
               {nacDose > 0 && <span className="ml-1 text-[10px] font-bold text-slate-400">~{nearestTsp(nacDose)}</span>}
             </span>
             <span className="text-[10px] text-slate-400">2700</span>
