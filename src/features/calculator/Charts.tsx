@@ -18,6 +18,53 @@ import { useAppStore } from '../../store/useAppStore'
 import { treatments } from '../../data/evidence'
 import { GlassCard, SectionTitle } from '../../components/ui'
 
+interface TooltipEntry {
+  name?: string
+  value?: number | string
+  fill?: string
+  color?: string
+}
+
+interface ChartTooltipProps {
+  active?: boolean
+  payload?: TooltipEntry[]
+  label?: string | number
+}
+
+/** Dark-glass tooltip shared across all charts — matches the app's aurora aesthetic. */
+function ChartTooltip({ active, payload, label }: ChartTooltipProps) {
+  if (!active || !payload?.length) return null
+  return (
+    <div
+      className="min-w-[120px] rounded-xl p-2.5"
+      style={{
+        background: 'rgba(7,26,54,0.92)',
+        backdropFilter: 'blur(18px) saturate(1.4)',
+        border: '1px solid rgba(255,255,255,0.12)',
+        boxShadow: '0 8px 24px -8px rgba(6,32,63,0.65)',
+      }}
+    >
+      {label != null && (
+        <p className="mb-1.5 text-[10px] font-extrabold uppercase tracking-wider text-white/45">
+          {label}
+        </p>
+      )}
+      {payload.map((entry, i) => (
+        <div key={i} className="flex items-center gap-2 text-xs">
+          <span
+            className="h-2 w-2 shrink-0 rounded-full"
+            style={{ background: entry.fill ?? entry.color ?? '#fff' }}
+          />
+          <span className="text-white/70">{entry.name}</span>
+          <span className="ml-auto font-extrabold text-white">
+            {typeof entry.value === 'number' ? entry.value.toFixed(1) : entry.value}
+          </span>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 const FOCUS: MetricKey[] = [
   'irritability',
   'looping',
@@ -91,10 +138,10 @@ export function BehaviourChart() {
               <stop offset="100%" stopColor="#0e5196" />
             </linearGradient>
           </defs>
-          <XAxis dataKey="name" angle={-30} textAnchor="end" interval={0} tick={{ fontSize: 11 }} height={60} />
-          <YAxis domain={[0, 10]} tick={{ fontSize: 11 }} />
-          <Tooltip cursor={{ fill: 'rgba(44,123,229,0.06)' }} />
-          <Legend wrapperStyle={{ fontSize: 12 }} />
+          <XAxis dataKey="name" angle={-30} textAnchor="end" interval={0} tick={{ fontSize: 11, fill: '#94a3b8' }} height={60} />
+          <YAxis domain={[0, 10]} tick={{ fontSize: 11, fill: '#94a3b8' }} />
+          <Tooltip content={<ChartTooltip />} cursor={{ fill: 'rgba(44,123,229,0.05)' }} />
+          <Legend wrapperStyle={{ fontSize: 12, color: '#64748b' }} />
           <Bar dataKey="now" name="Now" fill="url(#gNow)" radius={[6, 6, 0, 0]} animationDuration={700} />
           <Bar dataKey="model" name="Model" fill="url(#gModel)" radius={[6, 6, 0, 0]} animationDuration={900}>
             <LabelList dataKey="model" content={(props) => <DeltaLabel {...(props as Record<string, number>)} data={data} />} />
@@ -137,12 +184,22 @@ export function StackChart() {
       ) : (
         <ResponsiveContainer width="100%" height={260}>
           <BarChart data={data} margin={{ top: 8, right: 8, left: -18, bottom: 8 }}>
-            <XAxis dataKey="name" tick={{ fontSize: 11 }} />
-            <YAxis tick={{ fontSize: 11 }} />
-            <Tooltip />
-            <Legend wrapperStyle={{ fontSize: 12 }} />
-            <Bar dataKey="improvement" name="Improvement" stackId="a" fill={C.safe} radius={[4, 4, 0, 0]} />
-            <Bar dataKey="sideEffect" name="Side-effect" stackId="a" fill={C.doctor} radius={[4, 4, 0, 0]} />
+            <defs>
+              <linearGradient id="gImprove" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#22c55e" />
+                <stop offset="100%" stopColor="#15803D" />
+              </linearGradient>
+              <linearGradient id="gSide" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#f97316" />
+                <stop offset="100%" stopColor="#C2410C" />
+              </linearGradient>
+            </defs>
+            <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#94a3b8' }} />
+            <YAxis tick={{ fontSize: 11, fill: '#94a3b8' }} />
+            <Tooltip content={<ChartTooltip />} cursor={{ fill: 'rgba(44,123,229,0.05)' }} />
+            <Legend wrapperStyle={{ fontSize: 12, color: '#64748b' }} />
+            <Bar dataKey="improvement" name="Improvement" stackId="a" fill="url(#gImprove)" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="sideEffect" name="Side-effect" stackId="a" fill="url(#gSide)" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       )}
@@ -170,10 +227,10 @@ export function BenefitHarmChart() {
       <SectionTitle title="Benefit vs side-effect balance" subtitle="A rough balance of modelled improvements against modelled side effects." />
       <ResponsiveContainer width="100%" height={260}>
         <BarChart layout="vertical" data={data} margin={{ top: 8, right: 16, left: 30, bottom: 8 }}>
-          <XAxis type="number" tick={{ fontSize: 11 }} />
-          <YAxis type="category" dataKey="name" tick={{ fontSize: 11 }} width={120} />
-          <Tooltip />
-          <Bar dataKey="value" radius={[0, 4, 4, 0]} animationDuration={500}>
+          <XAxis type="number" tick={{ fontSize: 11, fill: '#94a3b8' }} />
+          <YAxis type="category" dataKey="name" tick={{ fontSize: 11, fill: '#64748b' }} width={130} />
+          <Tooltip content={<ChartTooltip />} cursor={{ fill: 'rgba(44,123,229,0.05)' }} />
+          <Bar dataKey="value" radius={[0, 6, 6, 0]} animationDuration={500}>
             {data.map((d, i) => (
               <Cell key={i} fill={d.fill} />
             ))}
@@ -227,8 +284,8 @@ export function EvidenceConfidenceChart() {
                 <Cell key={i} fill={d.fill} />
               ))}
             </RadialBar>
-            <Legend iconSize={10} layout="vertical" verticalAlign="middle" align="right" wrapperStyle={{ fontSize: 11 }} />
-            <Tooltip />
+            <Legend iconSize={10} layout="vertical" verticalAlign="middle" align="right" wrapperStyle={{ fontSize: 11, color: '#64748b' }} />
+            <Tooltip content={<ChartTooltip />} />
           </RadialBarChart>
         </ResponsiveContainer>
       )}

@@ -1,11 +1,23 @@
 import type { ReactNode } from 'react'
-import { FileText, Printer } from '../../components/icons'
+import { FileText, Printer, ShieldCheck } from '../../components/icons'
 import { useAppStore } from '../../store/useAppStore'
 import { useProjection } from '../../lib/useProjection'
 import { treatmentById } from '../../data/evidence'
 import { metricLabels } from '../../lib/labels'
 import type { MetricKey } from '../../lib/types'
 import { GlassCard, SectionTitle } from '../../components/ui'
+
+const EV_ACCENT: Record<string, string> = {
+  strong: '#15803D', moderate: '#16a34a', emerging: '#2563eb',
+  mixed: '#d97706', weak: '#ca8a04', theoretical: '#64748b',
+  negative: '#dc2626', doctorOnly: '#7c3aed',
+}
+
+function severityStyle(v: number): { bg: string; bar: string } {
+  if (v <= 3) return { bg: 'rgba(21,128,61,0.06)', bar: '#15803D' }
+  if (v <= 6) return { bg: 'rgba(180,83,9,0.06)', bar: '#B45309' }
+  return { bg: 'rgba(185,28,28,0.07)', bar: '#B91C1C' }
+}
 
 const DOCTOR_QUESTIONS = [
   'Is the current risperidone dose still the best risk-benefit fit?',
@@ -71,12 +83,20 @@ export function DoctorPack() {
             <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
               {(Object.keys(baselineMetrics) as MetricKey[])
                 .filter((k) => baselineMetrics[k] >= 4)
-                .map((k) => (
-                  <div key={k} className="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-1.5">
-                    <span className="text-xs text-slate-600">{metricLabels[k]}</span>
-                    <span className="font-extrabold text-brand-navy">{baselineMetrics[k]}</span>
-                  </div>
-                ))}
+                .map((k) => {
+                  const s = severityStyle(baselineMetrics[k])
+                  return (
+                    <div
+                      key={k}
+                      className="relative flex items-center justify-between overflow-hidden rounded-lg py-1.5 pl-5 pr-3"
+                      style={{ background: s.bg }}
+                    >
+                      <span className="absolute bottom-0 left-0 top-0 w-[3px] rounded-l-lg" style={{ background: s.bar }} />
+                      <span className="text-xs text-slate-600">{metricLabels[k]}</span>
+                      <span className="font-extrabold" style={{ color: s.bar }}>{baselineMetrics[k]}</span>
+                    </div>
+                  )
+                })}
             </div>
             {(Object.keys(baselineMetrics) as MetricKey[]).filter((k) => baselineMetrics[k] >= 4).length === 0 && (
               <p className="text-xs text-slate-400">No behaviours flagged above 4 yet. Use the Baseline editor on the Calculator tab.</p>
@@ -87,14 +107,25 @@ export function DoctorPack() {
           {considering.length > 0 && (
             <PackSection accent="#7c3aed" title="Options we want to discuss">
               <div className="space-y-2">
-                {considering.map((t) => (
-                  <div key={t!.id} className="rounded-xl bg-slate-50 p-3">
-                    <p className="font-extrabold text-brand-deep">{t!.name}</p>
-                    <p className="text-xs text-slate-500">
-                      {t!.evidenceLevel} evidence {t!.doctorOnly && '· doctor-only item'} · {t!.confidenceNote}
-                    </p>
-                  </div>
-                ))}
+                {considering.map((t) => {
+                  const acc = EV_ACCENT[t!.evidenceLevel] ?? '#64748b'
+                  return (
+                    <div
+                      key={t!.id}
+                      className="relative overflow-hidden rounded-xl p-3 pl-5"
+                      style={{
+                        background: `linear-gradient(135deg, white, color-mix(in srgb, ${acc} 4%, white))`,
+                        border: `1px solid ${acc}22`,
+                      }}
+                    >
+                      <span className="absolute bottom-0 left-0 top-0 w-[3.5px] rounded-l-xl" style={{ background: acc }} />
+                      <p className="font-extrabold text-brand-deep">{t!.name}</p>
+                      <p className="text-xs" style={{ color: acc }}>
+                        {t!.evidenceLevel} evidence{t!.doctorOnly ? ' · doctor-only' : ''} · {t!.confidenceNote}
+                      </p>
+                    </div>
+                  )
+                })}
               </div>
             </PackSection>
           )}
@@ -107,10 +138,17 @@ export function DoctorPack() {
                 .map((k) => {
                   const delta = +(projection[k].projected - projection[k].baseline).toFixed(1)
                   const down = delta < 0
+                  const bar = down ? '#15803D' : '#C2410C'
+                  const bg = down ? 'rgba(21,128,61,0.06)' : 'rgba(194,65,12,0.06)'
                   return (
-                    <div key={k} className="flex items-center justify-between rounded-lg bg-slate-50 px-3 py-1.5">
+                    <div
+                      key={k}
+                      className="relative flex items-center justify-between overflow-hidden rounded-lg py-1.5 pl-5 pr-3"
+                      style={{ background: bg }}
+                    >
+                      <span className="absolute bottom-0 left-0 top-0 w-[3px] rounded-l-lg" style={{ background: bar }} />
                       <span className="text-xs text-slate-600">{metricLabels[k]}</span>
-                      <span className={`text-xs font-extrabold ${down ? 'text-safe' : 'text-doctor'}`}>
+                      <span className="text-xs font-extrabold" style={{ color: bar }}>
                         {projection[k].baseline} {down ? '▼' : '▲'} {projection[k].projected}
                       </span>
                     </div>
@@ -137,9 +175,13 @@ export function DoctorPack() {
           </PackSection>
         </div>
 
-        <p className="px-5 py-3 text-[10px] text-slate-400" style={{ borderTop: '1px solid #f1f5f9' }}>
+        <div
+          className="flex items-center gap-2 px-5 py-3 text-[10px] text-slate-400"
+          style={{ borderTop: '1px solid #f1f5f9' }}
+        >
+          <ShieldCheck size={12} className="shrink-0 text-safe" />
           Autism Compass · Education only · Not medical advice · Do not change medication without the prescriber.
-        </p>
+        </div>
       </div>
     </GlassCard>
   )
