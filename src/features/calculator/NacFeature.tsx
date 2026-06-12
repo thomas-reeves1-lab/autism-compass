@@ -67,7 +67,7 @@ export function NacFeature() {
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, type: 'spring', stiffness: 260, damping: 24 }}
-                whileHover={{ y: -2, transition: { duration: 0.18 } }}
+                whileHover={{ y: -2, transition: { type: 'spring', stiffness: 300, damping: 22 } }}
                 className="relative overflow-hidden rounded-xl p-3"
                 style={{
                   background: 'linear-gradient(135deg, rgba(21,128,61,0.09), rgba(21,128,61,0.04))',
