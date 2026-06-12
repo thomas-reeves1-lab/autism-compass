@@ -101,26 +101,48 @@ export function GrowthPreview() {
       {/* Grand-slam offer (value stack) */}
       <GlassCard>
         <SectionTitle icon={<Sparkles size={20} />} title="Offer builder" subtitle="Honest value stacking. Every line is a real deliverable — no inflated promises." />
-        <div className="card p-5">
+        <div
+          className="relative overflow-hidden rounded-2xl p-5"
+          style={{
+            background: 'linear-gradient(135deg, white, color-mix(in srgb, #0E5196 4%, white))',
+            border: '1px solid rgba(14,81,150,0.14)',
+            boxShadow: '0 4px 18px -8px rgba(14,81,150,0.18)',
+          }}
+        >
+          <span className="absolute bottom-0 left-0 top-0 w-[3.5px] rounded-l-2xl" style={{ background: '#0E5196' }} />
           <h3 className="text-lg font-extrabold text-brand-deep">{sampleOffer.headline}</h3>
-          <p className="text-sm text-slate-600">{sampleOffer.promise}</p>
-          <ul className="mt-3 space-y-1.5">
+          <p className="mt-1 text-sm text-slate-600">{sampleOffer.promise}</p>
+          <ul className="mt-3 space-y-2">
             {sampleOffer.items.map((it) => (
-              <li key={it.name} className="flex items-center justify-between text-sm">
-                <span className="text-slate-700">{it.name} <span className="text-xs text-slate-400">— {it.realDeliverable}</span></span>
-                <span className="text-slate-400 line-through">{formatAud(it.value * 100)}</span>
+              <li key={it.name} className="flex items-center justify-between gap-2 text-sm">
+                <span className="text-slate-700">
+                  {it.name}
+                  <span className="ml-1 text-xs text-slate-400">— {it.realDeliverable}</span>
+                </span>
+                <span
+                  className="shrink-0 rounded-md px-2 py-0.5 text-xs font-bold text-slate-400 line-through"
+                  style={{ background: 'rgba(100,116,139,0.08)' }}
+                >
+                  {formatAud(it.value * 100)}
+                </span>
               </li>
             ))}
           </ul>
-          <div className="mt-3 flex items-center justify-between border-t border-slate-100 pt-3">
+          <div
+            className="mt-4 flex items-center justify-between rounded-xl px-3 py-2"
+            style={{ background: 'rgba(14,81,150,0.06)', border: '1px solid rgba(14,81,150,0.1)' }}
+          >
             <span className="text-sm text-slate-500">Total value {formatAud(totalStackValue(sampleOffer) * 100)}</span>
             <span className="text-xl font-extrabold text-brand-navy">{formatAud(sampleOffer.price * 100)}/mo</span>
           </div>
           {ethics.realGuarantees && (
-            <p className="mt-3 rounded-lg bg-safe-soft px-3 py-2 text-xs text-safe">
-              <span className="font-bold">Guarantee: </span>
-              {sampleOffer.guarantee}
-            </p>
+            <div
+              className="mt-3 flex items-start gap-2 rounded-xl px-3 py-2 text-xs"
+              style={{ background: 'rgba(21,128,61,0.07)', border: '1px solid rgba(21,128,61,0.12)', color: '#166534' }}
+            >
+              <Check size={13} className="mt-0.5 shrink-0 text-safe" />
+              <p><span className="font-bold">Guarantee: </span>{sampleOffer.guarantee}</p>
+            </div>
           )}
         </div>
       </GlassCard>

@@ -172,9 +172,12 @@ function AddOnCard({ t }: { t: Treatment }) {
             {selected ? 'On' : 'Add to model'}
           </label>
         )}
-        <button onClick={() => setOpen((o) => !o)} className="flex items-center gap-1 text-xs font-bold text-brand-navy">
-          Learn more <ChevronDown size={14} className={open ? 'rotate-180 transition' : 'transition'} />
-        </button>
+        <motion.button onClick={() => setOpen((o) => !o)} className="flex items-center gap-1 text-xs font-bold text-brand-navy" whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          Learn more
+          <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ type: 'spring', stiffness: 280, damping: 24 }} className="inline-block">
+            <ChevronDown size={14} />
+          </motion.span>
+        </motion.button>
       </div>
 
       {SUPPLEMENT_CATEGORIES.has(t.category) && (

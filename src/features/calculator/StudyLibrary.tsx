@@ -159,12 +159,14 @@ export function StudyLibrary() {
 
       {filtered.length === 0 && query && (
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
           className="mt-2 rounded-2xl border border-dashed border-slate-200 py-8 text-center"
         >
-          <p className="text-2xl">🔍</p>
-          <p className="mt-2 text-sm font-bold text-slate-400">No studies matched</p>
+          <div className="mx-auto mb-2 grid h-10 w-10 place-items-center rounded-2xl bg-slate-100">
+            <Search size={20} className="text-slate-400" />
+          </div>
+          <p className="text-sm font-bold text-slate-400">No studies matched</p>
           <p className="text-xs text-slate-300">Try a treatment name like NAC, omega-3, or risperidone.</p>
         </motion.div>
       )}
