@@ -33,7 +33,12 @@ export function Supports() {
   return (
     <div className="space-y-6">
       {/* Hero banner */}
-      <div className="grad-border p-[2px]">
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: 'spring', stiffness: 240, damping: 26 }}
+        className="grad-border p-[2px]"
+      >
         <div className="rounded-[1.4rem] bg-gradient-to-br from-white via-brand-sky to-safe-soft/60 p-5">
           <SectionTitle
             icon={<HandHeart size={20} />}
@@ -51,7 +56,7 @@ export function Supports() {
             <CTAButton live={sponsorsLive}>Find a provider near you</CTAButton>
           </div>
         </div>
-      </div>
+      </motion.div>
 
       {/* Therapies / allied health */}
       <GlassCard>

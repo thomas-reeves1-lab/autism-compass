@@ -28,7 +28,13 @@ export function NacFeature() {
   const sponsorsLive = isLive('SPONSORS_LIVE')
 
   return (
-    <div className="grad-border p-[2px]">
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-40px' }}
+      transition={{ type: 'spring', stiffness: 240, damping: 26 }}
+      className="grad-border p-[2px]"
+    >
       <div className="rounded-[1.4rem] bg-gradient-to-br from-white via-safe-soft/50 to-brand-sky p-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
@@ -124,6 +130,6 @@ export function NacFeature() {
           Not a medicine. Not approved to treat autism. Speak to your doctor or pharmacist before use.
         </p>
       </div>
-    </div>
+    </motion.div>
   )
 }
