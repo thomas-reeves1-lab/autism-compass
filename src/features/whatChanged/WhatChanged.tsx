@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { History, Plus } from '../../components/icons'
+import { History, Plus, ClipboardList, AlertTriangle } from '../../components/icons'
 import { useAppStore, type ChangeEvent } from '../../store/useAppStore'
 import { GlassCard, SectionTitle } from '../../components/ui'
 
@@ -56,17 +56,29 @@ export function WhatChanged() {
           className="mt-3 field"
           rows={2}
         />
-        <button onClick={submit} disabled={!date} className="btn-primary mt-3 text-sm">
+        <motion.button
+          onClick={submit}
+          disabled={!date}
+          whileTap={date ? { scale: 0.96 } : {}}
+          whileHover={date ? { scale: 1.02 } : {}}
+          className="btn-primary mt-3 text-sm"
+        >
           <Plus size={16} /> Log this change
-        </button>
+        </motion.button>
       </div>
 
       {events.length === 0 && (
-        <div className="mt-4 rounded-2xl border border-dashed border-slate-200 py-8 text-center">
-          <p className="text-2xl">📋</p>
-          <p className="mt-2 text-sm font-bold text-slate-400">No changes logged yet</p>
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-4 rounded-2xl border border-dashed border-slate-200 py-8 text-center"
+        >
+          <div className="mx-auto mb-2 grid h-10 w-10 place-items-center rounded-2xl bg-slate-100">
+            <ClipboardList size={20} className="text-slate-400" />
+          </div>
+          <p className="text-sm font-bold text-slate-400">No changes logged yet</p>
           <p className="text-xs text-slate-300">Add one above to start building a timeline.</p>
-        </div>
+        </motion.div>
       )}
 
       {events.length > 0 && (
@@ -105,11 +117,17 @@ export function WhatChanged() {
         </div>
       )}
 
-      <p className="mt-4 rounded-lg bg-caution-soft px-3 py-2 text-xs text-caution">
-        This tool shows patterns only. It does not prove cause. If aggression, self-injury, seizure
-        concern or red-flag side effects increase, specialist review is recommended. If there is
-        immediate danger, seek urgent help.
-      </p>
+      <div
+        className="mt-4 flex items-start gap-2.5 rounded-xl p-3 text-xs"
+        style={{ background: 'rgba(180,83,9,0.06)', border: '1px solid rgba(180,83,9,0.18)' }}
+      >
+        <AlertTriangle size={14} className="mt-0.5 shrink-0 text-caution" />
+        <p className="text-caution">
+          This tool shows patterns only. It does not prove cause. If aggression, self-injury, seizure
+          concern or red-flag side effects increase, specialist review is recommended. If there is
+          immediate danger, seek urgent help.
+        </p>
+      </div>
     </GlassCard>
   )
 }

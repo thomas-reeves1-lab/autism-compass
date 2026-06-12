@@ -232,24 +232,6 @@
     box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.6), 0 0 28px -4px rgba(44, 123, 229, 0.55);
   }
 
-  /* Bento block: no border, soft gradient surface, depth, hover float */
-  .bento {
-    position: relative;
-    border-radius: 1.5rem;
-    background: linear-gradient(150deg, #ffffff 0%, #eef6fd 55%, #e6f0fb 100%);
-    box-shadow: 0 16px 44px -20px rgba(6, 32, 63, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.9);
-    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.3s ease;
-    overflow: hidden;
-  }
-  .bento:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 30px 64px -24px rgba(6, 32, 63, 0.6);
-  }
-  /* Tinted bento accents */
-  .bento-leaf { background: linear-gradient(150deg, #ffffff, #eef8e6 60%, #e3f4d6); }
-  .bento-navy { background: linear-gradient(150deg, #f3f8ff, #dcecfb 60%, #cfe2fa); }
-  .bento-amber { background: linear-gradient(150deg, #fffaf0, #fdeecf 60%, #fbe5b8); }
-
   /* Animated gradient border (feature/CTA blocks) */
   .grad-border {
     position: relative;

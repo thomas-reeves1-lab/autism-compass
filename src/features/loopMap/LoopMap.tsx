@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Workflow, ArrowRight } from '../../components/icons'
+import { Workflow, ArrowRight, Info } from '../../components/icons'
 import { GlassCard, SectionTitle } from '../../components/ui'
 
 const STAGES = ['Trigger', 'Loop', 'Escalation', 'Behaviour', 'Recovery'] as const
@@ -45,15 +45,25 @@ export function LoopMap() {
           {TRIGGERS.map((t) => {
             const on = trigger === t
             return (
-              <button
+              <motion.button
                 key={t}
                 onClick={() => setTrigger(on ? '' : t)}
-                className={`rounded-lg px-2.5 py-1.5 text-xs font-bold transition ${
-                  on ? 'bg-brand-navy text-white shadow-card' : 'bg-white text-slate-600 ring-1 ring-inset ring-brand-deep/15 hover:ring-brand-navy/40'
-                }`}
+                whileTap={{ scale: 0.93 }}
+                whileHover={{ scale: 1.04 }}
+                transition={{ type: 'spring', stiffness: 320, damping: 22 }}
+                className="rounded-lg px-2.5 py-1.5 text-xs font-bold"
+                style={on ? {
+                  background: 'linear-gradient(135deg, #0E5196, #1d4ed8)',
+                  color: 'white',
+                  boxShadow: '0 2px 10px -4px rgba(14,81,150,0.55)',
+                } : {
+                  background: 'white',
+                  color: '#475569',
+                  boxShadow: '0 0 0 1px rgba(7,26,54,0.14)',
+                }}
               >
                 {t}
-              </button>
+              </motion.button>
             )
           })}
         </div>
@@ -124,9 +134,10 @@ export function LoopMap() {
       </div>
 
       <div
-        className="mt-4 rounded-xl p-3"
-        style={{ background: 'linear-gradient(90deg, rgba(44,123,229,0.08), rgba(44,123,229,0.04))' }}
+        className="mt-4 flex items-start gap-2.5 rounded-xl p-3"
+        style={{ background: 'linear-gradient(90deg, rgba(14,81,150,0.07), rgba(14,81,150,0.03))', border: '1px solid rgba(14,81,150,0.12)' }}
       >
+        <Info size={14} className="mt-0.5 shrink-0 text-brand-navy" />
         <p className="text-xs font-semibold text-brand-navy">
           <span className="font-extrabold">Remember:</span> checking sleep, pain, bowels, sensory needs,
           demands, and communication usually comes before a medication review.
