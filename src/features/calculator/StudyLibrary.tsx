@@ -163,8 +163,11 @@ export function StudyLibrary() {
           animate={{ opacity: 1, y: 0 }}
           className="mt-2 rounded-2xl border border-dashed border-slate-200 py-8 text-center"
         >
-          <div className="mx-auto mb-2 grid h-10 w-10 place-items-center rounded-2xl bg-slate-100">
-            <Search size={20} className="text-slate-400" />
+          <div
+            className="mx-auto mb-2 grid h-10 w-10 place-items-center rounded-2xl"
+            style={{ background: 'linear-gradient(135deg, #0E5196, #1d4ed8)' }}
+          >
+            <Search size={20} className="text-white" />
           </div>
           <p className="text-sm font-bold text-slate-400">No studies matched</p>
           <p className="text-xs text-slate-300">Try a treatment name like NAC, omega-3, or risperidone.</p>

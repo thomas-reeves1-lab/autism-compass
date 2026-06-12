@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import { Megaphone } from './icons'
 import { isLive, showDormant } from '../config/featureFlags'
 
@@ -29,11 +30,15 @@ export function SponsorSlot({
 
   if (live && sponsor) {
     return (
-      <a
+      <motion.a
         href={sponsor.url}
         target="_blank"
         rel="nofollow sponsored noopener"
-        className="mt-3 block rounded-xl border border-info/30 bg-info-soft/60 p-3 transition hover:bg-info-soft"
+        whileHover={{ y: -2, boxShadow: '0 8px 24px -8px rgba(14,81,150,0.22)' }}
+        whileTap={{ scale: 0.98 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+        className="mt-3 block rounded-xl p-3"
+        style={{ background: 'rgba(14,81,150,0.06)', border: '1px solid rgba(14,81,150,0.14)' }}
       >
         <div className="flex items-center justify-between">
           <span className="text-xs font-bold text-info">{sponsor.name}</span>
@@ -41,7 +46,7 @@ export function SponsorSlot({
         </div>
         <p className="mt-1 text-xs text-slate-600">{sponsor.blurb}</p>
         {disclaimer && <p className="mt-1 text-[10px] text-doctor">{disclaimer}</p>}
-      </a>
+      </motion.a>
     )
   }
 
