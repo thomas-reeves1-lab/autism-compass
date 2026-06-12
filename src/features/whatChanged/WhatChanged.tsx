@@ -34,7 +34,13 @@ export function WhatChanged() {
         subtitle="Behaviour rarely comes out of nowhere. Log changes here to spot patterns before and after. This shows patterns only — it does not prove cause."
       />
 
-      <div className="rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #f8fafc, #f1f5fb)', border: '1px solid rgba(14,81,150,0.09)' }}>
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: 'spring', stiffness: 240, damping: 26 }}
+        className="rounded-2xl p-4"
+        style={{ background: 'linear-gradient(135deg, #f8fafc, #f1f5fb)', border: '1px solid rgba(14,81,150,0.09)' }}
+      >
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <label className="text-xs font-bold text-slate-500">
             Date
@@ -66,7 +72,7 @@ export function WhatChanged() {
         >
           <Plus size={16} /> Log this change
         </motion.button>
-      </div>
+      </motion.div>
 
       {events.length === 0 && (
         <motion.div
@@ -122,7 +128,11 @@ export function WhatChanged() {
         </div>
       )}
 
-      <div
+      <motion.div
+        initial={{ opacity: 0, y: 6 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ type: 'spring', stiffness: 260, damping: 28 }}
         className="mt-4 flex items-start gap-2.5 rounded-xl p-3 text-xs"
         style={{ background: 'rgba(180,83,9,0.06)', border: '1px solid rgba(180,83,9,0.18)' }}
       >
@@ -132,7 +142,7 @@ export function WhatChanged() {
           concern or red-flag side effects increase, specialist review is recommended. If there is
           immediate danger, seek urgent help.
         </p>
-      </div>
+      </motion.div>
     </GlassCard>
   )
 }

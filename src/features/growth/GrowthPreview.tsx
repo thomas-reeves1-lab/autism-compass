@@ -23,7 +23,10 @@ export function GrowthPreview() {
   return (
     <div className="space-y-6">
       {!live && (
-        <div
+        <motion.div
+          initial={{ opacity: 0, y: -6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: 'spring', stiffness: 260, damping: 28 }}
           className="flex items-start gap-2.5 rounded-xl p-3 text-xs"
           style={{
             background: 'rgba(100,116,139,0.07)',
@@ -35,7 +38,7 @@ export function GrowthPreview() {
             <span className="font-bold">Preview mode.</span> The growth engine is built but not live.
             Ethics rail: dark patterns OFF, honest persuasion ON. Safety content can never be gated.
           </p>
-        </div>
+        </motion.div>
       )}
 
       {/* Subscription tiers */}
