@@ -121,11 +121,13 @@ export default function App() {
             const Icon = t.icon
             const active = tab === t.id
             return (
-              <button
+              <motion.button
                 key={t.id}
                 onClick={() => setTab(t.id)}
                 aria-current={active ? 'page' : undefined}
-                className={`group relative flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold transition-all duration-200 ${
+                whileTap={{ scale: 0.93 }}
+                transition={{ type: 'spring', stiffness: 340, damping: 24 }}
+                className={`group relative flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold transition-colors duration-200 ${
                   active
                     ? 'text-white'
                     : 'text-white/45 hover:bg-white/8 hover:text-white/80'
@@ -149,7 +151,7 @@ export default function App() {
                     style={{ background: 'linear-gradient(90deg, #7bc043, #2c7be5)' }}
                   />
                 )}
-              </button>
+              </motion.button>
             )
           })}
         </div>

@@ -63,10 +63,13 @@ export function EvidenceTable() {
         {FILTERS.map((f) => {
           const active = filter === f.id
           return (
-            <button
+            <motion.button
               key={f.id}
               onClick={() => setFilter(f.id)}
-              className="pill text-xs transition-all duration-200"
+              whileTap={{ scale: 0.91 }}
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: 'spring', stiffness: 340, damping: 22 }}
+              className="pill text-xs"
               style={
                 active
                   ? { background: f.accent ?? '#0e5196', color: '#fff', border: 'none', boxShadow: `0 4px 12px -4px ${f.accent ?? '#0e5196'}99` }
@@ -75,7 +78,7 @@ export function EvidenceTable() {
             >
               {active && <span className="mr-1 inline-block h-1.5 w-1.5 rounded-full bg-white/80" />}
               {f.label}
-            </button>
+            </motion.button>
           )
         })}
       </div>
@@ -170,10 +173,15 @@ function Th({
   const active = current === sortKey
   return (
     <th
-      className="cursor-pointer select-none px-3 py-2.5 font-semibold hover:text-brand-navy"
+      className="cursor-pointer select-none px-3 py-2.5 font-semibold"
       onClick={() => onClick(sortKey)}
     >
-      <span className="inline-flex items-center gap-1">
+      <motion.span
+        className="inline-flex items-center gap-1 hover:text-brand-navy"
+        whileTap={{ scale: 0.93 }}
+        whileHover={{ scale: 1.04 }}
+        transition={{ type: 'spring', stiffness: 320, damping: 22 }}
+      >
         {label}
         {active ? (
           dir === 'asc' ? <ChevronUp size={11} className="text-brand-navy" /> : <ChevronDown size={11} className="text-brand-navy" />
@@ -182,7 +190,7 @@ function Th({
             <ChevronUp size={9} />
           </span>
         )}
-      </span>
+      </motion.span>
     </th>
   )
 }
