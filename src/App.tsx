@@ -6,7 +6,7 @@ import {
 } from './components/icons'
 import { TopWarningBanner, EmergencyWarning, SiteFooter } from './components/SafetyShell'
 import { ConsentBanner } from './components/ConsentBanner'
-import { Disclaimer } from './components/ui'
+import { Disclaimer, AnimatedNumber } from './components/ui'
 import { LeadCapture } from './features/growth/LeadCapture'
 import { TrustSection } from './features/growth/TrustSection'
 import type { LegalDoc } from './features/legal/Legal'
@@ -182,7 +182,7 @@ export default function App() {
                 animate={{ opacity: 1 }}
                 className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-white ring-1 ring-white/20 backdrop-blur"
               >
-                <span className="h-2 w-2 animate-pulse rounded-full bg-brand-leaf" /> 40 studied options · evidence-labelled
+                <span className="h-2 w-2 animate-pulse rounded-full bg-brand-leaf" /> <AnimatedNumber value={40} duration={900} className="tabular-nums" /> studied options · evidence-labelled
               </motion.span>
               <h1 className="font-display text-[1.7rem] font-black leading-[1.05] tracking-tight sm:text-5xl">
                 <span className="text-gradient-bright">ASD Clinical Metrics</span>
