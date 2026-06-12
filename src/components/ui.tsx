@@ -16,8 +16,9 @@ export function GlassCard({
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -2 }}
       viewport={{ once: true, margin: '-60px' }}
-      transition={{ duration: 0.5, ease: [0.2, 0.8, 0.2, 1] }}
+      transition={{ type: 'spring', stiffness: 260, damping: 26 }}
       className={`glass p-5 ${className}`}
     >
       {children}
@@ -36,10 +37,21 @@ export function SectionTitle({
 }) {
   return (
     <div className="mb-4 flex items-start gap-3">
-      {icon && <div className="mt-1 text-brand-navy">{icon}</div>}
+      {icon && (
+        <div
+          className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-xl text-white"
+          style={{ background: 'linear-gradient(135deg, #0E5196, #1d4ed8)' }}
+        >
+          {icon}
+        </div>
+      )}
       <div>
         <h2 className="text-xl font-extrabold text-brand-deep">{title}</h2>
-        {subtitle && <p className="mt-0.5 max-w-2xl text-sm text-slate-600">{subtitle}</p>}
+        <span
+          className="mt-1 block h-[2px] w-8 rounded-full"
+          style={{ background: 'linear-gradient(90deg, #0E5196, #7bc043)' }}
+        />
+        {subtitle && <p className="mt-1 max-w-2xl text-sm text-slate-600">{subtitle}</p>}
       </div>
     </div>
   )

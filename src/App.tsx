@@ -78,7 +78,14 @@ export default function App() {
     <div className="min-h-screen">
       <TopWarningBanner />
 
-      <header className="border-b border-white/60 bg-white/70 backdrop-blur">
+      <header
+        className="border-b backdrop-blur-xl"
+        style={{
+          background: 'rgba(255,255,255,0.88)',
+          borderColor: 'rgba(7,26,54,0.1)',
+          boxShadow: '0 1px 0 rgba(255,255,255,0.6), 0 2px 8px -4px rgba(7,26,54,0.08)',
+        }}
+      >
         <div className="mx-auto flex max-w-6xl items-center gap-2.5 px-4 py-2.5">
           <motion.img
             src={`${import.meta.env.BASE_URL}brand/autism-compass-mark.svg`}
@@ -94,6 +101,14 @@ export default function App() {
           <span className="ml-2 hidden text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400 sm:inline">
             Education only
           </span>
+          <div className="ml-auto hidden items-center gap-1 sm:flex">
+            <span
+              className="rounded-md px-2 py-0.5 text-[10px] font-bold tracking-wide text-white"
+              style={{ background: 'linear-gradient(90deg, #0E5196, #1d4ed8)' }}
+            >
+              Free
+            </span>
+          </div>
         </div>
       </header>
 
