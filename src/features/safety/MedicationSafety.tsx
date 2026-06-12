@@ -248,7 +248,7 @@ export function MedicationSafety() {
                 initial={{ opacity: 0, y: 10 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-30px' }}
-                transition={{ delay: (i % 2) * 0.04, duration: 0.35 }}
+                transition={{ delay: (i % 2) * 0.04 + Math.floor(i / 2) * 0.04, type: 'spring', stiffness: 260, damping: 24 }}
                 className="relative overflow-hidden rounded-xl p-3 pl-5"
                 style={{
                   background: `linear-gradient(135deg, white, color-mix(in srgb, ${accent} 5%, white))`,

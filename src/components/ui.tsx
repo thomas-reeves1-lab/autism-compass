@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { ShieldCheck } from './icons'
+import { ShieldCheck, Info, AlertTriangle } from './icons'
 import type { EvidenceLevel } from '../lib/types'
 import { evidenceLevelMeta } from '../lib/labels'
 import { safetyMeta } from '../lib/safety'
@@ -236,13 +236,16 @@ export function CTAButton({
   className?: string
 }) {
   return (
-    <button
+    <motion.button
       onClick={live ? onClick : undefined}
       disabled={!live}
+      whileHover={live ? { scale: 1.04 } : { scale: 1.01 }}
+      whileTap={live ? { scale: 0.96 } : {}}
+      transition={{ type: 'spring', stiffness: 300, damping: 22 }}
       className={`btn-cta ${!live ? 'opacity-90' : ''} ${className}`}
     >
       {children} {!live && <span className="rounded-full bg-white/25 px-2 py-0.5 text-[10px]">soon</span>}
-    </button>
+    </motion.button>
   )
 }
 
@@ -250,16 +253,22 @@ export function CTAButton({
 export function Disclaimer({ variant = 'tool' }: { variant?: 'tool' | 'product' }) {
   if (variant === 'product') {
     return (
-      <p className="rounded-lg bg-doctor-soft px-3 py-2 text-xs text-doctor">
-        This product is not a medicine. It is not approved to treat autism. Speak to your doctor
-        or pharmacist before use.
-      </p>
+      <div
+        className="flex items-start gap-2 rounded-lg px-3 py-2 text-xs text-doctor"
+        style={{ background: 'rgba(194,65,12,0.07)', border: '1px solid rgba(194,65,12,0.18)' }}
+      >
+        <AlertTriangle size={13} className="mt-0.5 shrink-0 text-doctor" />
+        <p>This product is not a medicine. It is not approved to treat autism. Speak to your doctor or pharmacist before use.</p>
+      </div>
     )
   }
   return (
-    <p className="rounded-lg bg-info-soft px-3 py-2 text-xs text-info">
-      Education only. Not medical advice. Not a diagnosis or dosing tool. Always speak to the
-      treating doctor before changing anything.
-    </p>
+    <div
+      className="flex items-start gap-2 rounded-lg px-3 py-2 text-xs text-brand-navy"
+      style={{ background: 'rgba(14,81,150,0.06)', border: '1px solid rgba(14,81,150,0.12)' }}
+    >
+      <Info size={13} className="mt-0.5 shrink-0 text-brand-navy" />
+      <p>Education only. Not medical advice. Not a diagnosis or dosing tool. Always speak to the treating doctor before changing anything.</p>
+    </div>
   )
 }
