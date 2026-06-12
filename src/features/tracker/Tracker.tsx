@@ -262,7 +262,11 @@ export function Tracker() {
         </div>
       )}
 
-      <div
+      <motion.div
+        initial={{ opacity: 0, y: 6 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ type: 'spring', stiffness: 260, damping: 28 }}
         className="mt-4 flex items-start gap-2.5 rounded-xl px-3 py-2.5 text-xs"
         style={{ background: 'rgba(14,81,150,0.06)', border: '1px solid rgba(14,81,150,0.12)' }}
       >
@@ -270,7 +274,7 @@ export function Tracker() {
         <p className="text-brand-navy">
           <span className="font-bold">Data stays on this device</span> unless you export it. Nothing is sent anywhere.
         </p>
-      </div>
+      </motion.div>
     </GlassCard>
   )
 }

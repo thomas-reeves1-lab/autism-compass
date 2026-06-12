@@ -143,6 +143,7 @@ export default function App() {
                 key={t.id}
                 onClick={() => setTab(t.id)}
                 aria-current={active ? 'page' : undefined}
+                whileHover={!active ? { scale: 1.06, y: -1 } : {}}
                 whileTap={{ scale: 0.93 }}
                 transition={{ type: 'spring', stiffness: 340, damping: 24 }}
                 className={`group relative flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold transition-colors duration-200 ${
