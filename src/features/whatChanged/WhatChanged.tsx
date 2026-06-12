@@ -99,6 +99,7 @@ export function WhatChanged() {
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: Math.min(i, 8) * 0.04, type: 'spring', stiffness: 280, damping: 22 }}
+                whileHover={{ y: -1, boxShadow: '0 4px 14px -6px rgba(14,81,150,0.22)' }}
                 className="relative rounded-xl p-3"
                 style={{
                   background: 'linear-gradient(135deg, #ffffff, #f8fafc)',
