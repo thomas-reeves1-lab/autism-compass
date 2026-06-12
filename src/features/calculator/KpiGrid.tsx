@@ -16,8 +16,8 @@ export function KpiGrid() {
 
   return (
     <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 lg:grid-cols-4">
-      {keys.map((k) => (
-        <KpiCard key={k} metric={k} />
+      {keys.map((k, i) => (
+        <KpiCard key={k} metric={k} index={i} />
       ))}
     </div>
   )
@@ -30,7 +30,7 @@ function barGradient(score: number): string {
   return 'linear-gradient(90deg, #B91C1C, #ef4444)'
 }
 
-function KpiCard({ metric }: { metric: MetricKey }) {
+function KpiCard({ metric, index = 0 }: { metric: MetricKey; index?: number }) {
   const pm = useProjection()[metric]
   const [open, setOpen] = useState(false)
   const scale = metric === 'sedation' ? alertnessFace : faceFor
@@ -55,6 +55,10 @@ function KpiCard({ metric }: { metric: MetricKey }) {
   return (
     <motion.div
       layout
+      initial={{ opacity: 0, y: 14, scale: 0.96 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      viewport={{ once: true, margin: '-20px' }}
+      transition={{ delay: Math.min(index, 20) * 0.04, type: 'spring', stiffness: 260, damping: 24 }}
       onPointerMove={onMove}
       onPointerLeave={onLeave}
       style={{ rotateX, rotateY, transformPerspective: 900 }}
