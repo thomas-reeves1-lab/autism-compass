@@ -61,6 +61,7 @@ export function WhatChanged() {
           disabled={!date}
           whileTap={date ? { scale: 0.96 } : {}}
           whileHover={date ? { scale: 1.02 } : {}}
+          transition={{ type: 'spring', stiffness: 300, damping: 22 }}
           className="btn-primary mt-3 text-sm"
         >
           <Plus size={16} /> Log this change

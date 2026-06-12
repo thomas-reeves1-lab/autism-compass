@@ -128,7 +128,7 @@ export function StackChecker() {
                 initial={{ opacity: 0, x: -8 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0 }}
-                transition={{ delay: i * 0.04 }}
+                transition={{ delay: Math.min(i, 12) * 0.04, type: 'spring', stiffness: 280, damping: 22 }}
                 className="relative overflow-hidden rounded-xl p-3 pl-5"
                 style={{
                   background: `linear-gradient(135deg, white, color-mix(in srgb, ${m.hex} 5%, white))`,

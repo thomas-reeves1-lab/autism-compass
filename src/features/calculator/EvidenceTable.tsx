@@ -107,10 +107,10 @@ export function EvidenceTable() {
                   <motion.tr
                     key={t.id}
                     layout
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ delay: i * 0.015 }}
+                    initial={{ opacity: 0, y: 4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -2 }}
+                    transition={{ delay: Math.min(i, 20) * 0.015, type: 'spring', stiffness: 300, damping: 24 }}
                     className="border-b border-slate-100 transition-colors duration-150 hover:bg-brand-sky/50"
                     style={isStrong ? { background: 'linear-gradient(90deg, rgba(21,128,61,0.04), transparent 40%)' } : undefined}
                   >
