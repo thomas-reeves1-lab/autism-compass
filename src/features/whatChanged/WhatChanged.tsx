@@ -34,7 +34,7 @@ export function WhatChanged() {
         subtitle="Behaviour rarely comes out of nowhere. Log changes here to spot patterns before and after. This shows patterns only — it does not prove cause."
       />
 
-      <div className="rounded-xl border border-slate-100 bg-white p-4">
+      <div className="rounded-2xl p-4" style={{ background: 'linear-gradient(135deg, #f8fafc, #f1f5fb)', border: '1px solid rgba(14,81,150,0.09)' }}>
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
           <label className="text-xs font-bold text-slate-500">
             Date
@@ -52,32 +52,53 @@ export function WhatChanged() {
         <textarea
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
-          placeholder="Notes (optional)"
+          placeholder="Optional: add any context that might matter (e.g. they had a cold, school was different)"
           className="mt-3 field"
           rows={2}
         />
-        <button onClick={submit} className="btn-primary mt-3 text-sm">
-          <Plus size={16} /> Add change event
+        <button onClick={submit} disabled={!date} className="btn-primary mt-3 text-sm">
+          <Plus size={16} /> Log this change
         </button>
       </div>
 
+      {events.length === 0 && (
+        <div className="mt-4 rounded-2xl border border-dashed border-slate-200 py-8 text-center">
+          <p className="text-2xl">📋</p>
+          <p className="mt-2 text-sm font-bold text-slate-400">No changes logged yet</p>
+          <p className="text-xs text-slate-300">Add one above to start building a timeline.</p>
+        </div>
+      )}
+
       {events.length > 0 && (
-        <div className="mt-4">
-          <p className="mb-2 text-xs font-bold text-slate-500">Timeline</p>
-          <div className="relative space-y-2.5 pl-5">
-            <span className="absolute left-[5px] top-1 bottom-1 w-[2px] rounded bg-gradient-to-b from-brand-navy/40 via-brand-navy/20 to-transparent" />
+        <div className="mt-5">
+          <p className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-400">Timeline — {events.length} event{events.length !== 1 ? 's' : ''}</p>
+          <div className="relative space-y-2 pl-6">
+            {/* Gradient connector line */}
+            <span
+              className="pointer-events-none absolute bottom-2 left-[7px] top-2 w-[2px] rounded-full"
+              style={{ background: 'linear-gradient(180deg, #0e5196 0%, rgba(14,81,150,0.25) 80%, transparent)' }}
+            />
             {events.map((e, i) => (
               <motion.div
                 key={e.id}
-                initial={{ opacity: 0, x: -8 }}
+                initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: Math.min(i, 6) * 0.04 }}
-                className="relative rounded-lg bg-white/70 p-2.5 ring-1 ring-brand-deep/8"
+                transition={{ delay: Math.min(i, 8) * 0.04, type: 'spring', stiffness: 280, damping: 22 }}
+                className="relative rounded-xl p-3"
+                style={{
+                  background: 'linear-gradient(135deg, #ffffff, #f8fafc)',
+                  border: '1px solid rgba(14,81,150,0.08)',
+                  boxShadow: '0 2px 8px -4px rgba(6,32,63,0.15)',
+                }}
               >
-                <span className="absolute -left-[20px] top-3 h-3 w-3 rounded-full bg-brand-navy ring-4 ring-brand-navy/15" />
-                <p className="text-sm font-bold text-brand-deep">{e.type}</p>
+                {/* Timeline dot */}
+                <span
+                  className="absolute -left-[22px] top-3.5 h-3.5 w-3.5 rounded-full border-2 border-white"
+                  style={{ background: 'linear-gradient(135deg, #0e5196, #2c7be5)', boxShadow: '0 0 0 3px rgba(14,81,150,0.15)' }}
+                />
+                <p className="text-sm font-extrabold text-brand-deep">{e.type}</p>
                 <p className="text-[11px] font-semibold text-slate-400">{e.date}</p>
-                {e.notes && <p className="mt-0.5 text-xs text-slate-600">{e.notes}</p>}
+                {e.notes && <p className="mt-1 text-xs text-slate-600">{e.notes}</p>}
               </motion.div>
             ))}
           </div>

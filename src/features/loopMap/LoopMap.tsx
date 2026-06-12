@@ -59,53 +59,79 @@ export function LoopMap() {
         </div>
       </div>
 
-      <div className="flex flex-col gap-2.5 md:flex-row md:items-stretch">
+      <div className="flex flex-col gap-2 md:flex-row md:items-stretch">
         {STAGES.map((stage, i) => (
-          <div key={stage} className="flex flex-1 items-stretch gap-2">
+          <div key={stage} className="flex flex-1 items-stretch gap-1.5">
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.07, type: 'spring', stiffness: 220, damping: 22 }}
-              className="accent-card flex-1 p-3 pl-4"
-              style={{ ['--accent' as string]: STAGE_COLOUR[stage] }}
+              initial={{ opacity: 0, y: 16, scale: 0.96 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              transition={{ delay: i * 0.09, type: 'spring', stiffness: 240, damping: 22 }}
+              whileHover={{ y: -3, transition: { duration: 0.2 } }}
+              className="relative flex-1 overflow-hidden rounded-2xl p-3.5"
+              style={{
+                background: `linear-gradient(160deg, white 0%, color-mix(in srgb, ${STAGE_COLOUR[stage]} 6%, white) 100%)`,
+                border: '1px solid rgba(255,255,255,0.8)',
+                boxShadow: `inset 0 1px 0 rgba(255,255,255,0.9), 0 6px 20px -12px ${STAGE_COLOUR[stage]}66`,
+              }}
             >
-              <div className="flex items-center gap-2">
+              {/* Left accent bar with stage colour */}
+              <div
+                className="absolute bottom-0 left-0 top-0 w-[3.5px] rounded-l-2xl"
+                style={{ background: STAGE_COLOUR[stage] }}
+              />
+              <div className="ml-2 flex items-center gap-2.5">
+                {/* Number badge */}
                 <span
-                  className="grid h-5 w-5 place-items-center rounded-md text-[11px] font-black text-white"
-                  style={{ background: STAGE_COLOUR[stage] }}
+                  className="grid h-7 w-7 shrink-0 place-items-center rounded-full text-xs font-black text-white shadow-md"
+                  style={{ background: `radial-gradient(circle at 30% 30%, color-mix(in srgb, ${STAGE_COLOUR[stage]} 85%, white), ${STAGE_COLOUR[stage]})` }}
                 >
                   {i + 1}
                 </span>
-                <p className="text-sm font-extrabold text-brand-deep">{stage}</p>
+                <p className="text-sm font-extrabold" style={{ color: STAGE_COLOUR[stage] }}>{stage}</p>
               </div>
               {i === 0 && trigger && (
-                <p className="mt-1 inline-block rounded bg-brand-navy/10 px-1.5 py-0.5 text-xs font-bold text-brand-navy">
+                <motion.p
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  className="ml-2 mt-1.5 inline-block rounded-md px-2 py-0.5 text-xs font-bold"
+                  style={{ background: `${STAGE_COLOUR[stage]}18`, color: STAGE_COLOUR[stage] }}
+                >
                   e.g. {trigger}
-                </p>
+                </motion.p>
               )}
-              <ul className="mt-2 space-y-1">
+              <ul className="ml-2 mt-2.5 space-y-1.5">
                 {SUPPORTS[stage].map((s) => (
-                  <li key={s} className="text-[11px] leading-snug text-slate-500">• {s}</li>
+                  <li key={s} className="flex items-start gap-1.5 text-[11px] leading-snug text-slate-600">
+                    <span className="mt-0.5 h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: STAGE_COLOUR[stage], opacity: 0.6 }} />
+                    {s}
+                  </li>
                 ))}
               </ul>
             </motion.div>
+
+            {/* Arrow connector */}
             {i < STAGES.length - 1 && (
               <motion.div
-                animate={{ x: [0, 3, 0] }}
-                transition={{ duration: 1.6, repeat: Infinity, delay: i * 0.2 }}
-                className="hidden shrink-0 self-center text-brand-navy/30 md:block"
+                animate={{ x: [0, 4, 0], opacity: [0.4, 0.85, 0.4] }}
+                transition={{ duration: 2, repeat: Infinity, delay: i * 0.3, ease: 'easeInOut' }}
+                className="hidden shrink-0 self-center md:block"
               >
-                <ArrowRight size={18} />
+                <ArrowRight size={16} className="text-slate-400" />
               </motion.div>
             )}
           </div>
         ))}
       </div>
 
-      <p className="mt-4 rounded-lg bg-info-soft px-3 py-2 text-xs text-info">
-        Medication review is one option, but checking sleep, pain, bowels, sensory needs, demands and
-        communication usually comes first.
-      </p>
+      <div
+        className="mt-4 rounded-xl p-3"
+        style={{ background: 'linear-gradient(90deg, rgba(44,123,229,0.08), rgba(44,123,229,0.04))' }}
+      >
+        <p className="text-xs font-semibold text-brand-navy">
+          <span className="font-extrabold">Remember:</span> checking sleep, pain, bowels, sensory needs,
+          demands, and communication usually comes before a medication review.
+        </p>
+      </div>
     </GlassCard>
   )
 }
