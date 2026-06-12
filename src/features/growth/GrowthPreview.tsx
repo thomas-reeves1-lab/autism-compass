@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
-import { Rocket, Gift, Mail, Check, Sparkles } from '../../components/icons'
+import { Rocket, Gift, Mail, Check, Sparkles, CheckCircle2 } from '../../components/icons'
 import { ethics } from './ethics'
 import { sampleOffer, totalStackValue, quizQuestions } from './offers/offer'
 import { formatAud } from '../store/catalogue'
@@ -165,14 +165,32 @@ function LeadMagnet() {
   const [done, setDone] = useState(false)
   const live = isLive('GROWTH_LIVE')
 
+  const QUIZ_CARD_STYLE = {
+    background: 'linear-gradient(135deg, white, color-mix(in srgb, #0E5196 4%, white))',
+    border: '1px solid rgba(14,81,150,0.12)',
+    boxShadow: '0 4px 14px -6px rgba(14,81,150,0.12)',
+  }
+
   if (done) {
-    return <p className="rounded-lg bg-safe-soft px-3 py-2 text-sm text-safe">Thank you. Your guide is on its way (preview — not live).</p>
+    return (
+      <motion.div
+        initial={{ opacity: 0, y: 6 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: 'spring', stiffness: 280, damping: 24 }}
+        className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-semibold text-safe"
+        style={{ background: 'rgba(21,128,61,0.07)', border: '1px solid rgba(21,128,61,0.18)' }}
+      >
+        <CheckCircle2 size={16} className="shrink-0 text-safe" />
+        Thank you. Your guide is on its way (preview — not live).
+      </motion.div>
+    )
   }
 
   if (step < quizQuestions.length) {
     const q = quizQuestions[step]
     return (
-      <div className="rounded-xl border border-slate-100 bg-white p-4">
+      <div className="relative overflow-hidden rounded-xl p-4 pl-5" style={QUIZ_CARD_STYLE}>
+        <span className="absolute bottom-0 left-0 top-0 w-[3.5px] rounded-l-xl" style={{ background: '#0E5196' }} />
         <p className="text-xs font-bold text-slate-400">Question {step + 1} of {quizQuestions.length}</p>
         <p className="mt-1 text-sm font-bold text-brand-deep">{q.q}</p>
         <div className="mt-3 flex gap-2">
@@ -191,8 +209,10 @@ function LeadMagnet() {
     )
   }
 
+  const valid = email.includes('@') && consent && live
   return (
-    <div className="rounded-xl border border-slate-100 bg-white p-4">
+    <div className="relative overflow-hidden rounded-xl p-4 pl-5" style={QUIZ_CARD_STYLE}>
+      <span className="absolute bottom-0 left-0 top-0 w-[3.5px] rounded-l-xl" style={{ background: '#0E5196' }} />
       <p className="text-sm font-bold text-brand-deep">Get your free plain-English guide</p>
       <div className="mt-2 flex flex-col gap-2 sm:flex-row">
         <input
@@ -202,13 +222,16 @@ function LeadMagnet() {
           placeholder="you@example.com"
           className="field flex-1"
         />
-        <button
-          disabled={!email.includes('@') || !consent || !live}
+        <motion.button
+          disabled={!valid}
           onClick={() => setDone(true)}
+          whileHover={valid ? { scale: 1.03 } : {}}
+          whileTap={valid ? { scale: 0.96 } : {}}
+          transition={{ type: 'spring', stiffness: 300, damping: 22 }}
           className="btn-primary text-sm"
         >
           <Mail size={16} /> {live ? 'Send my guide' : 'Coming soon'}
-        </button>
+        </motion.button>
       </div>
       <label className="mt-2 flex items-start gap-2 text-xs text-slate-500">
         <input type="checkbox" checked={consent} onChange={(e) => setConsent(e.target.checked)} className="mt-0.5 accent-brand-navy" />
