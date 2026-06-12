@@ -186,8 +186,9 @@ export default function App() {
             />
             <div className="relative">
               <motion.span
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                initial={{ opacity: 0, y: -6 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ type: 'spring', stiffness: 240, damping: 22 }}
                 className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-bold text-white ring-1 ring-white/20 backdrop-blur"
               >
                 <span className="h-2 w-2 animate-pulse rounded-full bg-brand-leaf" /> <AnimatedNumber value={40} duration={900} className="tabular-nums" /> studied options · evidence-labelled
@@ -215,8 +216,9 @@ export default function App() {
                     key={b.text}
                     initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 + i * 0.07 }}
-                    className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[11px] font-semibold text-white/80 sm:text-xs"
+                    whileHover={{ y: -2, scale: 1.04, background: 'rgba(255,255,255,0.14)' }}
+                    transition={{ delay: 0.3 + i * 0.07, type: 'spring', stiffness: 260, damping: 22 }}
+                    className="inline-flex cursor-default items-center gap-1.5 rounded-lg px-3 py-1.5 text-[11px] font-semibold text-white/80 sm:text-xs"
                     style={{
                       background: 'rgba(255,255,255,0.09)',
                       border: '1px solid rgba(255,255,255,0.14)',
