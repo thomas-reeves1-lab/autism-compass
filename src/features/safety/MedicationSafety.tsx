@@ -136,7 +136,11 @@ export function MedicationSafety() {
       {/* Reduction education */}
       <GlassCard>
         <SectionTitle title="Understanding medication reduction (doctor only)" subtitle="Educational only. This does not give a taper plan, a target dose, or a speed." />
-        <div
+        <motion.div
+          initial={{ opacity: 0, y: -4 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ type: 'spring', stiffness: 260, damping: 26 }}
           className="flex items-start gap-3 rounded-xl p-4 text-sm"
           style={{ background: 'rgba(185,28,28,0.07)', border: '1px solid rgba(185,28,28,0.2)' }}
         >
@@ -147,9 +151,13 @@ export function MedicationSafety() {
               Behaviour can rebound. Sleep can break. Distress can increase. Unsafe behaviour can return.
             </p>
           </div>
-        </div>
+        </motion.div>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
-          <div
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-30px' }}
+            transition={{ type: 'spring', stiffness: 260, damping: 24 }}
             className="relative overflow-hidden rounded-xl p-4 text-sm"
             style={{
               background: 'linear-gradient(135deg, rgba(21,128,61,0.07), rgba(21,128,61,0.03))',
@@ -166,8 +174,12 @@ export function MedicationSafety() {
                 </li>
               ))}
             </ul>
-          </div>
-          <div
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-30px' }}
+            transition={{ delay: 0.07, type: 'spring', stiffness: 260, damping: 24 }}
             className="relative overflow-hidden rounded-xl p-4 text-sm"
             style={{
               background: 'linear-gradient(135deg, rgba(194,65,12,0.07), rgba(194,65,12,0.03))',
@@ -184,9 +196,13 @@ export function MedicationSafety() {
                 </li>
               ))}
             </ul>
-          </div>
+          </motion.div>
         </div>
-        <div
+        <motion.div
+          initial={{ opacity: 0, y: 6 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ type: 'spring', stiffness: 260, damping: 28 }}
           className="mt-4 flex items-start gap-2.5 rounded-xl px-3 py-2.5 text-xs"
           style={{ background: 'rgba(14,81,150,0.06)', border: '1px solid rgba(14,81,150,0.12)' }}
         >
@@ -195,7 +211,7 @@ export function MedicationSafety() {
             This model is deliberately cautious. It is not saying what will happen. It is showing why
             medication changes need a doctor, a plan, and tracking.
           </p>
-        </div>
+        </motion.div>
       </GlassCard>
 
       {/* Monitoring checklist */}

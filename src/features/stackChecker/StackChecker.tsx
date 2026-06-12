@@ -169,14 +169,25 @@ export function StackChecker() {
       )}
 
       {/* Pharmacist questions — numbered cards */}
-      <div
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: '-30px' }}
+        transition={{ type: 'spring', stiffness: 260, damping: 26 }}
         className="mt-4 rounded-2xl p-4"
         style={{ background: 'linear-gradient(135deg, #f0f7ff, #e8f4fd)', border: '1px solid rgba(44,123,229,0.12)' }}
       >
         <p className="mb-3 text-xs font-extrabold uppercase tracking-wider text-brand-navy">Questions to ask the pharmacist</p>
         <ol className="space-y-2">
           {PHARMACIST_QUESTIONS.map((q, i) => (
-            <li key={q} className="flex items-start gap-2.5">
+            <motion.li
+              key={q}
+              initial={{ opacity: 0, x: -8 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: Math.min(i, 12) * 0.04, type: 'spring', stiffness: 260, damping: 22 }}
+              className="flex items-start gap-2.5"
+            >
               <span
                 className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full text-[10px] font-black text-white"
                 style={{ background: 'linear-gradient(135deg, #0e5196, #2c7be5)' }}
@@ -184,10 +195,10 @@ export function StackChecker() {
                 {i + 1}
               </span>
               <span className="text-xs text-slate-600">{q}</span>
-            </li>
+            </motion.li>
           ))}
         </ol>
-      </div>
+      </motion.div>
     </GlassCard>
   )
 }
