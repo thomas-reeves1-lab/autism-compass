@@ -16,7 +16,7 @@ export function GlassCard({
     <motion.div
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -2 }}
+      whileHover={{ y: -2, boxShadow: '0 28px 64px -24px rgba(44,123,229,0.32), inset 0 1px 0 rgba(255,255,255,0.98)' }}
       viewport={{ once: true, margin: '-60px' }}
       transition={{ type: 'spring', stiffness: 260, damping: 26 }}
       className={`glass p-5 ${className}`}

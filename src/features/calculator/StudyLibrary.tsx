@@ -36,15 +36,20 @@ export function StudyLibrary() {
           'Peer-reviewed only',
           'RN reviewed',
           'Limitations shown',
-        ].map((label) => (
-          <span
+        ].map((label, i) => (
+          <motion.span
             key={label}
+            initial={{ opacity: 0, y: 6 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            whileHover={{ scale: 1.05, background: 'rgba(14,81,150,0.13)' }}
+            transition={{ delay: i * 0.06, type: 'spring', stiffness: 280, damping: 22 }}
             className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[10px] font-extrabold"
             style={{ background: 'rgba(14,81,150,0.08)', color: '#0E5196', border: '1px solid rgba(14,81,150,0.14)' }}
           >
             <span className="h-1.5 w-1.5 rounded-full bg-brand-navy opacity-60" />
             {label}
-          </span>
+          </motion.span>
         ))}
       </div>
 
