@@ -1,3 +1,4 @@
+import { motion } from 'framer-motion'
 import { ShoppingBag, Lock, Sparkles } from '../../components/icons'
 import { products, formatAud } from './catalogue'
 import { isLive, showDormant } from '../../config/featureFlags'
@@ -67,7 +68,14 @@ export function StorePreview() {
               </div>
               <div className="mt-3">
                 {live && p.active ? (
-                  <button className="btn-primary w-full text-sm">Add to cart</button>
+                  <motion.button
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.96 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+                    className="btn-primary w-full text-sm"
+                  >
+                    Add to cart
+                  </motion.button>
                 ) : (
                   <button disabled className="btn-ghost w-full cursor-not-allowed text-sm opacity-60">
                     <Lock size={14} /> Coming soon

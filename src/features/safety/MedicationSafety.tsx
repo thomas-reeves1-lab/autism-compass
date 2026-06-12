@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { ShieldPlus, Stethoscope, ClipboardCheck, HeartPulse, CheckCircle2, AlertTriangle } from '../../components/icons'
+import { ShieldPlus, Stethoscope, ClipboardCheck, HeartPulse, CheckCircle2, AlertTriangle, Info } from '../../components/icons'
 import {
   sideEffectMatrix,
   monitoringChecklist,
@@ -78,7 +78,7 @@ export function MedicationSafety() {
                 initial={{ opacity: 0, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
-                transition={{ delay: (i % 2) * 0.05 + Math.floor(i / 2) * 0.04, duration: 0.4 }}
+                transition={{ delay: (i % 2) * 0.05 + Math.floor(i / 2) * 0.04, type: 'spring', stiffness: 260, damping: 24 }}
                 className="relative overflow-hidden rounded-xl p-3 pl-5"
                 style={{
                   background: `linear-gradient(135deg, white, color-mix(in srgb, ${u.hex} 5%, white))`,
@@ -178,10 +178,16 @@ export function MedicationSafety() {
             </ul>
           </div>
         </div>
-        <p className="mt-4 rounded-xl bg-info-soft px-3 py-2 text-xs text-info">
-          This model is deliberately cautious. It is not saying what will happen. It is showing why
-          medication changes need a doctor, a plan, and tracking.
-        </p>
+        <div
+          className="mt-4 flex items-start gap-2.5 rounded-xl px-3 py-2.5 text-xs"
+          style={{ background: 'rgba(14,81,150,0.06)', border: '1px solid rgba(14,81,150,0.12)' }}
+        >
+          <Info size={14} className="mt-0.5 shrink-0 text-brand-navy" />
+          <p className="text-brand-navy">
+            This model is deliberately cautious. It is not saying what will happen. It is showing why
+            medication changes need a doctor, a plan, and tracking.
+          </p>
+        </div>
       </GlassCard>
 
       {/* Monitoring checklist */}
