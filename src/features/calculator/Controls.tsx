@@ -31,8 +31,10 @@ export function DoseSliders() {
 
       <div className="grid gap-3 md:grid-cols-2">
         {/* Risperidone */}
-        <div
+        <motion.div
           className="relative overflow-hidden rounded-xl p-3.5 pl-5"
+          whileHover={{ y: -2, boxShadow: '0 8px 24px -8px rgba(194,65,12,0.3)' }}
+          transition={{ type: 'spring', stiffness: 280, damping: 22 }}
           style={{
             background: 'linear-gradient(135deg, rgba(194,65,12,0.07), rgba(194,65,12,0.03))',
             border: '1px solid rgba(194,65,12,0.2)',
@@ -59,11 +61,13 @@ export function DoseSliders() {
             <span className="text-[10px] text-slate-400">3</span>
           </div>
           <p className="mt-1 text-[10px] leading-tight text-doctor/80">Prescription antipsychotic. Only the prescriber can change it.</p>
-        </div>
+        </motion.div>
 
         {/* NAC */}
-        <div
+        <motion.div
           className="relative overflow-hidden rounded-xl p-3.5 pl-5"
+          whileHover={{ y: -2, boxShadow: '0 8px 24px -8px rgba(21,128,61,0.26)' }}
+          transition={{ type: 'spring', stiffness: 280, damping: 22 }}
           style={{
             background: 'linear-gradient(135deg, rgba(21,128,61,0.07), rgba(21,128,61,0.03))',
             border: '1px solid rgba(21,128,61,0.18)',
@@ -93,7 +97,7 @@ export function DoseSliders() {
             <span className="text-[10px] text-slate-400">2700</span>
           </div>
           <p className="mt-1 text-[10px] leading-tight text-slate-400">Teaspoons are not accurate. Use the label and ask a pharmacist.</p>
-        </div>
+        </motion.div>
       </div>
     </GlassCard>
   )
@@ -114,6 +118,7 @@ export function BaselineEditor() {
           onClick={() => setOpen((o) => !o)}
           whileHover={{ scale: 1.04 }}
           whileTap={{ scale: 0.96 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 22 }}
           className="btn-ghost ml-auto px-3 py-1.5 text-xs"
         >
           {open ? 'Done' : 'Edit'}
@@ -207,7 +212,9 @@ export function EvidenceModeToggle() {
               key={m.id}
               onClick={() => setEvidenceMode(m.id)}
               title={m.help}
+              whileHover={!active ? { scale: 1.04 } : {}}
               whileTap={{ scale: 0.95 }}
+              transition={{ type: 'spring', stiffness: 320, damping: 22 }}
               className="relative rounded-lg px-3 py-1.5 text-xs font-bold transition-colors"
               style={
                 active
