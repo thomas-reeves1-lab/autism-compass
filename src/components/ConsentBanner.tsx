@@ -40,12 +40,15 @@ export function ConsentBanner() {
             </p>
           </div>
           <div className="flex shrink-0 gap-2">
-            <button
+            <motion.button
               onClick={() => decide('denied')}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.96 }}
+              transition={{ type: 'spring', stiffness: 300, damping: 22 }}
               className="rounded-lg px-3 py-2 text-xs font-semibold text-white/55 transition hover:bg-white/10 hover:text-white/85"
             >
               No thanks
-            </button>
+            </motion.button>
             <motion.button
               onClick={() => decide('granted')}
               whileHover={{ scale: 1.03 }}

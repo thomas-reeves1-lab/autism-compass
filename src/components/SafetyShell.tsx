@@ -40,8 +40,11 @@ export function EmergencyWarning() {
           <span className="font-extrabold">Immediate danger?</span>{' '}
           <span className="text-danger/85">Seizure, breathing trouble, collapse or severe change — get urgent help now.</span>
         </p>
-        <button
+        <motion.button
           onClick={() => setOpen((o) => !o)}
+          whileHover={{ scale: 1.06 }}
+          whileTap={{ scale: 0.94 }}
+          transition={{ type: 'spring', stiffness: 320, damping: 22 }}
           className="hidden items-center gap-1 text-xs font-bold text-danger/80 hover:text-danger sm:inline-flex"
         >
           Signs{' '}
@@ -52,7 +55,7 @@ export function EmergencyWarning() {
           >
             <ChevronDown size={13} />
           </motion.span>
-        </button>
+        </motion.button>
         <motion.a
           href="tel:000"
           whileHover={{ scale: 1.05 }}
@@ -135,13 +138,16 @@ export function SiteFooter({
         {onOpen && (
           <div className="mb-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2">
             {links.map((l) => (
-              <button
+              <motion.button
                 key={l.key}
                 onClick={() => onOpen(l.key)}
+                whileHover={{ y: -1, opacity: 1 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 22 }}
                 className="text-xs font-semibold text-white/50 transition hover:text-white/90"
               >
                 {l.label}
-              </button>
+              </motion.button>
             ))}
           </div>
         )}
