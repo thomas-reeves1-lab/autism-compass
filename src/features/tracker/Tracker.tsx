@@ -185,14 +185,16 @@ export function Tracker() {
             { label: 'Total episodes', value: String(totalEpisodes), accent: '#B45309' },
             { label: 'PRN days', value: String(prnDays), accent: '#C2410C' },
           ].map(({ label, value, accent }) => (
-            <div
+            <motion.div
               key={label}
+              whileHover={{ y: -2, scale: 1.02 }}
+              transition={{ type: 'spring', stiffness: 320, damping: 22 }}
               className="rounded-xl p-3 text-center"
               style={{ background: `color-mix(in srgb, ${accent} 7%, white)`, border: `1px solid ${accent}22` }}
             >
               <p className="text-base font-black" style={{ color: accent }}>{value}</p>
               <p className="text-[10px] font-bold text-slate-400">{label}</p>
-            </div>
+            </motion.div>
           ))}
         </div>
       )}
