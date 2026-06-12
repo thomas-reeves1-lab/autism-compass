@@ -39,7 +39,13 @@ export function LeadCapture({ source = 'site', onOpenGuide }: { source?: string;
   }
 
   return (
-    <div className="grad-border p-[2px]">
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ type: 'spring', stiffness: 240, damping: 26 }}
+      className="grad-border p-[2px]"
+    >
       <div className="rounded-[1.4rem] bg-gradient-to-br from-white via-brand-sky to-safe-soft/50 p-5">
         {done ? (
           <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="text-center">
@@ -86,7 +92,7 @@ export function LeadCapture({ source = 'site', onOpenGuide }: { source?: string;
                   key={item}
                   initial={{ opacity: 0, x: -8 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.07 }}
+                  transition={{ delay: i * 0.07, type: 'spring', stiffness: 260, damping: 24 }}
                   className="flex items-center gap-2 text-sm text-slate-700"
                 >
                   <span
@@ -143,6 +149,6 @@ export function LeadCapture({ source = 'site', onOpenGuide }: { source?: string;
           </>
         )}
       </div>
-    </div>
+    </motion.div>
   )
 }
