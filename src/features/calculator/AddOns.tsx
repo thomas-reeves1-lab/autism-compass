@@ -90,15 +90,15 @@ export function AddOns() {
       </AnimatePresence>
 
       <motion.div layout className="grid grid-cols-1 gap-3 md:grid-cols-2">
-        {ordered.map((t) => (
-          <AddOnCard key={t.id} t={t} />
+        {ordered.map((t, i) => (
+          <AddOnCard key={t.id} t={t} index={i} />
         ))}
       </motion.div>
     </GlassCard>
   )
 }
 
-function AddOnCard({ t }: { t: Treatment }) {
+function AddOnCard({ t, index = 0 }: { t: Treatment; index?: number }) {
   const selected = useAppStore((s) => s.selectedAdjuncts.includes(t.id))
   const toggle = useAppStore((s) => s.toggleAdjunct)
   const [open, setOpen] = useState(false)
@@ -116,8 +116,11 @@ function AddOnCard({ t }: { t: Treatment }) {
   return (
     <motion.div
       layout
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: '-20px' }}
       whileHover={{ y: -2 }}
-      transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+      transition={{ delay: Math.min(index, 8) * 0.05, type: 'spring', stiffness: 260, damping: 24 }}
       className="relative overflow-hidden rounded-xl p-4 pl-5"
       style={{
         background: selected
