@@ -114,11 +114,15 @@ export function DoctorPack() {
           {considering.length > 0 && (
             <PackSection accent="#7c3aed" title="Options we want to discuss">
               <div className="space-y-2">
-                {considering.map((t) => {
+                {considering.map((t, i) => {
                   const acc = EV_ACCENT[t!.evidenceLevel] ?? '#64748b'
                   return (
-                    <div
+                    <motion.div
                       key={t!.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true, margin: '-20px' }}
+                      transition={{ delay: Math.min(i, 12) * 0.06, type: 'spring', stiffness: 260, damping: 24 }}
                       className="relative overflow-hidden rounded-xl p-3 pl-5"
                       style={{
                         background: `linear-gradient(135deg, white, color-mix(in srgb, ${acc} 4%, white))`,
@@ -130,7 +134,7 @@ export function DoctorPack() {
                       <p className="text-xs" style={{ color: acc }}>
                         {t!.evidenceLevel} evidence{t!.doctorOnly ? ' · doctor-only' : ''} · {t!.confidenceNote}
                       </p>
-                    </div>
+                    </motion.div>
                   )
                 })}
               </div>
@@ -168,7 +172,14 @@ export function DoctorPack() {
           <PackSection accent="#B45309" title="Questions for the doctor">
             <ol className="space-y-2">
               {DOCTOR_QUESTIONS.map((q, i) => (
-                <li key={q} className="flex items-start gap-2.5">
+                <motion.li
+                  key={q}
+                  initial={{ opacity: 0, x: -8 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: Math.min(i, 12) * 0.05, type: 'spring', stiffness: 260, damping: 22 }}
+                  className="flex items-start gap-2.5"
+                >
                   <span
                     className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full text-[10px] font-black text-white"
                     style={{ background: '#B45309' }}
@@ -176,7 +187,7 @@ export function DoctorPack() {
                     {i + 1}
                   </span>
                   <span className="text-slate-600">{q}</span>
-                </li>
+                </motion.li>
               ))}
             </ol>
           </PackSection>

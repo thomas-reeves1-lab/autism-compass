@@ -72,14 +72,17 @@ export function FreeGuide() {
       </div>
 
       {/* Disclaimer banner */}
-      <div
+      <motion.div
+        initial={{ opacity: 0, y: -4 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: 'spring', stiffness: 260, damping: 26 }}
         className="mb-5 flex items-start gap-2 rounded-xl p-3 text-xs"
         style={{ background: 'rgba(14,81,150,0.07)', color: '#0E5196', border: '1px solid rgba(14,81,150,0.12)' }}
       >
         <ShieldCheck size={14} className="mt-0.5 shrink-0" />
         Education only. Not medical advice. Not a diagnosis or dosing tool. Always speak to the
         treating doctor before changing anything.
-      </div>
+      </motion.div>
 
       <div id="free-guide" className="space-y-3">
 
@@ -119,7 +122,14 @@ export function FreeGuide() {
         <GuideSection num={5} title="Questions worth asking">
           <ol className="mt-1 space-y-1.5">
             {DOCTOR_QUESTIONS.map((q, i) => (
-              <li key={q} className="flex items-start gap-2 text-sm text-slate-600">
+              <motion.li
+                key={q}
+                initial={{ opacity: 0, x: -8 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: Math.min(i, 12) * 0.05, type: 'spring', stiffness: 260, damping: 22 }}
+                className="flex items-start gap-2 text-sm text-slate-600"
+              >
                 <span
                   className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full text-[10px] font-black text-white"
                   style={{ background: SECTION_ACCENTS[4] }}
@@ -127,7 +137,7 @@ export function FreeGuide() {
                   {i + 1}
                 </span>
                 {q}
-              </li>
+              </motion.li>
             ))}
           </ol>
         </GuideSection>
@@ -158,13 +168,17 @@ export function FreeGuide() {
       </div>
 
       {/* Footer */}
-      <div
+      <motion.div
+        initial={{ opacity: 0, y: 6 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ type: 'spring', stiffness: 260, damping: 28 }}
         className="mt-5 flex items-center gap-2 rounded-xl px-3 py-2.5 text-xs text-slate-500"
         style={{ background: 'rgba(14,81,150,0.05)', border: '1px solid rgba(14,81,150,0.08)' }}
       >
         <Check size={13} className="text-safe" />
         Built by a registered NDIS provider and a Registered Nurse. Education only. Not medical advice.
-      </div>
+      </motion.div>
     </GlassCard>
   )
 }
