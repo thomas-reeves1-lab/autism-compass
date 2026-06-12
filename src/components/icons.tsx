@@ -297,3 +297,9 @@ export const Mail = (p: IconProps) => (
     <path d="M3.5 7l8.5 6 8.5-6" />
   </Svg>
 )
+
+export const X = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M18 6L6 18M6 6l12 12" />
+  </Svg>
+)

@@ -111,12 +111,25 @@ function AddOnCard({ t }: { t: Treatment }) {
     setShowSafety(true) // supplement safety check before switching on
   }
 
+  const accentHex = t.doctorOnly ? '#C2410C' : SUPPLEMENT_CATEGORIES.has(t.category) ? '#15803D' : '#0E5196'
+
   return (
     <motion.div
       layout
       transition={{ type: 'spring', stiffness: 380, damping: 32 }}
-      className={`rounded-xl border p-4 ${selected ? 'border-brand-leaf bg-safe-soft/40 ring-1 ring-brand-leaf/40' : 'border-slate-100 bg-white'}`}
+      className="relative overflow-hidden rounded-xl p-4 pl-5"
+      style={{
+        background: selected
+          ? `linear-gradient(135deg, color-mix(in srgb, ${accentHex} 8%, white), color-mix(in srgb, ${accentHex} 4%, white))`
+          : 'linear-gradient(135deg, #ffffff, #f8fafc)',
+        border: selected ? `1.5px solid ${accentHex}40` : '1px solid rgba(14,81,150,0.1)',
+        boxShadow: selected ? `0 4px 16px -6px ${accentHex}55` : '0 2px 8px -4px rgba(6,32,63,0.08)',
+      }}
     >
+      <span
+        className="absolute bottom-0 left-0 top-0 w-[3.5px] rounded-l-xl transition-all"
+        style={{ background: selected ? accentHex : `${accentHex}44` }}
+      />
       <div className="flex items-start justify-between gap-2">
         <div>
           <h3 className="font-extrabold text-brand-deep">{t.name}</h3>
@@ -131,7 +144,11 @@ function AddOnCard({ t }: { t: Treatment }) {
 
       <div className="mt-2 flex flex-wrap gap-1">
         {t.targetMetrics.slice(0, 3).map((m) => (
-          <span key={m} className="pill bg-slate-50 text-slate-500">
+          <span
+            key={m}
+            className="rounded-md px-1.5 py-0.5 text-[10px] font-semibold"
+            style={{ background: `${accentHex}12`, color: accentHex }}
+          >
             {metricLabels[m]}
           </span>
         ))}
@@ -174,26 +191,22 @@ function AddOnCard({ t }: { t: Treatment }) {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="mt-3 overflow-hidden border-t border-slate-100 pt-3 text-xs text-slate-600"
+            className="mt-3 overflow-hidden"
           >
-            <p className="mb-2">{t.plainEnglishSummary}</p>
-            <p className="mb-2 italic text-slate-500">{t.confidenceNote}</p>
-            {t.sideEffects.length > 0 && (
-              <p className="mb-1">
-                <span className="font-bold">Side effects: </span>
-                {t.sideEffects.join(', ')}
-              </p>
-            )}
-            <p className="mb-1">
-              <span className="font-bold">Studied dose: </span>
-              {t.studiedDoseRange}
-            </p>
-            {t.doctorQuestions.length > 0 && (
-              <p>
-                <span className="font-bold">Ask the doctor: </span>
-                {t.doctorQuestions[0]}
-              </p>
-            )}
+            <div
+              className="space-y-2 rounded-xl p-3 text-xs text-slate-600"
+              style={{ background: `${accentHex}06`, border: `1px solid ${accentHex}14` }}
+            >
+              <p>{t.plainEnglishSummary}</p>
+              <p className="italic text-slate-400">{t.confidenceNote}</p>
+              {t.sideEffects.length > 0 && (
+                <p><span className="font-bold text-slate-700">Side effects: </span>{t.sideEffects.join(', ')}</p>
+              )}
+              <p><span className="font-bold text-slate-700">Studied dose: </span>{t.studiedDoseRange}</p>
+              {t.doctorQuestions.length > 0 && (
+                <p style={{ color: accentHex }}><span className="font-bold">Ask: </span>{t.doctorQuestions[0]}</p>
+              )}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
