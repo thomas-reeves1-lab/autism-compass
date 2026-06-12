@@ -302,10 +302,11 @@
     background-size: 200% 200%;
     animation: borderflow 6s ease infinite;
     box-shadow: 0 14px 30px -10px rgba(44, 123, 229, 0.7);
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
   .btn-cta:hover {
     transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 20px 40px -12px rgba(44, 123, 229, 0.8);
   }
 
   .accent-bar {
@@ -317,6 +318,28 @@
     background: linear-gradient(90deg, #0e5196, #2c7be5, #7bc043);
     background-size: 200% 100%;
     animation: borderflow 6s ease infinite;
+  }
+
+  /* Clickable card: slight press effect + glow on hover */
+  .card-interactive {
+    cursor: pointer;
+    transition: transform 0.22s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.22s ease;
+  }
+  .card-interactive:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.9),
+      0 0 0 1px rgba(44, 123, 229, 0.18),
+      0 20px 48px -20px rgba(6, 32, 63, 0.65),
+      0 0 0 4px rgba(44, 123, 229, 0.06);
+  }
+  .card-interactive:active {
+    transform: translateY(-1px);
+  }
+
+  /* Soft glow on focus-within for card groups */
+  .focus-ring-group:focus-within {
+    box-shadow: 0 0 0 2px rgba(123, 192, 67, 0.4);
   }
 }
 

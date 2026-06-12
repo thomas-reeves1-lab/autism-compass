@@ -255,6 +255,12 @@ export const ChevronDown = (p: IconProps) => (
   </Svg>
 )
 
+export const ChevronUp = (p: IconProps) => (
+  <Svg {...p}>
+    <path d="M18 14.5l-6-6-6 6" />
+  </Svg>
+)
+
 export const Sparkles = (p: IconProps) => (
   <Svg {...p}>
     <path d="M12 3l1.7 4.6L18.3 9.3 13.7 11 12 15.6 10.3 11 5.7 9.3 10.3 7.6z" />

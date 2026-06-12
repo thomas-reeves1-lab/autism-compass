@@ -71,9 +71,25 @@ export function SafetyScoreChip({ score, size = 'sm' }: { score: number; size?: 
   )
 }
 
+const EVIDENCE_DOT: Record<EvidenceLevel, string> = {
+  strong: '#15803D',
+  moderate: '#16a34a',
+  emerging: '#2563eb',
+  mixed: '#d97706',
+  weak: '#ca8a04',
+  theoretical: '#64748b',
+  negative: '#dc2626',
+  doctorOnly: '#7c3aed',
+}
+
 export function EvidenceBadge({ level }: { level: EvidenceLevel }) {
   const m = evidenceLevelMeta[level]
-  return <span className={`pill ${m.bg} ${m.colour}`}>{m.label}</span>
+  return (
+    <span className={`pill inline-flex items-center gap-1 ${m.bg} ${m.colour}`}>
+      <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: EVIDENCE_DOT[level] }} />
+      {m.label}
+    </span>
+  )
 }
 
 export function Pill({
