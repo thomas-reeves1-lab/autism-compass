@@ -106,9 +106,19 @@ export default function App() {
           >
             Autism Compass
           </span>
-          <span className="ml-2 hidden text-[10px] font-bold uppercase tracking-[0.18em] text-slate-400 sm:inline">
+          <motion.span
+            initial={{ opacity: 0, scale: 0.88 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.35, type: 'spring', stiffness: 260, damping: 22 }}
+            className="ml-2 hidden items-center rounded-full px-2.5 py-0.5 text-[10px] font-black uppercase tracking-[0.14em] sm:inline-flex"
+            style={{
+              background: 'rgba(14,81,150,0.07)',
+              border: '1px solid rgba(14,81,150,0.14)',
+              color: '#0E5196',
+            }}
+          >
             Education only
-          </span>
+          </motion.span>
           <div className="ml-auto hidden items-center gap-1 sm:flex">
             <span
               className="rounded-md px-2 py-0.5 text-[10px] font-bold tracking-wide text-white"
