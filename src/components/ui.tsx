@@ -47,8 +47,12 @@ export function SectionTitle({
       )}
       <div>
         <h2 className="text-xl font-extrabold text-brand-deep">{title}</h2>
-        <span
-          className="mt-1 block h-[2px] w-8 rounded-full"
+        <motion.span
+          className="mt-1 block h-[2px] rounded-full"
+          initial={{ width: 0 }}
+          whileInView={{ width: '2rem' }}
+          viewport={{ once: true }}
+          transition={{ type: 'spring', stiffness: 200, damping: 28, delay: 0.15 }}
           style={{ background: 'linear-gradient(90deg, #0E5196, #7bc043)' }}
         />
         {subtitle && <p className="mt-1 max-w-2xl text-sm text-slate-600">{subtitle}</p>}
