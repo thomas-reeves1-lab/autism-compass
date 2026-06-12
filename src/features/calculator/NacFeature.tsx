@@ -63,21 +63,41 @@ export function NacFeature() {
             return (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 10, scale: 0.97 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-                className="bento-leaf rounded-xl p-3"
+                transition={{ delay: i * 0.1, type: 'spring', stiffness: 260, damping: 24 }}
+                whileHover={{ y: -2, transition: { duration: 0.18 } }}
+                className="relative overflow-hidden rounded-xl p-3"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(21,128,61,0.09), rgba(21,128,61,0.04))',
+                  border: '1px solid rgba(21,128,61,0.18)',
+                  boxShadow: '0 2px 8px -4px rgba(21,128,61,0.2)',
+                }}
               >
-                <Icon size={18} className="text-safe" />
-                <p className="mt-1 text-xs text-slate-600">{h.text}</p>
+                <span
+                  className="absolute left-0 top-0 bottom-0 w-[3px] rounded-l-xl"
+                  style={{ background: 'linear-gradient(180deg, #15803D, #22c55e)' }}
+                />
+                <div className="pl-1">
+                  <div
+                    className="mb-1.5 grid h-7 w-7 place-items-center rounded-lg text-white"
+                    style={{ background: 'linear-gradient(135deg, #15803D, #22c55e)' }}
+                  >
+                    <Icon size={15} />
+                  </div>
+                  <p className="text-xs text-slate-600">{h.text}</p>
+                </div>
               </motion.div>
             )
           })}
         </div>
 
         {/* Quick NAC dose control */}
-        <div className="mt-4 rounded-xl bg-white/70 p-4">
+        <div
+          className="mt-4 rounded-xl p-4"
+          style={{ background: 'linear-gradient(135deg, rgba(255,255,255,0.85), rgba(240,253,244,0.9))', border: '1px solid rgba(21,128,61,0.12)' }}
+        >
           <div className="mb-1 flex items-center justify-between text-sm">
             <span className="font-bold text-brand-deep">Try it in the model</span>
             <span className="font-black text-safe">{nacDose} mg/day {nacDose > 0 && `(~${nearestTsp(nacDose)})`}</span>
