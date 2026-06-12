@@ -23,6 +23,13 @@ export function KpiGrid() {
   )
 }
 
+function barGradient(score: number): string {
+  if (score <= 3) return 'linear-gradient(90deg, #15803D, #22c55e)'
+  if (score <= 5) return 'linear-gradient(90deg, #B45309, #f59e0b)'
+  if (score <= 7) return 'linear-gradient(90deg, #C2410C, #f97316)'
+  return 'linear-gradient(90deg, #B91C1C, #ef4444)'
+}
+
 function KpiCard({ metric }: { metric: MetricKey }) {
   const pm = useProjection()[metric]
   const [open, setOpen] = useState(false)
@@ -106,7 +113,7 @@ function KpiCard({ metric }: { metric: MetricKey }) {
         />
         <motion.div
           className="absolute top-0 h-full rounded-full"
-          style={{ background: 'linear-gradient(90deg, #0e5196, #1D4ED8)' }}
+          style={{ background: barGradient(pm.projected) }}
           initial={false}
           animate={{ width: `${pm.projected * 10}%` }}
           transition={{ type: 'spring', stiffness: 120, damping: 18 }}
@@ -124,25 +131,27 @@ function KpiCard({ metric }: { metric: MetricKey }) {
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: 'auto', opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
-            className="overflow-hidden border-t border-slate-100"
+            className="overflow-hidden"
           >
-            <p className="mb-1 mt-2 text-[10px] font-bold text-slate-500">Why did this move?</p>
-            <ul className="space-y-1">
-              {explainMetric(pm).map((line, i) => (
-                <li key={i} className="text-[10px] leading-snug text-slate-600">
-                  {line}
-                </li>
-              ))}
-            </ul>
-            {pm.contributions.length > 0 && (
-              <div className="mt-2 flex flex-wrap gap-1">
-                {pm.contributions.map((c, i) => (
-                  <span key={i} className={`pill bg-slate-50 text-[9px] ${numberLabelMeta[c.label].colour}`}>
-                    {numberLabelMeta[c.label].label}
-                  </span>
+            <div className="mt-2 rounded-lg p-2.5" style={{ background: 'rgba(14,81,150,0.05)', border: '1px solid rgba(14,81,150,0.1)' }}>
+              <p className="mb-1 text-[10px] font-bold text-brand-navy">Why did this move?</p>
+              <ul className="space-y-1">
+                {explainMetric(pm).map((line, i) => (
+                  <li key={i} className="text-[10px] leading-snug text-slate-600">
+                    {line}
+                  </li>
                 ))}
-              </div>
-            )}
+              </ul>
+              {pm.contributions.length > 0 && (
+                <div className="mt-1.5 flex flex-wrap gap-1">
+                  {pm.contributions.map((c, i) => (
+                    <span key={i} className={`pill bg-white/80 text-[9px] ${numberLabelMeta[c.label].colour}`}>
+                      {numberLabelMeta[c.label].label}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

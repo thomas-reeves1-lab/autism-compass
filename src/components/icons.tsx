@@ -303,3 +303,10 @@ export const X = (p: IconProps) => (
     <path d="M18 6L6 18M6 6l12 12" />
   </Svg>
 )
+
+export const Search = (p: IconProps) => (
+  <Svg {...p}>
+    <circle cx="11" cy="11" r="7" />
+    <path d="M16.5 16.5l4 4" />
+  </Svg>
+)
