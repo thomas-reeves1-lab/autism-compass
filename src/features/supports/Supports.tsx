@@ -67,7 +67,7 @@ export function Supports() {
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true, margin: '-30px' }}
                 transition={{ delay: (i % 2) * 0.06 + Math.floor(i / 2) * 0.04, type: 'spring', stiffness: 260, damping: 24 }}
-                whileHover={{ y: -2, transition: { duration: 0.18 } }}
+                whileHover={{ y: -2, transition: { type: 'spring', stiffness: 300, damping: 22 } }}
                 className="relative overflow-hidden rounded-2xl p-4 pl-5 transition-shadow"
                 style={{
                   background: on
@@ -152,7 +152,7 @@ export function Supports() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-30px' }}
                 transition={{ delay: (i % 3) * 0.05 + Math.floor(i / 3) * 0.04, type: 'spring', stiffness: 260, damping: 24 }}
-                whileHover={{ y: -2, transition: { duration: 0.18 } }}
+                whileHover={{ y: -2, transition: { type: 'spring', stiffness: 300, damping: 22 } }}
                 className="relative overflow-hidden rounded-2xl p-4 pl-5"
                 style={{
                   background: on

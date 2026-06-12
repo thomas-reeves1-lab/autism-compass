@@ -76,7 +76,7 @@ export function LoopMap() {
               initial={{ opacity: 0, y: 16, scale: 0.96 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ delay: i * 0.09, type: 'spring', stiffness: 240, damping: 22 }}
-              whileHover={{ y: -3, transition: { duration: 0.2 } }}
+              whileHover={{ y: -3, transition: { type: 'spring', stiffness: 280, damping: 22 } }}
               className="relative flex-1 overflow-hidden rounded-2xl p-3.5"
               style={{
                 background: `linear-gradient(160deg, white 0%, color-mix(in srgb, ${STAGE_COLOUR[stage]} 6%, white) 100%)`,
