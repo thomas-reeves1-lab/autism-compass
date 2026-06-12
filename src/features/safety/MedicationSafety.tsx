@@ -194,15 +194,20 @@ export function MedicationSafety() {
       <GlassCard>
         <SectionTitle icon={<ClipboardCheck size={20} />} title="Monitoring checklist" subtitle="What can be monitored. Print and take it to the doctor." />
         <div className="flex flex-wrap gap-2">
-          {monitoringChecklist.map((m) => (
-            <span
+          {monitoringChecklist.map((m, i) => (
+            <motion.span
               key={m}
-              className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold text-brand-deep"
+              initial={{ opacity: 0, scale: 0.88 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: Math.min(i, 12) * 0.03, type: 'spring', stiffness: 280, damping: 22 }}
+              whileHover={{ scale: 1.05, transition: { type: 'spring', stiffness: 320, damping: 20 } }}
+              className="inline-flex cursor-default items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold text-brand-deep"
               style={{ background: 'rgba(14,81,150,0.07)', border: '1px solid rgba(14,81,150,0.12)' }}
             >
               <span className="h-1.5 w-1.5 rounded-full bg-brand-navy opacity-60" />
               {m}
-            </span>
+            </motion.span>
           ))}
         </div>
         <motion.button
@@ -220,15 +225,20 @@ export function MedicationSafety() {
       <GlassCard>
         <SectionTitle icon={<ShieldPlus size={20} />} title="Before changing medication" subtitle="Could this behaviour be from something else? Check these first." />
         <div className="flex flex-wrap gap-2">
-          {behaviourFirstChecklist.map((b) => (
-            <span
+          {behaviourFirstChecklist.map((b, i) => (
+            <motion.span
               key={b}
-              className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold"
+              initial={{ opacity: 0, scale: 0.88 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: Math.min(i, 12) * 0.03, type: 'spring', stiffness: 280, damping: 22 }}
+              whileHover={{ scale: 1.05, transition: { type: 'spring', stiffness: 320, damping: 20 } }}
+              className="inline-flex cursor-default items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold"
               style={{ background: 'rgba(44,123,229,0.08)', color: '#0E5196', border: '1px solid rgba(44,123,229,0.15)' }}
             >
               <span className="h-1.5 w-1.5 rounded-full" style={{ background: '#2c7be5', opacity: 0.6 }} />
               {b}
-            </span>
+            </motion.span>
           ))}
         </div>
         <p className="mt-3 text-xs text-slate-500">
