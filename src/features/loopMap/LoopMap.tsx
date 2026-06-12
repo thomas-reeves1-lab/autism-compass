@@ -133,7 +133,11 @@ export function LoopMap() {
         ))}
       </div>
 
-      <div
+      <motion.div
+        initial={{ opacity: 0, y: 6 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ type: 'spring', stiffness: 260, damping: 28 }}
         className="mt-4 flex items-start gap-2.5 rounded-xl p-3"
         style={{ background: 'linear-gradient(90deg, rgba(14,81,150,0.07), rgba(14,81,150,0.03))', border: '1px solid rgba(14,81,150,0.12)' }}
       >
@@ -142,7 +146,7 @@ export function LoopMap() {
           <span className="font-extrabold">Remember:</span> checking sleep, pain, bowels, sensory needs,
           demands, and communication usually comes before a medication review.
         </p>
-      </div>
+      </motion.div>
     </GlassCard>
   )
 }
