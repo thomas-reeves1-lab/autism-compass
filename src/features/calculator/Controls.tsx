@@ -94,12 +94,21 @@ export function BaselineEditor() {
       <div className="flex flex-wrap items-center gap-2">
         <h2 className="text-base font-black text-brand-deep">Your starting point</h2>
         <span className="text-[11px] text-slate-400">Example profile · 0 calm → 10 severe</span>
-        <button
+        <motion.button
           onClick={() => setOpen((o) => !o)}
+          whileHover={{ scale: 1.04 }}
+          whileTap={{ scale: 0.96 }}
           className="btn-ghost ml-auto px-3 py-1.5 text-xs"
         >
-          {open ? 'Done' : 'Edit'} <ChevronDown size={13} className={open ? 'rotate-180 transition' : 'transition'} />
-        </button>
+          {open ? 'Done' : 'Edit'}
+          <motion.span
+            animate={{ rotate: open ? 180 : 0 }}
+            transition={{ type: 'spring', stiffness: 280, damping: 24 }}
+            className="inline-block"
+          >
+            <ChevronDown size={13} />
+          </motion.span>
+        </motion.button>
       </div>
 
       {/* Collapsed: dense colour-coded chips (read-only) */}
@@ -162,19 +171,36 @@ export function EvidenceModeToggle() {
   return (
     <div className="flex flex-wrap items-center gap-1.5">
       <span className="text-xs font-bold text-slate-500">Evidence mode:</span>
-      <div className="inline-flex rounded-lg bg-white/70 p-0.5 ring-1 ring-brand-deep/12">
-        {modes.map((m) => (
-          <button
-            key={m.id}
-            onClick={() => setEvidenceMode(m.id)}
-            title={m.help}
-            className={`rounded-md px-3 py-1.5 text-xs font-bold transition ${
-              evidenceMode === m.id ? 'bg-brand-navy text-white shadow-card' : 'text-slate-500 hover:text-brand-navy'
-            }`}
-          >
-            {m.label}
-          </button>
-        ))}
+      <div
+        className="inline-flex rounded-xl p-0.5"
+        style={{
+          background: 'rgba(14,81,150,0.06)',
+          border: '1px solid rgba(14,81,150,0.12)',
+        }}
+      >
+        {modes.map((m) => {
+          const active = evidenceMode === m.id
+          return (
+            <motion.button
+              key={m.id}
+              onClick={() => setEvidenceMode(m.id)}
+              title={m.help}
+              whileTap={{ scale: 0.95 }}
+              className="relative rounded-lg px-3 py-1.5 text-xs font-bold transition-colors"
+              style={
+                active
+                  ? {
+                      background: 'linear-gradient(135deg, #0E5196, #1d4ed8)',
+                      color: '#fff',
+                      boxShadow: '0 2px 8px -3px rgba(14,81,150,0.6)',
+                    }
+                  : { color: '#64748b' }
+              }
+            >
+              {m.label}
+            </motion.button>
+          )
+        })}
       </div>
     </div>
   )
