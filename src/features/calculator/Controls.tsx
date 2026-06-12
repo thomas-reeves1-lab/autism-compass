@@ -31,7 +31,15 @@ export function DoseSliders() {
 
       <div className="grid gap-3 md:grid-cols-2">
         {/* Risperidone */}
-        <div className="rounded-xl bg-doctor-soft/60 p-3.5 ring-1 ring-doctor/25">
+        <div
+          className="relative overflow-hidden rounded-xl p-3.5 pl-5"
+          style={{
+            background: 'linear-gradient(135deg, rgba(194,65,12,0.07), rgba(194,65,12,0.03))',
+            border: '1px solid rgba(194,65,12,0.2)',
+            boxShadow: '0 2px 8px -4px rgba(194,65,12,0.2)',
+          }}
+        >
+          <span className="absolute bottom-0 left-0 top-0 w-[3.5px] rounded-l-xl" style={{ background: '#C2410C' }} />
           <div className="mb-2 flex items-center justify-between gap-2">
             <span className="text-sm font-extrabold text-brand-deep">Risperidone</span>
             <div className="flex items-center gap-1.5">
@@ -54,7 +62,15 @@ export function DoseSliders() {
         </div>
 
         {/* NAC */}
-        <div className="rounded-xl bg-safe-soft/60 p-3.5 ring-1 ring-safe/25">
+        <div
+          className="relative overflow-hidden rounded-xl p-3.5 pl-5"
+          style={{
+            background: 'linear-gradient(135deg, rgba(21,128,61,0.07), rgba(21,128,61,0.03))',
+            border: '1px solid rgba(21,128,61,0.18)',
+            boxShadow: '0 2px 8px -4px rgba(21,128,61,0.15)',
+          }}
+        >
+          <span className="absolute bottom-0 left-0 top-0 w-[3.5px] rounded-l-xl" style={{ background: '#15803D' }} />
           <div className="mb-2 flex items-center justify-between gap-2">
             <span className="text-sm font-extrabold text-brand-deep">NAC</span>
             <div className="flex items-center gap-1.5">
