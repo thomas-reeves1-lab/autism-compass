@@ -95,7 +95,10 @@ export default function App() {
             transition={{ type: 'spring', stiffness: 200, damping: 14 }}
             className="h-9 w-9 sm:h-10 sm:w-10"
           />
-          <span
+          <motion.span
+            initial={{ opacity: 0, x: -8 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.12, type: 'spring', stiffness: 260, damping: 22 }}
             className="font-display text-base font-black tracking-tight sm:text-lg"
             style={{
               background: 'linear-gradient(110deg, #0E5196 10%, #2c7be5 55%, #7bc043 100%)',
@@ -105,7 +108,7 @@ export default function App() {
             }}
           >
             Autism Compass
-          </span>
+          </motion.span>
           <motion.span
             initial={{ opacity: 0, scale: 0.88 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -119,14 +122,19 @@ export default function App() {
           >
             Education only
           </motion.span>
-          <div className="ml-auto hidden items-center gap-1 sm:flex">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.82 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.45, type: 'spring', stiffness: 280, damping: 22 }}
+            className="ml-auto hidden items-center gap-1 sm:flex"
+          >
             <span
               className="rounded-md px-2 py-0.5 text-[10px] font-bold tracking-wide text-white"
               style={{ background: 'linear-gradient(90deg, #0E5196, #1d4ed8)' }}
             >
               Free
             </span>
-          </div>
+          </motion.div>
         </div>
       </header>
 
