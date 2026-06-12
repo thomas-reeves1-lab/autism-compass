@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { ShieldPlus, Stethoscope, ClipboardCheck, HeartPulse } from '../../components/icons'
+import { ShieldPlus, Stethoscope, ClipboardCheck, HeartPulse, CheckCircle2, AlertTriangle } from '../../components/icons'
 import {
   sideEffectMatrix,
   monitoringChecklist,
@@ -9,17 +9,19 @@ import {
 import type { TrafficLight } from '../../lib/safety'
 import { GlassCard, SectionTitle } from '../../components/ui'
 
-const URGENCY: Record<TrafficLight, { label: string; cls: string; colour: string }> = {
-  green: { label: 'Track only', cls: 'bg-safe-soft text-safe', colour: '#2e9e5b' },
-  yellow: { label: 'Book review', cls: 'bg-caution-soft text-caution', colour: '#e0a800' },
-  orange: { label: 'Prompt doctor review', cls: 'bg-doctor-soft text-doctor', colour: '#e8730c' },
-  red: { label: 'Urgent medical help', cls: 'bg-danger-soft text-danger', colour: '#d23b3b' },
+const URGENCY: Record<TrafficLight, { label: string; hex: string; bg: string; textCls: string }> = {
+  green:  { label: 'Track only',          hex: '#15803D', bg: 'rgba(21,128,61,0.07)',  textCls: 'text-safe' },
+  yellow: { label: 'Book review',         hex: '#B45309', bg: 'rgba(180,83,9,0.07)',   textCls: 'text-caution' },
+  orange: { label: 'Prompt doctor',       hex: '#C2410C', bg: 'rgba(194,65,12,0.07)',  textCls: 'text-doctor' },
+  red:    { label: 'Urgent medical help', hex: '#B91C1C', bg: 'rgba(185,28,28,0.08)',  textCls: 'text-danger' },
 }
+
+const SPECIALIST_ACCENT = ['#0E5196', '#1D4ED8', '#7C3AED', '#15803D', '#B45309', '#C2410C']
 
 export function MedicationSafety() {
   return (
     <div className="space-y-6">
-      {/* Current snapshot + why used */}
+      {/* Current snapshot */}
       <GlassCard>
         <SectionTitle
           icon={<HeartPulse size={20} />}
@@ -27,14 +29,34 @@ export function MedicationSafety() {
           subtitle="Reference only, not a recommendation. Prescription medication is doctor territory."
         />
         <div className="grid gap-4 md:grid-cols-2">
-          <div className="rounded-xl border border-doctor/30 bg-doctor-soft/40 p-4 text-sm">
-            <p className="font-extrabold text-brand-deep">Example current reference</p>
-            <p>Risperidone 3 mg/day (1.5 morning, 1.5 night). Reference only.</p>
-            <p className="mt-1 font-bold text-doctor">Prescription medication. Doctor only.</p>
+          <div
+            className="relative overflow-hidden rounded-xl p-4 text-sm"
+            style={{
+              background: 'linear-gradient(135deg, rgba(194,65,12,0.06), rgba(194,65,12,0.02))',
+              border: '1px solid rgba(194,65,12,0.18)',
+            }}
+          >
+            <span
+              className="absolute bottom-0 left-0 top-0 w-[3.5px] rounded-l-xl"
+              style={{ background: '#C2410C' }}
+            />
+            <p className="mb-1 pl-1 font-extrabold text-brand-deep">Example current reference</p>
+            <p className="pl-1 text-slate-700">Risperidone 3 mg/day (1.5 morning, 1.5 night). Reference only.</p>
+            <p className="mt-1 pl-1 text-xs font-bold text-doctor">Prescription medication. Doctor only.</p>
           </div>
-          <div className="rounded-xl border border-slate-100 bg-white p-4 text-sm text-slate-600">
-            <p className="font-extrabold text-brand-deep">Why risperidone is used</p>
-            <p>
+          <div
+            className="relative overflow-hidden rounded-xl p-4 text-sm"
+            style={{
+              background: 'linear-gradient(135deg, rgba(14,81,150,0.05), rgba(14,81,150,0.02))',
+              border: '1px solid rgba(14,81,150,0.12)',
+            }}
+          >
+            <span
+              className="absolute bottom-0 left-0 top-0 w-[3.5px] rounded-l-xl"
+              style={{ background: '#0E5196' }}
+            />
+            <p className="mb-1 pl-1 font-extrabold text-brand-deep">Why risperidone is used</p>
+            <p className="pl-1 text-slate-600">
               Sometimes used when autism-related distress becomes unsafe or very hard to manage. It
               may help aggression, self-injury, severe irritability and unsafe behaviour. It does not
               teach skills, and does not fix pain, constipation, sleep, trauma, boredom, sensory
@@ -48,75 +70,115 @@ export function MedicationSafety() {
       <GlassCard>
         <SectionTitle title="Side-effect risk matrix" subtitle="What families might see, what to track, and when to act. Calm and practical." />
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-          {sideEffectMatrix.map((r, i) => (
-            <motion.div
-              key={r.key}
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ delay: (i % 2) * 0.05 + Math.floor(i / 2) * 0.04, duration: 0.4 }}
-              className="accent-card p-3 pl-4"
-              style={{ ['--accent' as string]: URGENCY[r.urgency].colour }}
-            >
-              <div className="flex items-start justify-between gap-2">
-                <p className="flex items-center gap-2 text-sm font-extrabold text-brand-deep">
+          {sideEffectMatrix.map((r, i) => {
+            const u = URGENCY[r.urgency]
+            return (
+              <motion.div
+                key={r.key}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ delay: (i % 2) * 0.05 + Math.floor(i / 2) * 0.04, duration: 0.4 }}
+                className="relative overflow-hidden rounded-xl p-3 pl-5"
+                style={{
+                  background: `linear-gradient(135deg, white, color-mix(in srgb, ${u.hex} 5%, white))`,
+                  border: `1px solid ${u.hex}22`,
+                  boxShadow: `0 2px 8px -4px ${u.hex}33`,
+                }}
+              >
+                <span
+                  className="absolute bottom-0 left-0 top-0 w-[3.5px] rounded-l-xl"
+                  style={{ background: u.hex }}
+                />
+                <div className="flex items-start justify-between gap-2">
+                  <p className="flex items-center gap-2 text-sm font-extrabold text-brand-deep">
+                    <span
+                      className="grid h-5 w-5 shrink-0 place-items-center rounded-md text-[11px] font-black text-white"
+                      style={{ background: u.hex }}
+                    >
+                      {r.key}
+                    </span>
+                    {r.name}
+                  </p>
                   <span
-                    className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md text-[11px] text-white"
-                    style={{ background: URGENCY[r.urgency].colour }}
+                    className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-extrabold ${u.textCls}`}
+                    style={{ background: u.bg }}
                   >
-                    {r.key}
+                    {u.label}
                   </span>
-                  {r.name}
+                </div>
+                <p className="mt-1.5 text-xs text-slate-600">
+                  <span className="font-bold text-slate-700">You might see: </span>
+                  {r.familySigns}
                 </p>
-                <span className={`pill ${URGENCY[r.urgency].cls}`}>{URGENCY[r.urgency].label}</span>
-              </div>
-              <p className="mt-1 text-xs text-slate-600">
-                <span className="font-bold">You might see: </span>
-                {r.familySigns}
-              </p>
-              <p className="mt-1 text-xs text-slate-500">
-                <span className="font-bold">Track: </span>
-                {r.track}
-              </p>
-              <p className="mt-1 text-xs text-info">
-                <span className="font-bold">Ask: </span>
-                {r.doctorQuestion}
-              </p>
-            </motion.div>
-          ))}
+                <p className="mt-1 text-xs text-slate-500">
+                  <span className="font-bold">Track: </span>
+                  {r.track}
+                </p>
+                <p className="mt-1 text-xs" style={{ color: '#0E5196' }}>
+                  <span className="font-bold">Ask: </span>
+                  {r.doctorQuestion}
+                </p>
+              </motion.div>
+            )
+          })}
         </div>
       </GlassCard>
 
       {/* Reduction education */}
       <GlassCard>
         <SectionTitle title="Understanding medication reduction (doctor only)" subtitle="Educational only. This does not give a taper plan, a target dose, or a speed." />
-        <div className="rounded-xl border-2 border-danger/30 bg-danger-soft p-4 text-sm text-danger">
-          <p className="font-extrabold">Never reduce risperidone without the prescriber.</p>
-          <p>
-            Behaviour can rebound. Sleep can break. Distress can increase. Unsafe behaviour can return.
-          </p>
+        <div
+          className="flex items-start gap-3 rounded-xl p-4 text-sm"
+          style={{ background: 'rgba(185,28,28,0.07)', border: '1px solid rgba(185,28,28,0.2)' }}
+        >
+          <AlertTriangle size={18} className="mt-0.5 shrink-0 text-danger" />
+          <div>
+            <p className="font-extrabold text-danger">Never reduce risperidone without the prescriber.</p>
+            <p className="text-slate-600">
+              Behaviour can rebound. Sleep can break. Distress can increase. Unsafe behaviour can return.
+            </p>
+          </div>
         </div>
         <div className="mt-4 grid gap-4 md:grid-cols-2">
-          <div className="rounded-xl border border-safe/30 bg-safe-soft/40 p-4 text-sm">
-            <p className="font-extrabold text-safe">Possible good changes</p>
-            <ul className="ml-4 list-disc text-slate-600">
-              <li>less sedation</li>
-              <li>less appetite/weight pressure</li>
-              <li>less prolactin/movement pressure</li>
-              <li>more daytime alertness</li>
+          <div
+            className="relative overflow-hidden rounded-xl p-4 text-sm"
+            style={{
+              background: 'linear-gradient(135deg, rgba(21,128,61,0.07), rgba(21,128,61,0.03))',
+              border: '1px solid rgba(21,128,61,0.18)',
+            }}
+          >
+            <span className="absolute bottom-0 left-0 top-0 w-[3.5px] rounded-l-xl" style={{ background: '#15803D' }} />
+            <p className="mb-2 pl-1 font-extrabold text-safe">Possible good changes</p>
+            <ul className="space-y-1.5 pl-1">
+              {['Less sedation', 'Less appetite and weight pressure', 'Less prolactin and movement pressure', 'More daytime alertness'].map((item) => (
+                <li key={item} className="flex items-center gap-2 text-xs text-slate-600">
+                  <CheckCircle2 size={13} className="shrink-0 text-safe" />
+                  {item}
+                </li>
+              ))}
             </ul>
           </div>
-          <div className="rounded-xl border border-doctor/30 bg-doctor-soft/40 p-4 text-sm">
-            <p className="font-extrabold text-doctor">Possible hard changes</p>
-            <ul className="ml-4 list-disc text-slate-600">
-              <li>more irritability / aggression / self-injury</li>
-              <li>more looping and sleep disruption</li>
-              <li>more PRN use and family stress</li>
-              <li>more restrictive-practice risk</li>
+          <div
+            className="relative overflow-hidden rounded-xl p-4 text-sm"
+            style={{
+              background: 'linear-gradient(135deg, rgba(194,65,12,0.07), rgba(194,65,12,0.03))',
+              border: '1px solid rgba(194,65,12,0.18)',
+            }}
+          >
+            <span className="absolute bottom-0 left-0 top-0 w-[3.5px] rounded-l-xl" style={{ background: '#C2410C' }} />
+            <p className="mb-2 pl-1 font-extrabold text-doctor">Possible hard changes</p>
+            <ul className="space-y-1.5 pl-1">
+              {['More irritability, aggression, self-injury', 'More looping and sleep disruption', 'More PRN use and family stress', 'More restrictive-practice risk'].map((item) => (
+                <li key={item} className="flex items-center gap-2 text-xs text-slate-600">
+                  <AlertTriangle size={13} className="shrink-0 text-doctor" />
+                  {item}
+                </li>
+              ))}
             </ul>
           </div>
         </div>
-        <p className="mt-4 rounded-lg bg-info-soft px-3 py-2 text-xs text-info">
+        <p className="mt-4 rounded-xl bg-info-soft px-3 py-2 text-xs text-info">
           This model is deliberately cautious. It is not saying what will happen. It is showing why
           medication changes need a doctor, a plan, and tracking.
         </p>
@@ -125,9 +187,14 @@ export function MedicationSafety() {
       {/* Monitoring checklist */}
       <GlassCard>
         <SectionTitle icon={<ClipboardCheck size={20} />} title="Monitoring checklist" subtitle="What can be monitored. Print and take it to the doctor." />
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-2">
           {monitoringChecklist.map((m) => (
-            <span key={m} className="pill bg-slate-50 text-slate-600">
+            <span
+              key={m}
+              className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold text-brand-deep"
+              style={{ background: 'rgba(14,81,150,0.07)', border: '1px solid rgba(14,81,150,0.12)' }}
+            >
+              <span className="h-1.5 w-1.5 rounded-full bg-brand-navy opacity-60" />
               {m}
             </span>
           ))}
@@ -140,9 +207,14 @@ export function MedicationSafety() {
       {/* Behaviour first */}
       <GlassCard>
         <SectionTitle icon={<ShieldPlus size={20} />} title="Before changing medication" subtitle="Could this behaviour be from something else? Check these first." />
-        <div className="flex flex-wrap gap-1.5">
+        <div className="flex flex-wrap gap-2">
           {behaviourFirstChecklist.map((b) => (
-            <span key={b} className="pill bg-info-soft text-info">
+            <span
+              key={b}
+              className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1 text-xs font-semibold"
+              style={{ background: 'rgba(44,123,229,0.08)', color: '#0E5196', border: '1px solid rgba(44,123,229,0.15)' }}
+            >
+              <span className="h-1.5 w-1.5 rounded-full" style={{ background: '#2c7be5', opacity: 0.6 }} />
               {b}
             </span>
           ))}
@@ -156,23 +228,30 @@ export function MedicationSafety() {
       <GlassCard>
         <SectionTitle icon={<Stethoscope size={20} />} title="Who to ask" subtitle="The right person for the right question." />
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-          {specialists.map((s, i) => (
-            <motion.div
-              key={s.role}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-30px' }}
-              transition={{ delay: (i % 2) * 0.04, duration: 0.35 }}
-              className="accent-card p-3 pl-4"
-              style={{ ['--accent' as string]: '#0e5196' }}
-            >
-              <p className="flex items-center gap-2 text-sm font-extrabold text-brand-deep">
-                <Stethoscope size={15} className="text-brand-navy" />
-                {s.role}
-              </p>
-              <p className="mt-0.5 text-xs text-slate-600">{s.best}</p>
-            </motion.div>
-          ))}
+          {specialists.map((s, i) => {
+            const accent = SPECIALIST_ACCENT[i % SPECIALIST_ACCENT.length]
+            return (
+              <motion.div
+                key={s.role}
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-30px' }}
+                transition={{ delay: (i % 2) * 0.04, duration: 0.35 }}
+                className="relative overflow-hidden rounded-xl p-3 pl-5"
+                style={{
+                  background: `linear-gradient(135deg, white, color-mix(in srgb, ${accent} 5%, white))`,
+                  border: `1px solid ${accent}22`,
+                }}
+              >
+                <span className="absolute bottom-0 left-0 top-0 w-[3.5px] rounded-l-xl" style={{ background: accent }} />
+                <p className="flex items-center gap-2 text-sm font-extrabold text-brand-deep">
+                  <Stethoscope size={14} style={{ color: accent }} />
+                  {s.role}
+                </p>
+                <p className="mt-0.5 text-xs text-slate-600">{s.best}</p>
+              </motion.div>
+            )
+          })}
         </div>
       </GlassCard>
     </div>
