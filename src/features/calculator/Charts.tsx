@@ -193,15 +193,23 @@ export function StackChart() {
     <GlassCard>
       <SectionTitle title="What each option contributes" subtitle="Green = modelled improvement. Orange = modelled side-effect pressure." />
       {data.length === 0 ? (
-        <div className="py-8 text-center">
-          <div
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: 'spring', stiffness: 240, damping: 26 }}
+          className="py-8 text-center"
+        >
+          <motion.div
+            initial={{ scale: 0.7, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: 'spring', stiffness: 320, damping: 18, delay: 0.08 }}
             className="mx-auto mb-2 grid h-10 w-10 place-items-center rounded-2xl"
             style={{ background: 'linear-gradient(135deg, #0E5196, #1d4ed8)' }}
           >
             <TrendingUp size={20} className="text-white" />
-          </div>
+          </motion.div>
           <p className="text-sm text-slate-400">Add an option to see its contribution.</p>
-        </div>
+        </motion.div>
       ) : (
         <ResponsiveContainer width="100%" height={260}>
           <BarChart data={data} margin={{ top: 8, right: 8, left: -18, bottom: 8 }}>
@@ -296,15 +304,23 @@ export function EvidenceConfidenceChart() {
     <GlassCard>
       <SectionTitle title="Evidence confidence of your selection" subtitle="How strong the evidence is behind the options you have switched on." />
       {data.length === 0 ? (
-        <div className="py-8 text-center">
-          <div
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: 'spring', stiffness: 240, damping: 26 }}
+          className="py-8 text-center"
+        >
+          <motion.div
+            initial={{ scale: 0.7, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: 'spring', stiffness: 320, damping: 18, delay: 0.08 }}
             className="mx-auto mb-2 grid h-10 w-10 place-items-center rounded-2xl"
             style={{ background: 'linear-gradient(135deg, #15803D, #22c55e)' }}
           >
             <ShieldCheck size={20} className="text-white" />
-          </div>
+          </motion.div>
           <p className="text-sm text-slate-400">Switch on options to see their evidence strength.</p>
-        </div>
+        </motion.div>
       ) : (
         <ResponsiveContainer width="100%" height={260}>
           <RadialBarChart innerRadius="25%" outerRadius="100%" data={data} startAngle={90} endAngle={-270}>

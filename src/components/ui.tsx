@@ -261,22 +261,30 @@ export function CTAButton({
 export function Disclaimer({ variant = 'tool' }: { variant?: 'tool' | 'product' }) {
   if (variant === 'product') {
     return (
-      <div
+      <motion.div
+        initial={{ opacity: 0, y: 6 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ type: 'spring', stiffness: 260, damping: 28 }}
         className="flex items-start gap-2 rounded-lg px-3 py-2 text-xs text-doctor"
         style={{ background: 'rgba(194,65,12,0.07)', border: '1px solid rgba(194,65,12,0.18)' }}
       >
         <AlertTriangle size={13} className="mt-0.5 shrink-0 text-doctor" />
         <p>This product is not a medicine. It is not approved to treat autism. Speak to your doctor or pharmacist before use.</p>
-      </div>
+      </motion.div>
     )
   }
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 6 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ type: 'spring', stiffness: 260, damping: 28 }}
       className="flex items-start gap-2 rounded-lg px-3 py-2 text-xs text-brand-navy"
       style={{ background: 'rgba(14,81,150,0.06)', border: '1px solid rgba(14,81,150,0.12)' }}
     >
       <Info size={13} className="mt-0.5 shrink-0 text-brand-navy" />
       <p>Education only. Not medical advice. Not a diagnosis or dosing tool. Always speak to the treating doctor before changing anything.</p>
-    </div>
+    </motion.div>
   )
 }
