@@ -99,7 +99,10 @@ export function Tracker() {
       />
 
       {/* Form */}
-      <div
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: 'spring', stiffness: 240, damping: 26 }}
         className="rounded-2xl p-4"
         style={{ background: 'linear-gradient(135deg, #f8fafc, #f1f5fb)', border: '1px solid rgba(14,81,150,0.09)' }}
       >
@@ -153,7 +156,7 @@ export function Tracker() {
         >
           <Plus size={16} /> Save this day
         </motion.button>
-      </div>
+      </motion.div>
 
       {/* Actions row */}
       <div className="mt-4 flex flex-wrap items-center gap-2">
@@ -184,11 +187,14 @@ export function Tracker() {
             { label: 'Avg sleep', value: `${avgSleep}h`, accent: '#0E5196' },
             { label: 'Total episodes', value: String(totalEpisodes), accent: '#B45309' },
             { label: 'PRN days', value: String(prnDays), accent: '#C2410C' },
-          ].map(({ label, value, accent }) => (
+          ].map(({ label, value, accent }, i) => (
             <motion.div
               key={label}
-              whileHover={{ y: -2, scale: 1.02 }}
-              transition={{ type: 'spring', stiffness: 320, damping: 22 }}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.06, type: 'spring', stiffness: 260, damping: 24 }}
+              whileHover={{ y: -2, scale: 1.02, transition: { type: 'spring', stiffness: 320, damping: 22 } }}
               className="rounded-xl p-3 text-center"
               style={{ background: `color-mix(in srgb, ${accent} 7%, white)`, border: `1px solid ${accent}22` }}
             >

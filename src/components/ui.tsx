@@ -38,12 +38,16 @@ export function SectionTitle({
   return (
     <div className="mb-4 flex items-start gap-3">
       {icon && (
-        <div
+        <motion.div
+          initial={{ opacity: 0, scale: 0.7 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ type: 'spring', stiffness: 320, damping: 18 }}
           className="mt-0.5 grid h-8 w-8 shrink-0 place-items-center rounded-xl text-white"
           style={{ background: 'linear-gradient(135deg, #0E5196, #1d4ed8)' }}
         >
           {icon}
-        </div>
+        </motion.div>
       )}
       <div>
         <h2 className="text-xl font-extrabold text-brand-deep">{title}</h2>
