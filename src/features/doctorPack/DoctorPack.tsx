@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { motion } from 'framer-motion'
 import { FileText, Printer, ShieldCheck } from '../../components/icons'
 import { useAppStore } from '../../store/useAppStore'
 import { useProjection } from '../../lib/useProjection'
@@ -45,9 +46,15 @@ export function DoctorPack() {
         title="Doctor Visit Pack"
         subtitle="A clean one-page summary to take to the appointment. Print it or save as PDF from the print dialog."
       />
-      <button onClick={() => window.print()} className="btn-primary mb-4 text-sm">
+      <motion.button
+        onClick={() => window.print()}
+        whileHover={{ scale: 1.03 }}
+        whileTap={{ scale: 0.96 }}
+        transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+        className="btn-primary mb-4 text-sm"
+      >
         <Printer size={16} /> Print / save as PDF
-      </button>
+      </motion.button>
 
       <div id="doctor-pack" className="overflow-hidden rounded-2xl bg-white text-sm text-slate-700" style={{ boxShadow: '0 0 0 1px rgba(14,81,150,0.1), 0 8px 32px -12px rgba(6,32,63,0.25)' }}>
         {/* Header strip */}

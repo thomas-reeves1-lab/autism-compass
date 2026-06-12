@@ -143,16 +143,30 @@ export function Tracker() {
           rows={2}
           className="mt-1 field"
         />
-        <button onClick={submit} disabled={!form.date} className="btn-primary mt-3 text-sm">
+        <motion.button
+          onClick={submit}
+          disabled={!form.date}
+          whileTap={form.date ? { scale: 0.96 } : {}}
+          whileHover={form.date ? { scale: 1.02 } : {}}
+          transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+          className="btn-primary mt-3 text-sm"
+        >
           <Plus size={16} /> Save this day
-        </button>
+        </motion.button>
       </div>
 
       {/* Actions row */}
       <div className="mt-4 flex flex-wrap items-center gap-2">
-        <button onClick={() => downloadTrackerCsv(entries)} className="btn-ghost text-sm" disabled={entries.length === 0}>
+        <motion.button
+          onClick={() => downloadTrackerCsv(entries)}
+          disabled={entries.length === 0}
+          whileTap={entries.length > 0 ? { scale: 0.96 } : {}}
+          whileHover={entries.length > 0 ? { scale: 1.03 } : {}}
+          transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+          className="btn-ghost text-sm"
+        >
           <Download size={16} /> Export CSV
-        </button>
+        </motion.button>
         {showDormant('PREMIUM_LIVE') && (
           <span title="Premium export — not live yet">
             <Pill tone="doctor">
@@ -187,12 +201,14 @@ export function Tracker() {
       <AnimatePresence>
         {entries.length === 0 && (
           <motion.div
-            initial={{ opacity: 0, y: 4 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             className="mt-4 rounded-2xl border border-dashed border-slate-200 py-8 text-center"
           >
-            <p className="text-3xl">📋</p>
-            <p className="mt-2 text-sm font-bold text-slate-400">No days logged yet</p>
+            <div className="mx-auto mb-2 grid h-10 w-10 place-items-center rounded-2xl bg-slate-100">
+              <ClipboardList size={20} className="text-slate-400" />
+            </div>
+            <p className="text-sm font-bold text-slate-400">No days logged yet</p>
             <p className="mt-1 text-xs text-slate-300">Fill in today above to start building your picture.</p>
             <p className="mt-0.5 text-xs text-slate-300">Even 7 days shows patterns a doctor can act on.</p>
           </motion.div>
@@ -241,9 +257,15 @@ export function Tracker() {
         </div>
       )}
 
-      <p className="mt-4 rounded-xl bg-info-soft px-3 py-2 text-xs text-info">
-        This tracker stores data on this device only unless you export it. No data is sent anywhere.
-      </p>
+      <div
+        className="mt-4 flex items-start gap-2.5 rounded-xl px-3 py-2.5 text-xs"
+        style={{ background: 'rgba(14,81,150,0.06)', border: '1px solid rgba(14,81,150,0.12)' }}
+      >
+        <Download size={13} className="mt-0.5 shrink-0 text-brand-navy" />
+        <p className="text-brand-navy">
+          <span className="font-bold">Data stays on this device</span> unless you export it. Nothing is sent anywhere.
+        </p>
+      </div>
     </GlassCard>
   )
 }

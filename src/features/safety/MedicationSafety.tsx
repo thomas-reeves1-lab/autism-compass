@@ -199,9 +199,15 @@ export function MedicationSafety() {
             </span>
           ))}
         </div>
-        <button onClick={() => window.print()} className="btn-ghost mt-4 text-sm">
+        <motion.button
+          onClick={() => window.print()}
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.96 }}
+          transition={{ type: 'spring', stiffness: 300, damping: 22 }}
+          className="btn-ghost mt-4 text-sm"
+        >
           Print monitoring checklist
-        </button>
+        </motion.button>
       </GlassCard>
 
       {/* Behaviour first */}
