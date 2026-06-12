@@ -148,17 +148,24 @@ export function StackChecker() {
         </AnimatePresence>
 
         {result.flags.length === 0 && selected.length > 0 && (
-          <p className="rounded-xl bg-safe-soft px-4 py-2.5 text-sm font-semibold text-safe">
+          <div
+            className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-semibold text-safe"
+            style={{ background: 'rgba(21,128,61,0.07)', border: '1px solid rgba(21,128,61,0.18)' }}
+          >
+            <CheckCircle2 size={16} className="shrink-0 text-safe" />
             No interaction flags detected for this combination. Always confirm with a pharmacist.
-          </p>
+          </div>
         )}
       </div>
 
       {result.doctorOnlyItems.length > 0 && (
-        <p className="mt-3 rounded-xl bg-doctor-soft px-3 py-2 text-xs text-doctor">
-          <span className="font-extrabold">Doctor-only items selected:</span>{' '}
-          {result.doctorOnlyItems.join(', ')}. Do not use this website to self-start them.
-        </p>
+        <div
+          className="mt-3 flex items-start gap-2.5 rounded-xl px-3 py-2.5 text-xs text-doctor"
+          style={{ background: 'rgba(194,65,12,0.07)', border: '1px solid rgba(194,65,12,0.2)' }}
+        >
+          <Lock size={14} className="mt-0.5 shrink-0 text-doctor" />
+          <p><span className="font-extrabold">Doctor-only items selected:</span>{' '}{result.doctorOnlyItems.join(', ')}. Do not use this website to self-start them.</p>
+        </div>
       )}
 
       {/* Pharmacist questions — numbered cards */}
