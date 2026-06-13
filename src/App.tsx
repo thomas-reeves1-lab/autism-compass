@@ -212,16 +212,40 @@ export default function App() {
               >
                 <span className="h-2 w-2 animate-pulse rounded-full bg-brand-leaf" /> <AnimatedNumber value={40} duration={900} className="tabular-nums" /> studied options · evidence-labelled
               </motion.span>
-              <h1 className="font-display text-[1.7rem] font-black leading-[1.05] tracking-tight sm:text-5xl">
-                <span className="text-gradient-bright">ASD Clinical Metrics</span>
+              <motion.h1
+                className="font-display text-[1.7rem] font-black leading-[1.05] tracking-tight sm:text-5xl"
+                initial={{ opacity: 0, y: 14 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.06, type: 'spring', stiffness: 220, damping: 26 }}
+              >
+                <motion.span
+                  className="text-gradient-bright"
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.1, type: 'spring', stiffness: 260, damping: 24 }}
+                >
+                  ASD Clinical Metrics
+                </motion.span>
                 <br />
-                <span className="text-white">&amp; Guidance Tool</span>
-              </h1>
-              <p className="mt-3 max-w-2xl text-sm text-slate-200/90 sm:text-base">
+                <motion.span
+                  className="text-white"
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.2, type: 'spring', stiffness: 260, damping: 24 }}
+                >
+                  &amp; Guidance Tool
+                </motion.span>
+              </motion.h1>
+              <motion.p
+                className="mt-3 max-w-2xl text-sm text-slate-200/90 sm:text-base"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.3, duration: 0.45 }}
+              >
                 See what published studies found about common ASD behaviour and supplement pathways.
                 Adjust an option to see the estimated effect, then walk into the appointment prepared.{' '}
                 <span className="font-bold text-white">This is not medical advice.</span>
-              </p>
+              </motion.p>
 
               {/* Credibility trust strip */}
               <div className="mt-5 flex flex-wrap gap-2">
