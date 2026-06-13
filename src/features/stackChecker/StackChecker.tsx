@@ -41,7 +41,9 @@ export function StackChecker() {
             <motion.button
               key={t.id}
               onClick={() => toggle(t.id)}
-              whileTap={{ scale: 0.94 }}
+              whileHover={{ scale: 1.06, y: -1 }}
+              whileTap={{ scale: 0.93 }}
+              transition={{ type: 'spring', stiffness: 340, damping: 22 }}
               className="inline-flex items-center gap-1 rounded-lg px-2.5 py-1.5 text-xs font-bold transition"
               style={on ? {
                 background: accent,
@@ -161,15 +163,22 @@ export function StackChecker() {
         )}
       </div>
 
-      {result.doctorOnlyItems.length > 0 && (
-        <div
-          className="mt-3 flex items-start gap-2.5 rounded-xl px-3 py-2.5 text-xs text-doctor"
-          style={{ background: 'rgba(194,65,12,0.07)', border: '1px solid rgba(194,65,12,0.2)' }}
-        >
-          <Lock size={14} className="mt-0.5 shrink-0 text-doctor" />
-          <p><span className="font-extrabold">Doctor-only items selected:</span>{' '}{result.doctorOnlyItems.join(', ')}. Do not use this website to self-start them.</p>
-        </div>
-      )}
+      <AnimatePresence>
+        {result.doctorOnlyItems.length > 0 && (
+          <motion.div
+            key="doctor-warning"
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 26 }}
+            className="mt-3 flex items-start gap-2.5 rounded-xl px-3 py-2.5 text-xs text-doctor"
+            style={{ background: 'rgba(194,65,12,0.07)', border: '1px solid rgba(194,65,12,0.2)' }}
+          >
+            <Lock size={14} className="mt-0.5 shrink-0 text-doctor" />
+            <p><span className="font-extrabold">Doctor-only items selected:</span>{' '}{result.doctorOnlyItems.join(', ')}. Do not use this website to self-start them.</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Pharmacist questions — numbered cards */}
       <motion.div
