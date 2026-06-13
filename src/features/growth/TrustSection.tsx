@@ -51,7 +51,7 @@ export function TrustSection() {
             style={{ background: 'linear-gradient(180deg, #15803D, #4ade80)' }}
           />
           <div className="mb-3 flex items-center gap-2">
-            <span className="grid h-6 w-6 place-items-center rounded-full bg-safe text-white">
+            <span className="grid h-6 w-6 place-items-center rounded-full text-white" style={{ background: 'linear-gradient(135deg, #22c55e, #15803D)' }}>
               <Check size={13} />
             </span>
             <p className="text-sm font-extrabold text-safe">What it is</p>
@@ -93,7 +93,7 @@ export function TrustSection() {
           <div className="mb-3 flex items-center gap-2">
             <span
               className="grid h-6 w-6 place-items-center rounded-full text-white"
-              style={{ background: '#C2410C' }}
+              style={{ background: 'linear-gradient(135deg, #E0631F, #C2410C)' }}
             >
               <X size={13} />
             </span>
