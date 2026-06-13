@@ -6,6 +6,11 @@
   html {
     scroll-behavior: smooth;
   }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    /* Disable Tailwind CSS keyframe animations (Framer Motion is handled via MotionConfig) */
+    .animate-pulse, .animate-ping, .animate-spin, .animate-bounce { animation: none !important; }
+  }
   body {
     @apply text-slate-800 antialiased;
     margin: 0;
