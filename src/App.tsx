@@ -75,6 +75,11 @@ export default function App() {
   const [overlay, setOverlay] = useState<null | 'guide' | LegalDoc>(null)
   const [showTop, setShowTop] = useState(false)
 
+  const switchTab = (id: TabId) => {
+    setTab(id)
+    window.scrollTo({ top: 0, behavior: 'instant' })
+  }
+
   useEffect(() => {
     const onScroll = () => setShowTop(window.scrollY > 420)
     window.addEventListener('scroll', onScroll, { passive: true })
@@ -157,7 +162,7 @@ export default function App() {
             return (
               <motion.button
                 key={t.id}
-                onClick={() => setTab(t.id)}
+                onClick={() => switchTab(t.id)}
                 aria-current={active ? 'page' : undefined}
                 whileHover={!active ? { scale: 1.06, y: -1 } : {}}
                 whileTap={{ scale: 0.93 }}
