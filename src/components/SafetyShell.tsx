@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
-import { AlertTriangle, Phone, ShieldAlert, ChevronDown } from './icons'
+import { AlertTriangle, Phone, ShieldAlert, ChevronDown, ShieldCheck, Stethoscope, BookOpen, CheckCircle2 } from './icons'
 
 /** Modern, slim clinical strip — on every page. Not a chunky box. */
 export function TopWarningBanner() {
@@ -90,10 +90,10 @@ export function EmergencyWarning() {
 }
 
 const TRUST_PILLS = [
-  { label: 'Registered NDIS provider' },
-  { label: 'Reviewed by a Registered Nurse' },
-  { label: 'Education only' },
-  { label: 'No cure claims' },
+  { label: 'Registered NDIS provider',       Icon: ShieldCheck,  iconColour: '#7bc8ff' },
+  { label: 'Reviewed by a Registered Nurse', Icon: Stethoscope,  iconColour: '#86efac' },
+  { label: 'Education only',                 Icon: BookOpen,     iconColour: '#c4b5fd' },
+  { label: 'No cure claims',                 Icon: CheckCircle2, iconColour: '#fde68a' },
 ]
 
 /** Footer on every page — dark glass to match the aurora. */
@@ -132,15 +132,16 @@ export function SiteFooter({
               initial={{ opacity: 0, y: 6 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              whileHover={{ scale: 1.05, background: 'rgba(255,255,255,0.11)' }}
-              transition={{ delay: i * 0.05, type: 'spring', stiffness: 260, damping: 22 }}
-              className="inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[11px] font-semibold text-white/70"
+              whileHover={{ scale: 1.05, y: -1 }}
+              transition={{ delay: i * 0.07, type: 'spring', stiffness: 260, damping: 22 }}
+              className="inline-flex cursor-default items-center gap-2 rounded-xl px-3 py-1.5 text-[11px] font-semibold text-white/75"
               style={{
                 background: 'rgba(255,255,255,0.07)',
-                border: '1px solid rgba(255,255,255,0.12)',
+                border: '1px solid rgba(255,255,255,0.13)',
+                backdropFilter: 'blur(8px)',
               }}
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-brand-leaf" />
+              <p.Icon size={12} style={{ color: p.iconColour, flexShrink: 0 }} />
               {p.label}
             </motion.span>
           ))}

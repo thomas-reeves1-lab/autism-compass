@@ -53,15 +53,15 @@ export function LoopMap() {
                 onClick={() => setTrigger(on ? '' : t)}
                 whileTap={{ scale: 0.93 }}
                 whileHover={{ scale: 1.06 }}
-                className="rounded-lg px-2.5 py-1.5 text-xs font-bold"
+                className="rounded-lg px-2.5 py-1.5 text-xs font-bold transition-colors"
                 style={on ? {
                   background: 'linear-gradient(135deg, #0E5196, #1d4ed8)',
                   color: 'white',
                   boxShadow: '0 2px 10px -4px rgba(14,81,150,0.55)',
                 } : {
-                  background: 'white',
-                  color: '#475569',
-                  boxShadow: '0 0 0 1px rgba(7,26,54,0.14)',
+                  background: 'linear-gradient(135deg, rgba(14,81,150,0.06), rgba(44,123,229,0.04))',
+                  color: '#334155',
+                  border: '1px solid rgba(14,81,150,0.14)',
                 }}
               >
                 {t}

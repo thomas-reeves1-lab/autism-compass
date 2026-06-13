@@ -50,9 +50,9 @@ export function StackChecker() {
                 color: '#fff',
                 boxShadow: `0 2px 8px -3px ${accent}88`,
               } : {
-                background: 'rgba(255,255,255,0.85)',
-                color: '#475569',
-                boxShadow: 'inset 0 0 0 1px rgba(14,81,150,0.15)',
+                background: `linear-gradient(135deg, ${accent}0D, ${accent}06)`,
+                color: '#334155',
+                border: `1px solid ${accent}28`,
               }}
             >
               {t.doctorOnly && (
