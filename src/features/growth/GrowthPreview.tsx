@@ -82,10 +82,17 @@ export function GrowthPreview() {
                   <p className="text-[11px] font-semibold text-slate-400">about ${(t.price / 30).toFixed(2)} a day</p>
                 )}
                 <ul className="mt-3 space-y-1.5">
-                  {t.features.map((f) => (
-                    <li key={f} className="flex items-start gap-1.5 text-xs text-slate-600">
+                  {t.features.map((f, fi) => (
+                    <motion.li
+                      key={f}
+                      initial={{ opacity: 0, x: -6 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: Math.min(fi, 5) * 0.04, type: 'spring', stiffness: 280, damping: 24 }}
+                      className="flex items-start gap-1.5 text-xs text-slate-600"
+                    >
                       <Check size={14} className="mt-0.5 shrink-0" style={{ color: acc }} /> {f}
-                    </li>
+                    </motion.li>
                   ))}
                 </ul>
                 <motion.button
@@ -119,8 +126,15 @@ export function GrowthPreview() {
           <h3 className="text-lg font-extrabold text-brand-deep">{sampleOffer.headline}</h3>
           <p className="mt-1 text-sm text-slate-600">{sampleOffer.promise}</p>
           <ul className="mt-3 space-y-2">
-            {sampleOffer.items.map((it) => (
-              <li key={it.name} className="flex items-center justify-between gap-2 text-sm">
+            {sampleOffer.items.map((it, i) => (
+              <motion.li
+                key={it.name}
+                initial={{ opacity: 0, x: -8 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: Math.min(i, 6) * 0.05, type: 'spring', stiffness: 260, damping: 24 }}
+                className="flex items-center justify-between gap-2 text-sm"
+              >
                 <span className="text-slate-700">
                   {it.name}
                   <span className="ml-1 text-xs text-slate-400">— {it.realDeliverable}</span>
@@ -131,7 +145,7 @@ export function GrowthPreview() {
                 >
                   {formatAud(it.value * 100)}
                 </span>
-              </li>
+              </motion.li>
             ))}
           </ul>
           <div
