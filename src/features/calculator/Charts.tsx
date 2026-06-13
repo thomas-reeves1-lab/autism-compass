@@ -18,7 +18,7 @@ import { useProjection } from '../../lib/useProjection'
 import { useAppStore } from '../../store/useAppStore'
 import { treatments } from '../../data/evidence'
 import { GlassCard, SectionTitle } from '../../components/ui'
-import { TrendingUp, ShieldCheck } from '../../components/icons'
+import { TrendingUp, ShieldCheck, ChevronUp } from '../../components/icons'
 
 interface TooltipEntry {
   name?: string
@@ -197,18 +197,57 @@ export function StackChart() {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ type: 'spring', stiffness: 240, damping: 26 }}
-          className="py-8 text-center"
+          className="flex flex-col items-center py-8 text-center"
         >
+          {/* Pulsing icon with outer glow */}
+          <div className="relative mb-3">
+            <motion.div
+              animate={{ scale: [1, 1.35, 1], opacity: [0.25, 0.07, 0.25] }}
+              transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
+              className="absolute inset-0 rounded-2xl"
+              style={{ background: 'rgba(14,81,150,0.45)', borderRadius: '1rem' }}
+            />
+            <motion.div
+              initial={{ scale: 0.7, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ type: 'spring', stiffness: 320, damping: 18, delay: 0.08 }}
+              className="relative grid h-11 w-11 place-items-center rounded-2xl"
+              style={{ background: 'linear-gradient(135deg, #0E5196, #1d4ed8)' }}
+            >
+              <TrendingUp size={20} className="text-white" />
+            </motion.div>
+          </div>
+
+          {/* Bouncing up-arrow pointing toward sliders */}
           <motion.div
-            initial={{ scale: 0.7, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ type: 'spring', stiffness: 320, damping: 18, delay: 0.08 }}
-            className="mx-auto mb-2 grid h-10 w-10 place-items-center rounded-2xl"
-            style={{ background: 'linear-gradient(135deg, #0E5196, #1d4ed8)' }}
+            animate={{ y: [0, -5, 0] }}
+            transition={{ duration: 1.7, repeat: Infinity, ease: 'easeInOut', delay: 0.2 }}
+            className="mb-2"
+            style={{ color: 'rgba(14,81,150,0.35)' }}
           >
-            <TrendingUp size={20} className="text-white" />
+            <ChevronUp size={16} />
           </motion.div>
-          <p className="text-sm text-slate-400">Add an option to see its contribution.</p>
+
+          <p className="text-sm font-semibold text-slate-500">Adjust a slider above</p>
+          <p className="mt-1 max-w-[200px] text-xs text-slate-400">Each option's contribution to improvement and side-effect pressure will appear here.</p>
+
+          {/* Colour preview legend */}
+          <div className="mt-3 flex items-center gap-4 text-[11px] text-slate-400">
+            <span className="flex items-center gap-1.5">
+              <span
+                className="h-2.5 w-3.5 rounded-sm"
+                style={{ background: 'linear-gradient(180deg, #22c55e, #15803D)' }}
+              />
+              Improvement
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span
+                className="h-2.5 w-3.5 rounded-sm"
+                style={{ background: 'linear-gradient(180deg, #f97316, #C2410C)' }}
+              />
+              Side-effect
+            </span>
+          </div>
         </motion.div>
       ) : (
         <ResponsiveContainer width="100%" height={260}>
