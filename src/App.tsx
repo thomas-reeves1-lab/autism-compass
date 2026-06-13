@@ -152,7 +152,7 @@ export default function App() {
 
       <nav
         aria-label="App tabs"
-        className="sticky top-0 z-40 border-b border-white/20"
+        className="sticky top-0 z-40 border-b border-white/20 relative"
         style={{ background: 'rgba(7,26,54,0.82)', backdropFilter: 'blur(16px) saturate(1.5)' }}
       >
         <div className="mx-auto flex max-w-6xl gap-0.5 overflow-x-auto px-2 py-1.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
@@ -195,6 +195,12 @@ export default function App() {
             )
           })}
         </div>
+        {/* Right-edge fade — mobile only. Hints that more tabs scroll off screen. */}
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-y-0 right-0 w-10 sm:hidden"
+          style={{ background: 'linear-gradient(to right, transparent, rgba(7,26,54,0.9))' }}
+        />
       </nav>
 
       <main className="mx-auto max-w-6xl px-4 py-6">
