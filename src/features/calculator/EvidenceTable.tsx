@@ -74,7 +74,9 @@ export function EvidenceTable() {
               style={
                 active
                   ? { background: f.accent ?? '#0e5196', color: '#fff', border: 'none', boxShadow: `0 4px 12px -4px ${f.accent ?? '#0e5196'}99` }
-                  : { background: '#f8fafc', color: '#475569', border: '1px solid #e2e8f0' }
+                  : f.accent
+                    ? { background: `${f.accent}0D`, color: '#334155', border: `1px solid ${f.accent}28` }
+                    : { background: '#f8fafc', color: '#475569', border: '1px solid #e2e8f0' }
               }
             >
               {active && <span className="mr-1 inline-block h-1.5 w-1.5 rounded-full bg-white/80" />}

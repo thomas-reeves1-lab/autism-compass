@@ -77,8 +77,8 @@ export function Supports() {
                 style={{
                   background: on
                     ? `linear-gradient(135deg, color-mix(in srgb, ${accent} 9%, white), color-mix(in srgb, ${accent} 5%, white))`
-                    : 'linear-gradient(135deg, #ffffff, #f8fafc)',
-                  border: on ? `1.5px solid ${accent}44` : '1px solid rgba(14,81,150,0.1)',
+                    : `linear-gradient(135deg, ${accent}0A, ${accent}05)`,
+                  border: on ? `1.5px solid ${accent}44` : `1px solid ${accent}18`,
                   boxShadow: on
                     ? `0 4px 16px -6px ${accent}55`
                     : '0 2px 8px -4px rgba(6,32,63,0.1)',
@@ -133,7 +133,7 @@ export function Supports() {
                   } : {
                     background: 'rgba(255,255,255,0.9)',
                     color: '#475569',
-                    boxShadow: 'inset 0 0 0 1px rgba(14,81,150,0.18)',
+                    boxShadow: `inset 0 0 0 1px ${accent}28`,
                   }}
                 >
                   {on ? <><Check size={15} /> Added to model</> : <><Plus size={15} /> Add to model</>}
