@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import {
   Compass, LayoutDashboard, Plane, HeartPulse, Workflow, History,
   ClipboardList, BookOpen, FileText, ShoppingBag, Rocket, HandHeart, X, ChevronUp,
+  ShieldCheck, Stethoscope, Lock,
 } from './components/icons'
 import { TopWarningBanner, EmergencyWarning, SiteFooter } from './components/SafetyShell'
 import { ConsentBanner } from './components/ConsentBanner'
@@ -285,25 +286,25 @@ export default function App() {
               {/* Credibility trust strip — 2-col grid on mobile, flex-wrap on sm+ */}
               <div className="mt-5 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
                 {[
-                  { text: 'Registered NDIS provider' },
-                  { text: 'Reviewed by a Registered Nurse' },
-                  { text: '200+ peer-reviewed studies' },
-                  { text: 'Data stays on your device' },
+                  { text: 'Registered NDIS provider',     Icon: ShieldCheck,  accent: 'rgba(44,123,229,0.35)',  iconColour: '#7bc8ff' },
+                  { text: 'Reviewed by a Registered Nurse', Icon: Stethoscope, accent: 'rgba(21,128,61,0.35)',  iconColour: '#86efac' },
+                  { text: '200+ peer-reviewed studies',   Icon: BookOpen,      accent: 'rgba(124,58,237,0.30)', iconColour: '#c4b5fd' },
+                  { text: 'Data stays on your device',    Icon: Lock,          accent: 'rgba(14,81,150,0.30)',  iconColour: '#93c5fd' },
                 ].map((b, i) => (
                   <motion.span
                     key={b.text}
                     initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
-                    whileHover={{ y: -2, scale: 1.04, background: 'rgba(255,255,255,0.14)' }}
+                    whileHover={{ y: -2, scale: 1.04 }}
                     transition={{ delay: 0.3 + i * 0.07, type: 'spring', stiffness: 260, damping: 22 }}
-                    className="inline-flex cursor-default items-center gap-1.5 rounded-lg px-3 py-1.5 text-[11px] font-semibold text-white/80 sm:text-xs"
+                    className="inline-flex cursor-default items-center gap-2 rounded-xl px-3 py-2 text-[11px] font-semibold text-white/85 sm:text-xs"
                     style={{
-                      background: 'rgba(255,255,255,0.09)',
-                      border: '1px solid rgba(255,255,255,0.14)',
-                      backdropFilter: 'blur(6px)',
+                      background: `linear-gradient(135deg, ${b.accent}, rgba(255,255,255,0.06))`,
+                      border: '1px solid rgba(255,255,255,0.16)',
+                      backdropFilter: 'blur(8px)',
                     }}
                   >
-                    <span className="h-1.5 w-1.5 rounded-full bg-brand-leaf opacity-90" />
+                    <b.Icon size={13} style={{ color: b.iconColour, flexShrink: 0 }} />
                     {b.text}
                   </motion.span>
                 ))}
