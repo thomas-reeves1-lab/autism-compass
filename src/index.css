@@ -415,3 +415,35 @@
     transition-duration: 0.001ms !important;
   }
 }
+
+@media print {
+  /* Remove decorative aurora and noise backgrounds */
+  body::before, body::after { display: none !important; }
+  body { background: white !important; color: #1f2937 !important; }
+
+  /* Hide chrome — the printed page is the content only */
+  #site-top-banner, header, nav, footer { display: none !important; }
+
+  /* Hide fixed-position overlays (consent banner, modal backdrop) */
+  [class~="fixed"] { display: none !important; }
+
+  /* Flatten glass cards for ink-friendly printing */
+  .glass {
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    background: white !important;
+    border: 1px solid #e2e8f0 !important;
+  }
+
+  /* Render gradient text as plain dark text so it shows up on paper */
+  .text-gradient, .text-gradient-title, .text-gradient-bright {
+    -webkit-text-fill-color: #06203f !important;
+    color: #06203f !important;
+    background: none !important;
+  }
+
+  /* Remove animations, shrink padding, allow cards to break naturally */
+  main { padding: 0 !important; }
+  .glass { break-inside: avoid; }
+}

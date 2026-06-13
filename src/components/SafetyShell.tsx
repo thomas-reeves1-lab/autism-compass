@@ -5,7 +5,7 @@ import { AlertTriangle, Phone, ShieldAlert, ChevronDown } from './icons'
 /** Modern, slim clinical strip — on every page. Not a chunky box. */
 export function TopWarningBanner() {
   return (
-    <div className="relative border-b border-brand-deep/10 bg-white/75 backdrop-blur">
+    <div id="site-top-banner" className="relative border-b border-brand-deep/10 bg-white/75 backdrop-blur">
       <div className="mx-auto flex max-w-6xl items-center gap-2 px-4 py-2 text-xs text-slate-600">
         <ShieldAlert size={15} className="shrink-0 text-brand-navy" />
         <p className="leading-tight">
