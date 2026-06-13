@@ -77,13 +77,44 @@ export function StudyLibrary() {
       </div>
 
       {/* Result count */}
-      {query && (
-        <p className="mb-3 text-xs text-slate-400">
-          {filtered.length === 0
-            ? 'No studies matched that search.'
-            : `${filtered.length} of ${studies.length} studies`}
-        </p>
+      {query && filtered.length > 0 && (
+        <motion.p
+          key={filtered.length}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="mb-3 text-xs text-slate-400"
+        >
+          {filtered.length} of {studies.length} studies
+        </motion.p>
       )}
+
+      {/* Empty state */}
+      <AnimatePresence>
+        {query && filtered.length === 0 && (
+          <motion.div
+            key="empty"
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ type: 'spring', stiffness: 260, damping: 26 }}
+            className="mb-4 flex flex-col items-center py-10 text-center"
+          >
+            <motion.div
+              initial={{ scale: 0.7, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.08, type: 'spring', stiffness: 280, damping: 18 }}
+              className="mb-3 grid h-12 w-12 place-items-center rounded-2xl"
+              style={{ background: 'rgba(14,81,150,0.08)', border: '1px solid rgba(14,81,150,0.12)' }}
+            >
+              <Search size={20} className="text-brand-navy/40" />
+            </motion.div>
+            <p className="text-sm font-semibold text-slate-400">
+              No studies matched &ldquo;<span className="text-brand-navy">{query}</span>&rdquo;
+            </p>
+            <p className="mt-1 text-xs text-slate-300">Try a supplement name, behaviour, or study design</p>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
         <AnimatePresence mode="popLayout">
