@@ -88,6 +88,14 @@ export default function App() {
 
   return (
     <div className="min-h-screen">
+      {/* Skip link: invisible until keyboard-focused; bypasses nav for screen reader / keyboard users */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-xl focus:px-4 focus:py-2 focus:text-sm focus:font-bold focus:text-white"
+        style={{ background: 'linear-gradient(135deg, #0E5196, #2c7be5)' }}
+      >
+        Skip to main content
+      </a>
       <TopWarningBanner />
 
       <header
@@ -203,7 +211,7 @@ export default function App() {
         />
       </nav>
 
-      <main className="mx-auto max-w-6xl px-4 py-6">
+      <main id="main-content" className="mx-auto max-w-6xl px-4 py-6">
         {tab === 'dashboard' && (
           <motion.div
             initial={{ opacity: 0, y: 8 }}
