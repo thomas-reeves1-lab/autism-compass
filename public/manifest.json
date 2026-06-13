@@ -1,0 +1,19 @@
+{
+  "name": "Autism Compass",
+  "short_name": "Autism Compass",
+  "description": "ASD Clinical Metrics & Guidance Tool. Education only, not medical advice.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#071a36",
+  "theme_color": "#071a36",
+  "lang": "en-AU",
+  "orientation": "portrait-primary",
+  "categories": ["medical", "health", "education"],
+  "icons": [
+    {
+      "src": "brand/autism-compass-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
