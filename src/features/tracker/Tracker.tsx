@@ -213,12 +213,15 @@ export function Tracker() {
             animate={{ opacity: 1, y: 0 }}
             className="mt-4 rounded-2xl border border-dashed border-slate-200 py-8 text-center"
           >
-            <div
+            <motion.div
+              initial={{ scale: 0.7, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.1, type: 'spring', stiffness: 280, damping: 18 }}
               className="mx-auto mb-2 grid h-10 w-10 place-items-center rounded-2xl"
               style={{ background: 'linear-gradient(135deg, #0E5196, #1d4ed8)' }}
             >
               <ClipboardList size={20} className="text-white" />
-            </div>
+            </motion.div>
             <p className="text-sm font-bold text-slate-400">No days logged yet</p>
             <p className="mt-1 text-xs text-slate-300">Fill in today above to start building your picture.</p>
             <p className="mt-0.5 text-xs text-slate-300">Even 7 days shows patterns a doctor can act on.</p>
@@ -242,9 +245,12 @@ export function Tracker() {
             </thead>
             <tbody>
               {entries.slice(0, 14).map((e, i) => (
-                <tr
+                <motion.tr
                   key={i}
-                  className="border-b border-slate-100 transition"
+                  initial={{ opacity: 0, x: -6 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: Math.min(i, 10) * 0.04, type: 'spring', stiffness: 280, damping: 24 }}
+                  className="border-b border-slate-100 transition-colors hover:bg-brand-sky/40"
                   style={e.prnUsed
                     ? { background: 'linear-gradient(90deg, rgba(194,65,12,0.06), rgba(194,65,12,0.03))' }
                     : i % 2 === 1 ? { background: 'rgba(219,234,254,0.3)' } : undefined
@@ -261,7 +267,7 @@ export function Tracker() {
                     }
                   </td>
                   <td className="px-3 py-2 text-slate-500 hidden sm:table-cell">{e.notes.slice(0, 30)}</td>
-                </tr>
+                </motion.tr>
               ))}
             </tbody>
           </table>
