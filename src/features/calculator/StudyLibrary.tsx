@@ -64,12 +64,15 @@ export function StudyLibrary() {
           className="field w-full pl-9 text-sm"
         />
         {query && (
-          <button
+          <motion.button
             onClick={() => setQuery('')}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-slate-400 hover:text-slate-600"
+            whileHover={{ scale: 1.1, color: '#0e5196' }}
+            whileTap={{ scale: 0.88 }}
+            transition={{ type: 'spring', stiffness: 380, damping: 22 }}
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-[10px] font-bold text-slate-400"
           >
             clear
-          </button>
+          </motion.button>
         )}
       </div>
 
@@ -95,6 +98,7 @@ export function StudyLibrary() {
                 exit={{ opacity: 0, scale: 0.96 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-30px' }}
+                whileHover={{ y: -3, boxShadow: `0 14px 32px -12px ${accent}55, 0 0 0 1px ${accent}30`, transition: { type: 'spring', stiffness: 300, damping: 22 } }}
                 transition={{ delay: query ? 0 : (i % 2) * 0.04, duration: 0.35, type: 'spring', stiffness: 260, damping: 24 }}
                 className="relative overflow-hidden rounded-2xl p-4 pl-6"
                 style={{
