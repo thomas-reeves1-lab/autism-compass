@@ -9,11 +9,11 @@ import {
 import type { TrafficLight } from '../../lib/safety'
 import { GlassCard, SectionTitle } from '../../components/ui'
 
-const URGENCY: Record<TrafficLight, { label: string; hex: string; bg: string; textCls: string }> = {
-  green:  { label: 'Track only',          hex: '#15803D', bg: 'rgba(21,128,61,0.07)',  textCls: 'text-safe' },
-  yellow: { label: 'Book review',         hex: '#B45309', bg: 'rgba(180,83,9,0.07)',   textCls: 'text-caution' },
-  orange: { label: 'Prompt doctor',       hex: '#C2410C', bg: 'rgba(194,65,12,0.07)',  textCls: 'text-doctor' },
-  red:    { label: 'Urgent medical help', hex: '#B91C1C', bg: 'rgba(185,28,28,0.08)',  textCls: 'text-danger' },
+const URGENCY: Record<TrafficLight, { label: string; hex: string; bg: string; textCls: string; grad: string }> = {
+  green:  { label: 'Track only',          hex: '#15803D', bg: 'rgba(21,128,61,0.07)',  textCls: 'text-safe',    grad: 'linear-gradient(135deg, #1CA356, #15803D)' },
+  yellow: { label: 'Book review',         hex: '#B45309', bg: 'rgba(180,83,9,0.07)',   textCls: 'text-caution', grad: 'linear-gradient(135deg, #D08214, #B45309)' },
+  orange: { label: 'Prompt doctor',       hex: '#C2410C', bg: 'rgba(194,65,12,0.07)',  textCls: 'text-doctor',  grad: 'linear-gradient(135deg, #E0631F, #C2410C)' },
+  red:    { label: 'Urgent medical help', hex: '#B91C1C', bg: 'rgba(185,28,28,0.08)',  textCls: 'text-danger',  grad: 'linear-gradient(135deg, #D03030, #B91C1C)' },
 }
 
 const SPECIALIST_ACCENT = ['#0E5196', '#1D4ED8', '#7C3AED', '#15803D', '#B45309', '#C2410C']
@@ -102,7 +102,7 @@ export function MedicationSafety() {
                   <p className="flex items-center gap-2 text-sm font-extrabold text-brand-deep">
                     <span
                       className="grid h-5 w-5 shrink-0 place-items-center rounded-md text-[11px] font-black text-white"
-                      style={{ background: u.hex }}
+                      style={{ background: u.grad }}
                     >
                       {r.key}
                     </span>
