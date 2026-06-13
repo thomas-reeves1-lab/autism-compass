@@ -14,6 +14,7 @@
     color: #1f2a37;
     font-family: 'Roboto', system-ui, -apple-system, sans-serif;
     letter-spacing: 0.1px;
+    line-height: 1.62;
     background: #050c1a;
     overflow-x: hidden;
   }
@@ -51,10 +52,17 @@
     @apply font-black tracking-tight;
     color: #06203f;
     letter-spacing: -0.5px;
+    text-wrap: balance;
   }
   :focus-visible {
     @apply outline-none ring-2 ring-brand-leaf ring-offset-2;
     ring-offset-color: transparent;
+  }
+
+  /* Branded text selection */
+  ::selection {
+    background: rgba(44, 123, 229, 0.22);
+    color: #06203f;
   }
 
   /* Premium range input: white-ring thumb + shadow + hover scale */
