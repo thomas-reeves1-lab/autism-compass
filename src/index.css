@@ -234,6 +234,7 @@
     @apply w-full rounded-lg bg-white px-3 py-2 text-sm text-slate-700 transition;
     box-shadow: inset 0 0 0 1px rgba(14, 81, 150, 0.16);
     caret-color: #2c7be5;
+    color-scheme: light;
   }
   .field:hover:not(:focus) {
     box-shadow: inset 0 0 0 1.5px rgba(14, 81, 150, 0.28);
