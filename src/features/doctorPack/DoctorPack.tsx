@@ -190,7 +190,7 @@ export function DoctorPack() {
                 >
                   <span
                     className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full text-[10px] font-black text-white"
-                    style={{ background: '#B45309' }}
+                    style={{ background: 'linear-gradient(135deg, #B45309, #D08214)' }}
                   >
                     {i + 1}
                   </span>

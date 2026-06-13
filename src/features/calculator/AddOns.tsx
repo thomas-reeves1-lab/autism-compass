@@ -125,14 +125,14 @@ function AddOnCard({ t, index = 0 }: { t: Treatment; index?: number }) {
       style={{
         background: selected
           ? `linear-gradient(135deg, color-mix(in srgb, ${accentHex} 8%, white), color-mix(in srgb, ${accentHex} 4%, white))`
-          : 'linear-gradient(135deg, #ffffff, #f8fafc)',
-        border: selected ? `1.5px solid ${accentHex}40` : '1px solid rgba(14,81,150,0.1)',
+          : `linear-gradient(135deg, ${accentHex}0A, ${accentHex}05)`,
+        border: selected ? `1.5px solid ${accentHex}40` : `1px solid ${accentHex}18`,
         boxShadow: selected ? `0 4px 16px -6px ${accentHex}55` : '0 2px 8px -4px rgba(6,32,63,0.08)',
       }}
     >
       <span
         className="absolute bottom-0 left-0 top-0 w-[3.5px] rounded-l-xl transition-all"
-        style={{ background: selected ? accentHex : `${accentHex}44` }}
+        style={{ background: selected ? accentHex : `${accentHex}55` }}
       />
       <div className="flex items-start justify-between gap-2">
         <div>

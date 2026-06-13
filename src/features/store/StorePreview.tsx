@@ -87,9 +87,9 @@ export function StorePreview() {
                 ) : (
                   <motion.button
                     disabled
-                    whileHover={{ scale: 1.01 }}
-                    transition={{ type: 'spring', stiffness: 300, damping: 22 }}
-                    className="btn-ghost w-full cursor-not-allowed text-sm opacity-60"
+                    animate={{ opacity: [0.5, 0.72, 0.5] }}
+                    transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
+                    className="btn-ghost w-full cursor-not-allowed text-sm"
                   >
                     <Lock size={14} /> Coming soon
                   </motion.button>
