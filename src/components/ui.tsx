@@ -122,9 +122,16 @@ const EVIDENCE_DOT: Record<EvidenceLevel, string> = {
 
 export function EvidenceBadge({ level }: { level: EvidenceLevel }) {
   const m = evidenceLevelMeta[level]
+  const glow = level === 'strong' || level === 'moderate'
   return (
     <span className={`pill inline-flex items-center gap-1 ${m.bg} ${m.colour}`}>
-      <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: EVIDENCE_DOT[level] }} />
+      <span
+        className="h-1.5 w-1.5 shrink-0 rounded-full"
+        style={{
+          background: EVIDENCE_DOT[level],
+          boxShadow: glow ? `0 0 5px ${EVIDENCE_DOT[level]}99` : undefined,
+        }}
+      />
       {m.label}
     </span>
   )
@@ -265,10 +272,14 @@ export function CTAButton({
     <motion.button
       onClick={live ? onClick : undefined}
       disabled={!live}
+      animate={!live ? { opacity: [0.78, 0.96, 0.78] } : {}}
       whileHover={live ? { scale: 1.04 } : { scale: 1.01 }}
       whileTap={live ? { scale: 0.96 } : {}}
-      transition={{ type: 'spring', stiffness: 300, damping: 22 }}
-      className={`btn-cta ${!live ? 'opacity-90' : ''} ${className}`}
+      transition={!live ? {
+        opacity: { duration: 2.2, repeat: Infinity, ease: 'easeInOut' },
+        scale: { type: 'spring', stiffness: 300, damping: 22 },
+      } : { type: 'spring', stiffness: 300, damping: 22 }}
+      className={`btn-cta ${className}`}
     >
       {children} {!live && <span className="rounded-full bg-white/25 px-2 py-0.5 text-[10px]">soon</span>}
     </motion.button>
