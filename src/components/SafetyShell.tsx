@@ -17,8 +17,9 @@ export function TopWarningBanner() {
         <p className="leading-tight">
           <span className="font-bold uppercase tracking-wide text-brand-deep">Education only</span>
           <span className="mx-1.5 text-slate-300">·</span>
-          Not medical advice, not a dosing tool. Always speak to the treating doctor before changing
-          anything.
+          {/* Full text on sm+, short on mobile to keep banner single-line */}
+          <span className="hidden sm:inline">Not medical advice, not a dosing tool. Always speak to the treating doctor before changing anything.</span>
+          <span className="sm:hidden">Not medical advice.</span>
         </p>
       </div>
       {/* clinical accent hairline */}

@@ -23,7 +23,13 @@ export function ScoreRings() {
   ]
 
   return (
-    <div className="sticky top-[50px] z-30 -mx-1">
+    <div className="sticky top-[50px] z-30 -mx-1 relative">
+      {/* Right-fade hint — mobile only — indicates scrollable content */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-0 right-0 z-10 w-10 sm:hidden rounded-r-2xl"
+        style={{ background: 'linear-gradient(to right, transparent, rgba(235,244,251,0.95))' }}
+      />
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}

@@ -282,8 +282,8 @@ export default function App() {
                 <span className="font-bold text-white">This is not medical advice.</span>
               </motion.p>
 
-              {/* Credibility trust strip */}
-              <div className="mt-5 flex flex-wrap gap-2">
+              {/* Credibility trust strip — 2-col grid on mobile, flex-wrap on sm+ */}
+              <div className="mt-5 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
                 {[
                   { text: 'Registered NDIS provider' },
                   { text: 'Reviewed by a Registered Nurse' },
