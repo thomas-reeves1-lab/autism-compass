@@ -32,7 +32,7 @@ function GuideSection({ num, title, children }: { num: number; title: string; ch
       <div className="mb-2 flex items-center gap-2.5">
         <span
           className="grid h-6 w-6 shrink-0 place-items-center rounded-full text-xs font-black text-white"
-          style={{ background: accent }}
+          style={{ background: `linear-gradient(135deg, color-mix(in srgb, ${accent} 85%, white), ${accent})` }}
         >
           {num}
         </span>
@@ -132,7 +132,7 @@ export function FreeGuide() {
               >
                 <span
                   className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full text-[10px] font-black text-white"
-                  style={{ background: SECTION_ACCENTS[4] }}
+                  style={{ background: `linear-gradient(135deg, #D08214, ${SECTION_ACCENTS[4]})` }}
                 >
                   {i + 1}
                 </span>
