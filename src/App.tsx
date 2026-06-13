@@ -139,6 +139,7 @@ export default function App() {
       </header>
 
       <nav
+        aria-label="App tabs"
         className="sticky top-0 z-40 border-b border-white/20"
         style={{ background: 'rgba(7,26,54,0.82)', backdropFilter: 'blur(16px) saturate(1.5)' }}
       >
