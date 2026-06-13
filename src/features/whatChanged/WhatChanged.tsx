@@ -80,12 +80,15 @@ export function WhatChanged() {
           animate={{ opacity: 1, y: 0 }}
           className="mt-4 rounded-2xl border border-dashed border-slate-200 py-8 text-center"
         >
-          <div
+          <motion.div
+            initial={{ scale: 0.7, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.1, type: 'spring', stiffness: 280, damping: 18 }}
             className="mx-auto mb-2 grid h-10 w-10 place-items-center rounded-2xl"
             style={{ background: 'linear-gradient(135deg, #0E5196, #1d4ed8)' }}
           >
             <ClipboardList size={20} className="text-white" />
-          </div>
+          </motion.div>
           <p className="text-sm font-bold text-slate-400">No changes logged yet</p>
           <p className="text-xs text-slate-300">Add one above to start building a timeline.</p>
         </motion.div>
