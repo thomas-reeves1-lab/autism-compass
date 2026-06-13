@@ -203,6 +203,14 @@ export default function App() {
                   'radial-gradient(40% 60% at 88% 8%, rgba(44,123,229,0.45), transparent 60%), radial-gradient(34% 50% at 8% 95%, rgba(123,192,67,0.35), transparent 60%)',
               }}
             />
+            {/* Subtle dot grid — premium SaaS texture at low opacity */}
+            <div
+              className="pointer-events-none absolute inset-0 opacity-[0.055]"
+              style={{
+                backgroundImage: 'radial-gradient(rgba(255,255,255,0.85) 1px, transparent 1px)',
+                backgroundSize: '22px 22px',
+              }}
+            />
             <div className="relative">
               <motion.span
                 initial={{ opacity: 0, y: -6 }}
