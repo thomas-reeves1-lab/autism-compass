@@ -25,7 +25,10 @@ export function StorePreview() {
       />
 
       {!live && (
-        <div
+        <motion.div
+          initial={{ opacity: 0, y: -6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ type: 'spring', stiffness: 260, damping: 28 }}
           className="mb-4 flex items-start gap-2.5 rounded-xl p-3 text-xs"
           style={{ background: 'rgba(100,116,139,0.07)', border: '1px solid rgba(100,116,139,0.18)' }}
         >
@@ -33,7 +36,7 @@ export function StorePreview() {
           <p className="text-theoretical">
             <span className="font-bold">Preview mode.</span> The store is built but not live. Nothing can be purchased yet.
           </p>
-        </div>
+        </motion.div>
       )}
 
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2">

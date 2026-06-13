@@ -257,6 +257,15 @@
   textarea.field {
     resize: vertical;
   }
+  /* Hide native number spinners so .field looks uniform across input types */
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
 
   /* Gradient headline text (for light surfaces) */
   .text-gradient {
