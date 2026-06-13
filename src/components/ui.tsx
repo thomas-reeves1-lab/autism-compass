@@ -50,7 +50,15 @@ export function SectionTitle({
         </motion.div>
       )}
       <div>
-        <h2 className="text-xl font-extrabold text-brand-deep">{title}</h2>
+        <motion.h2
+          className="text-xl font-extrabold text-gradient-title"
+          initial={{ opacity: 0, y: -6 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-20px' }}
+          transition={{ type: 'spring', stiffness: 260, damping: 28 }}
+        >
+          {title}
+        </motion.h2>
         <motion.span
           className="mt-1 block h-[2px] rounded-full"
           initial={{ width: 0 }}
@@ -59,7 +67,17 @@ export function SectionTitle({
           transition={{ type: 'spring', stiffness: 200, damping: 28, delay: 0.15 }}
           style={{ background: 'linear-gradient(90deg, #0E5196, #7bc043)' }}
         />
-        {subtitle && <p className="mt-1 max-w-2xl text-sm text-slate-600">{subtitle}</p>}
+        {subtitle && (
+          <motion.p
+            className="mt-1 max-w-2xl text-sm text-slate-600"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1, duration: 0.35 }}
+          >
+            {subtitle}
+          </motion.p>
+        )}
       </div>
     </div>
   )

@@ -241,6 +241,13 @@
     background-clip: text;
     color: transparent;
   }
+  /* Subtle dark-to-navy gradient for section headings on light cards */
+  .text-gradient-title {
+    background: linear-gradient(110deg, #06203f 5%, #0e5196 50%, #1d4ed8 95%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
   /* Bright gradient for dark surfaces (hero on aurora) */
   .text-gradient-bright {
     background: linear-gradient(110deg, #9be15b 5%, #7fc4ff 50%, #ffffff 98%);
