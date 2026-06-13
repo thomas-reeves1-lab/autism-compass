@@ -90,18 +90,22 @@ export function DoctorPack() {
             <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
               {(Object.keys(baselineMetrics) as MetricKey[])
                 .filter((k) => baselineMetrics[k] >= 4)
-                .map((k) => {
+                .map((k, i) => {
                   const s = severityStyle(baselineMetrics[k])
                   return (
-                    <div
+                    <motion.div
                       key={k}
+                      initial={{ opacity: 0, y: 6 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: Math.min(i, 10) * 0.05, type: 'spring', stiffness: 280, damping: 24 }}
                       className="relative flex items-center justify-between overflow-hidden rounded-lg py-1.5 pl-5 pr-3"
                       style={{ background: s.bg }}
                     >
                       <span className="absolute bottom-0 left-0 top-0 w-[3px] rounded-l-lg" style={{ background: s.bar }} />
                       <span className="text-xs text-slate-600">{metricLabels[k]}</span>
                       <span className="font-extrabold" style={{ color: s.bar }}>{baselineMetrics[k]}</span>
-                    </div>
+                    </motion.div>
                   )
                 })}
             </div>
@@ -146,14 +150,18 @@ export function DoctorPack() {
             <div className="grid grid-cols-1 gap-1.5 sm:grid-cols-2">
               {(Object.keys(projection) as MetricKey[])
                 .filter((k) => Math.abs(projection[k].projected - projection[k].baseline) >= 0.5)
-                .map((k) => {
+                .map((k, i) => {
                   const delta = +(projection[k].projected - projection[k].baseline).toFixed(1)
                   const down = delta < 0
                   const bar = down ? '#15803D' : '#C2410C'
                   const bg = down ? 'rgba(21,128,61,0.06)' : 'rgba(194,65,12,0.06)'
                   return (
-                    <div
+                    <motion.div
                       key={k}
+                      initial={{ opacity: 0, y: 6 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: Math.min(i, 10) * 0.05, type: 'spring', stiffness: 280, damping: 24 }}
                       className="relative flex items-center justify-between overflow-hidden rounded-lg py-1.5 pl-5 pr-3"
                       style={{ background: bg }}
                     >
@@ -162,7 +170,7 @@ export function DoctorPack() {
                       <span className="text-xs font-extrabold" style={{ color: bar }}>
                         {projection[k].baseline} {down ? '▼' : '▲'} {projection[k].projected}
                       </span>
-                    </div>
+                    </motion.div>
                   )
                 })}
             </div>
@@ -207,13 +215,18 @@ export function DoctorPack() {
 
 function PackSection({ accent, title, children }: { accent: string; title: string; children: ReactNode }) {
   return (
-    <div className="relative px-5 py-4 pl-8">
-      {/* Left accent bar */}
+    <motion.div
+      className="relative px-5 py-4 pl-8"
+      initial={{ opacity: 0, x: -10 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true, margin: '-16px' }}
+      transition={{ type: 'spring', stiffness: 260, damping: 26 }}
+    >
       <div className="absolute bottom-0 left-5 top-0 w-[3px] rounded-full" style={{ background: accent }} />
       <h4 className="mb-2.5 text-xs font-extrabold uppercase tracking-wider" style={{ color: accent }}>
         {title}
       </h4>
       {children}
-    </div>
+    </motion.div>
   )
 }
