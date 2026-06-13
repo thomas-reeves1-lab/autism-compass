@@ -148,13 +148,16 @@ export function StackChecker() {
         </AnimatePresence>
 
         {result.flags.length === 0 && selected.length > 0 && (
-          <div
+          <motion.div
+            initial={{ opacity: 0, scale: 0.97 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ type: 'spring', stiffness: 280, damping: 22 }}
             className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-semibold text-safe"
             style={{ background: 'rgba(21,128,61,0.07)', border: '1px solid rgba(21,128,61,0.18)' }}
           >
             <CheckCircle2 size={16} className="shrink-0 text-safe" />
             No interaction flags detected for this combination. Always confirm with a pharmacist.
-          </div>
+          </motion.div>
         )}
       </div>
 
