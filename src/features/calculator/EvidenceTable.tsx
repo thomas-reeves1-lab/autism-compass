@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, Fragment } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { treatments } from '../../data/evidence'
 import type { EvidenceLevel } from '../../lib/types'
@@ -33,6 +33,7 @@ export function EvidenceTable() {
   const [sort, setSort] = useState<SortKey>('evidenceLevel')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('asc')
   const [filter, setFilter] = useState('all')
+  const [expandedId, setExpandedId] = useState<string | null>(null)
 
   const cycleSort = (key: SortKey) => {
     if (sort === key) setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'))
@@ -99,50 +100,164 @@ export function EvidenceTable() {
               <th className="px-3 py-2.5 font-semibold">Rx?</th>
             </tr>
           </thead>
-          <AnimatePresence mode="popLayout">
-            <tbody>
+          <tbody>
               {rows.map((t, i) => {
                 const isStrong = t.evidenceLevel === 'strong' || t.evidenceLevel === 'moderate'
+                const isExpanded = expandedId === t.id
                 return (
-                  <motion.tr
-                    key={t.id}
-                    layout
-                    initial={{ opacity: 0, y: 4 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -2 }}
-                    transition={{ delay: Math.min(i, 20) * 0.015, type: 'spring', stiffness: 300, damping: 24 }}
-                    className="border-b border-slate-100 transition-colors duration-150 hover:bg-brand-sky/50"
-                    style={isStrong ? { background: 'linear-gradient(90deg, rgba(21,128,61,0.04), transparent 40%)' } : undefined}
-                  >
-                    <td className="px-3 py-2.5">
-                      <span className="font-bold text-brand-deep">{t.name}</span>
-                      {isStrong && <span className="ml-1.5 text-[10px] font-black text-safe opacity-70">*</span>}
-                    </td>
-                    <td className="px-3 py-2.5 text-xs text-slate-500">{t.category}</td>
-                    <td className="px-3 py-2.5">
-                      <EvidenceBadge level={t.evidenceLevel} />
-                    </td>
-                    <td className="px-3 py-2.5">
-                      <SafetyScoreChip score={safetyScore(t)} />
-                    </td>
-                    <td className="hidden px-3 py-2.5 text-xs text-slate-500 md:table-cell">{t.sourceSummary.slice(0, 55)}{t.sourceSummary.length > 55 ? '…' : ''}</td>
-                    <td className="px-3 py-2.5">
-                      <span className={harmColour(t.harmLevel)}>{t.harmLevel}</span>
-                    </td>
-                    <td className="px-3 py-2.5">
-                      {t.doctorOnly ? (
-                        <span className="inline-flex items-center gap-1 text-xs font-bold text-doctor">
-                          <Lock size={12} /> Yes
-                        </span>
-                      ) : (
-                        <span className="text-slate-300">No</span>
+                  <Fragment key={t.id}>
+                    <motion.tr
+                      layout
+                      initial={{ opacity: 0, y: 4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -2 }}
+                      transition={{ delay: Math.min(i, 20) * 0.015, type: 'spring', stiffness: 300, damping: 24 }}
+                      onClick={() => setExpandedId((id) => (id === t.id ? null : t.id))}
+                      className="cursor-pointer border-b border-slate-100 transition-colors duration-150 hover:bg-brand-sky/50"
+                      style={
+                        isExpanded
+                          ? { background: 'linear-gradient(90deg, rgba(14,81,150,0.07), rgba(14,81,150,0.02))' }
+                          : isStrong
+                            ? { background: 'linear-gradient(90deg, rgba(21,128,61,0.04), transparent 40%)' }
+                            : undefined
+                      }
+                    >
+                      <td className="px-3 py-2.5">
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-bold text-brand-deep">{t.name}</span>
+                          {isStrong && <span className="text-[10px] font-black text-safe opacity-70">*</span>}
+                          <motion.span
+                            animate={{ rotate: isExpanded ? 180 : 0 }}
+                            transition={{ type: 'spring', stiffness: 280, damping: 22 }}
+                            className="ml-auto shrink-0 text-slate-300"
+                          >
+                            <ChevronDown size={12} />
+                          </motion.span>
+                        </div>
+                      </td>
+                      <td className="px-3 py-2.5 text-xs text-slate-500">{t.category}</td>
+                      <td className="px-3 py-2.5">
+                        <EvidenceBadge level={t.evidenceLevel} />
+                      </td>
+                      <td className="px-3 py-2.5">
+                        <SafetyScoreChip score={safetyScore(t)} />
+                      </td>
+                      <td className="hidden px-3 py-2.5 text-xs text-slate-500 md:table-cell">
+                        {t.sourceSummary.slice(0, 55)}{t.sourceSummary.length > 55 ? '…' : ''}
+                      </td>
+                      <td className="px-3 py-2.5">
+                        <span className={harmColour(t.harmLevel)}>{t.harmLevel}</span>
+                      </td>
+                      <td className="px-3 py-2.5">
+                        {t.doctorOnly ? (
+                          <span className="inline-flex items-center gap-1 text-xs font-bold text-doctor">
+                            <Lock size={12} /> Yes
+                          </span>
+                        ) : (
+                          <span className="text-slate-300">No</span>
+                        )}
+                      </td>
+                    </motion.tr>
+
+                    <AnimatePresence>
+                      {isExpanded && (
+                        <motion.tr
+                          key={`${t.id}-detail`}
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          exit={{ opacity: 0 }}
+                          transition={{ duration: 0.18 }}
+                        >
+                          <td colSpan={7} className="px-3 pb-3 pt-0">
+                            <motion.div
+                              initial={{ height: 0 }}
+                              animate={{ height: 'auto' }}
+                              exit={{ height: 0 }}
+                              transition={{ type: 'spring', stiffness: 260, damping: 28 }}
+                              className="overflow-hidden"
+                            >
+                              <div
+                                className="grid grid-cols-1 gap-3 rounded-xl p-3 md:grid-cols-2"
+                                style={{
+                                  background: 'linear-gradient(135deg, rgba(14,81,150,0.04), rgba(44,123,229,0.03))',
+                                  border: '1px solid rgba(14,81,150,0.1)',
+                                }}
+                              >
+                                {/* Left column */}
+                                <div className="space-y-2">
+                                  <p className="text-xs text-slate-600">{t.sourceSummary}</p>
+
+                                  {t.confidenceNote && (
+                                    <div
+                                      className="rounded-lg px-2.5 py-1.5 text-xs"
+                                      style={{ background: 'rgba(14,81,150,0.06)', color: '#0E5196', border: '1px solid rgba(14,81,150,0.1)' }}
+                                    >
+                                      <span className="font-bold">Confidence: </span>{t.confidenceNote}
+                                    </div>
+                                  )}
+
+                                  {t.plainEnglishSummary && (
+                                    <div
+                                      className="rounded-lg px-2.5 py-1.5 text-xs"
+                                      style={{ background: 'rgba(21,128,61,0.06)', color: '#166534', border: '1px solid rgba(21,128,61,0.1)' }}
+                                    >
+                                      <span className="font-bold">Plain English: </span>{t.plainEnglishSummary}
+                                    </div>
+                                  )}
+
+                                  {t.studiedDoseRange && (
+                                    <p className="text-xs text-slate-500">
+                                      <span className="font-bold text-slate-600">Studied dose: </span>{t.studiedDoseRange}
+                                    </p>
+                                  )}
+                                </div>
+
+                                {/* Right column */}
+                                <div className="space-y-2">
+                                  {t.sideEffects.length > 0 && (
+                                    <div>
+                                      <p className="mb-1 text-[10px] font-bold uppercase tracking-wide text-slate-400">Side effects to know</p>
+                                      <div className="flex flex-wrap gap-1">
+                                        {t.sideEffects.slice(0, 7).map((s) => (
+                                          <span
+                                            key={s}
+                                            className="rounded-md px-1.5 py-0.5 text-[10px] font-semibold text-slate-500"
+                                            style={{ background: 'rgba(180,83,9,0.07)', border: '1px solid rgba(180,83,9,0.11)' }}
+                                          >
+                                            {s}
+                                          </span>
+                                        ))}
+                                        {t.sideEffects.length > 7 && (
+                                          <span className="text-[10px] text-slate-400">+{t.sideEffects.length - 7} more</span>
+                                        )}
+                                      </div>
+                                    </div>
+                                  )}
+
+                                  {t.doctorQuestions.length > 0 && (
+                                    <div>
+                                      <p className="mb-1 text-[10px] font-bold uppercase tracking-wide text-slate-400">Ask your doctor</p>
+                                      <ul className="space-y-1">
+                                        {t.doctorQuestions.map((q) => (
+                                          <li key={q} className="flex items-start gap-1.5 text-xs text-slate-600">
+                                            <span className="mt-0.5 shrink-0 font-bold text-brand-navy">·</span>
+                                            {q}
+                                          </li>
+                                        ))}
+                                      </ul>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </motion.div>
+                          </td>
+                        </motion.tr>
                       )}
-                    </td>
-                  </motion.tr>
+                    </AnimatePresence>
+                  </Fragment>
                 )
               })}
             </tbody>
-          </AnimatePresence>
         </table>
       </div>
 
