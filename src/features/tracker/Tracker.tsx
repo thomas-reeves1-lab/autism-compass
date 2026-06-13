@@ -43,8 +43,14 @@ const PHYSICAL_FIELDS: NumField[] = [
 
 function FormSection({ accent, title, children }: { accent: string; title: string; children: React.ReactNode }) {
   return (
-    <div className="mb-3 last:mb-0">
-      <p className="mb-2 text-[10px] font-extrabold uppercase tracking-widest" style={{ color: accent }}>{title}</p>
+    <div
+      className="mb-3 overflow-hidden rounded-xl p-3 last:mb-0"
+      style={{ background: `linear-gradient(135deg, ${accent}08, ${accent}04)`, border: `1px solid ${accent}14` }}
+    >
+      <div className="mb-2 flex items-center gap-2">
+        <span className="h-2.5 w-0.5 rounded-full" style={{ background: accent }} />
+        <p className="text-[10px] font-extrabold uppercase tracking-widest" style={{ color: accent }}>{title}</p>
+      </div>
       <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3">{children}</div>
     </div>
   )
@@ -196,7 +202,7 @@ export function Tracker() {
               transition={{ delay: i * 0.06, type: 'spring', stiffness: 260, damping: 24 }}
               whileHover={{ y: -2, scale: 1.02, transition: { type: 'spring', stiffness: 320, damping: 22 } }}
               className="rounded-xl p-3 text-center"
-              style={{ background: `color-mix(in srgb, ${accent} 7%, white)`, border: `1px solid ${accent}22` }}
+              style={{ background: `linear-gradient(135deg, color-mix(in srgb, ${accent} 9%, white), color-mix(in srgb, ${accent} 5%, white))`, border: `1px solid ${accent}28`, boxShadow: `0 2px 8px -4px ${accent}22` }}
             >
               <p className="text-base font-black" style={{ color: accent }}>{value}</p>
               <p className="text-[10px] font-bold text-slate-400">{label}</p>
