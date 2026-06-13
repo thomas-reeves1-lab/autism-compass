@@ -149,8 +149,16 @@ export function EvidenceTable() {
       {/* Legend */}
       <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t border-slate-100 pt-3">
         <span className="text-[10px] font-bold uppercase tracking-wide text-slate-400">Legend</span>
-        {(Object.keys(evidenceLevelMeta) as EvidenceLevel[]).map((l) => (
-          <EvidenceBadge key={l} level={l} />
+        {(Object.keys(evidenceLevelMeta) as EvidenceLevel[]).map((l, i) => (
+          <motion.span
+            key={l}
+            initial={{ opacity: 0, y: 4 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: i * 0.05, type: 'spring', stiffness: 280, damping: 22 }}
+          >
+            <EvidenceBadge level={l} />
+          </motion.span>
         ))}
       </div>
     </GlassCard>

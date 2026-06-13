@@ -24,7 +24,10 @@ export function ScoreRings() {
 
   return (
     <div className="sticky top-[50px] z-30 -mx-1">
-      <div
+      <motion.div
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ type: 'spring', stiffness: 280, damping: 28 }}
         className="flex items-center gap-1 overflow-x-auto rounded-2xl px-3 py-2.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         style={{
           background: 'linear-gradient(120deg, rgba(255,255,255,0.95) 0%, rgba(232,244,251,0.9) 100%)',
@@ -75,7 +78,7 @@ export function ScoreRings() {
           <br />
           <span className="font-bold text-orange-600">Side-effect</span> lower = better
         </div>
-      </div>
+      </motion.div>
     </div>
   )
 }
