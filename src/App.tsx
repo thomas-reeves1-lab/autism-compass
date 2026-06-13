@@ -1,8 +1,8 @@
-import { useState, lazy, Suspense } from 'react'
+import { useState, useEffect, lazy, Suspense } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Compass, LayoutDashboard, Plane, HeartPulse, Workflow, History,
-  ClipboardList, BookOpen, FileText, ShoppingBag, Rocket, HandHeart, X,
+  ClipboardList, BookOpen, FileText, ShoppingBag, Rocket, HandHeart, X, ChevronUp,
 } from './components/icons'
 import { TopWarningBanner, EmergencyWarning, SiteFooter } from './components/SafetyShell'
 import { ConsentBanner } from './components/ConsentBanner'
@@ -73,6 +73,13 @@ const TABS: { id: TabId; label: string; icon: typeof Compass }[] = [
 export default function App() {
   const [tab, setTab] = useState<TabId>('dashboard')
   const [overlay, setOverlay] = useState<null | 'guide' | LegalDoc>(null)
+  const [showTop, setShowTop] = useState(false)
+
+  useEffect(() => {
+    const onScroll = () => setShowTop(window.scrollY > 420)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   return (
     <div className="min-h-screen">
@@ -341,6 +348,30 @@ export default function App() {
       <SiteFooter onOpen={(d) => setOverlay(d)} />
 
       <ConsentBanner />
+
+      {/* Floating back-to-top — appears after 420px scroll, springs in/out */}
+      <AnimatePresence>
+        {showTop && (
+          <motion.button
+            key="back-to-top"
+            initial={{ opacity: 0, scale: 0.6, y: 12 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.6, y: 12 }}
+            transition={{ type: 'spring', stiffness: 320, damping: 24 }}
+            whileHover={{ scale: 1.12, y: -2 }}
+            whileTap={{ scale: 0.92 }}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            aria-label="Back to top"
+            className="fixed bottom-6 right-5 z-50 grid h-11 w-11 place-items-center rounded-2xl text-white shadow-lg"
+            style={{
+              background: 'linear-gradient(135deg, #0E5196 0%, #2c7be5 100%)',
+              boxShadow: '0 8px 24px -6px rgba(14,81,150,0.55), 0 0 0 1px rgba(44,123,229,0.35)',
+            }}
+          >
+            <ChevronUp size={20} />
+          </motion.button>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence>
         {overlay && (
