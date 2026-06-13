@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ClipboardList, Download, Lock, Plus } from '../../components/icons'
+import { ClipboardList, Download, Lock, Plus, ChevronUp } from '../../components/icons'
 import { useAppStore, type TrackerEntry } from '../../store/useAppStore'
 import { downloadTrackerCsv } from '../../lib/exports'
 import { showDormant } from '../../config/featureFlags'
@@ -211,20 +211,60 @@ export function Tracker() {
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mt-4 rounded-2xl border border-dashed border-slate-200 py-8 text-center"
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ type: 'spring', stiffness: 240, damping: 26 }}
+            className="mt-4 flex flex-col items-center rounded-2xl py-8 text-center"
+            style={{ background: 'linear-gradient(135deg, rgba(14,81,150,0.03), rgba(44,123,229,0.02))', border: '1px dashed rgba(14,81,150,0.18)' }}
           >
+            {/* Pulsing icon glow */}
+            <div className="relative mb-2">
+              <motion.div
+                animate={{ scale: [1, 1.38, 1], opacity: [0.22, 0.06, 0.22] }}
+                transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+                className="absolute inset-0"
+                style={{ background: 'rgba(14,81,150,0.45)', borderRadius: '1rem' }}
+              />
+              <motion.div
+                initial={{ scale: 0.7, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.1, type: 'spring', stiffness: 280, damping: 18 }}
+                className="relative grid h-11 w-11 place-items-center rounded-2xl"
+                style={{ background: 'linear-gradient(135deg, #0E5196, #1d4ed8)' }}
+              >
+                <ClipboardList size={20} className="text-white" />
+              </motion.div>
+            </div>
+
+            {/* Bouncing chevron pointing up at the form */}
             <motion.div
-              initial={{ scale: 0.7, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.1, type: 'spring', stiffness: 280, damping: 18 }}
-              className="mx-auto mb-2 grid h-10 w-10 place-items-center rounded-2xl"
-              style={{ background: 'linear-gradient(135deg, #0E5196, #1d4ed8)' }}
+              animate={{ y: [0, -5, 0] }}
+              transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
+              className="mb-2"
+              style={{ color: 'rgba(14,81,150,0.3)' }}
             >
-              <ClipboardList size={20} className="text-white" />
+              <ChevronUp size={15} />
             </motion.div>
-            <p className="text-sm font-bold text-slate-400">No days logged yet</p>
-            <p className="mt-1 text-xs text-slate-300">Fill in today above to start building your picture.</p>
-            <p className="mt-0.5 text-xs text-slate-300">Even 7 days shows patterns a doctor can act on.</p>
+
+            <p className="text-sm font-semibold text-slate-500">No days logged yet</p>
+            <p className="mt-1 max-w-[240px] text-xs text-slate-400">
+              Fill in today above to start building your picture.
+            </p>
+            <p className="mt-1 max-w-[240px] text-xs font-semibold" style={{ color: 'rgba(14,81,150,0.55)' }}>
+              Even 7 days shows patterns a doctor can act on.
+            </p>
+
+            {/* What gets tracked chips */}
+            <div className="mt-3 flex flex-wrap justify-center gap-1.5 px-4">
+              {['sleep hours', 'aggression', 'PRN use', 'pain signs'].map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full px-2.5 py-0.5 text-[10px] font-semibold text-slate-400"
+                  style={{ background: 'rgba(14,81,150,0.06)', border: '1px solid rgba(14,81,150,0.1)' }}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
